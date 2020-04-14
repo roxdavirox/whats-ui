@@ -1,8 +1,0 @@
-@mixin icons {
-  .icon,
-  i,
-  [class^="ti-"],
-  [class*=" ti-"] {
-    @content;
-  }
-}
