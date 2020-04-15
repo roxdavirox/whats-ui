@@ -16,6 +16,8 @@ import {
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
+import WebSocketClient from './WebSocketClient';
+import BootstrapStep from './BootstrapStep';
 
 class AppChat extends Component {
   state = {
@@ -27,7 +29,8 @@ class AppChat extends Component {
     messageList: [],
     currentChatRoom: "",
     opponentUser: null,
-    open: true
+    open: true,
+    bootstrapStep: null
   };
 
   bottomRef = React.createRef();
@@ -45,6 +48,7 @@ class AppChat extends Component {
     getAllContact(this.state.currentUser.id).then(data =>
       this.setState({ contactList: [...data.data] })
     );
+
     this.updateRecentContactList();
   }
 
