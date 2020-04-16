@@ -16,8 +16,6 @@ import {
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
-import WebSocketClient from './WebSocketClient';
-import BootstrapStep from './BootstrapStep';
 
 class AppChat extends Component {
   state = {
