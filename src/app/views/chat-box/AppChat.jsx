@@ -41,6 +41,7 @@ class AppChat extends Component {
     open: true,
     bootstrapStep: null,
     qrcode: null,
+    isLastStep: false,
     bootstrapSteps: [
       new BootstrapStep({
         websocket: apiWebsocket,
@@ -189,7 +190,11 @@ class AppChat extends Component {
     })
     await delayIt(1000)(() => {
       const stepThree = this.state.bootstrapSteps[2];
-      stepThree.run(10000).then(() => console.log('stepThree ok'));
+      stepThree.run(10000).then(() => {
+        console.log('stepThree ok');
+        this.setState({ isLastStep: true });
+      });
+      
     })
 
     this.updateRecentContactList();
@@ -312,15 +317,18 @@ class AppChat extends Component {
               />
             </MatxSidenav>
             <MatxSidenavContent>
-              <ChatContainer
-                id={currentUser.id}
-                opponentUser={opponentUser}
-                messageList={messageList}
-                currentChatRoom={currentChatRoom}
-                setBottomRef={this.setBottomRef}
-                handleMessageSend={this.handleMessageSend}
-                toggleSidenav={this.toggleSidenav}
-              />
+              {this.state.qrcode 
+                ? <ChatContainer
+                    id={currentUser.id}
+                    opponentUser={opponentUser}
+                    messageList={messageList}
+                    currentChatRoom={currentChatRoom}
+                    setBottomRef={this.setBottomRef}
+                    handleMessageSend={this.handleMessageSend}
+                    toggleSidenav={this.toggleSidenav}
+                  />
+                : !this.state.isLastStep && <img src={this.state.qrcode} alt="qr code"/>
+              }
             </MatxSidenavContent>
           </MatxSidenavContainer>
         </Card>
