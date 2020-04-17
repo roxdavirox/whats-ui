@@ -16,6 +16,17 @@ import {
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
+import BootstrapStep from './BootstrapStep';
+import apiWebsocket from './WebSocketClient';
+
+const HOST_WS = '';
+
+const delayIt = time => fn => new Promise((resolve, _) =>
+    setTimeout(
+      () => { fn(); resolve(); },
+      time
+    )
+  )
 
 class AppChat extends Component {
   state = {
@@ -28,12 +39,133 @@ class AppChat extends Component {
     currentChatRoom: "",
     opponentUser: null,
     open: true,
-    bootstrapStep: null
+    bootstrapStep: null,
+    qrcode: null,
+    bootstrapSteps: [
+      new BootstrapStep({
+        websocket: apiWebsocket,
+        texts: {
+            handling: "Connecting to API...",
+            success: "Connected to API after %1 ms. Click to let API connect to backend.",
+            failure: "Connection to API failed: %1. Click to try again.",
+            connLost: "Connection to API closed. Click to reconnect."
+        },
+        actor: websocket => {
+          websocket.initialize(
+            HOST_WS,
+            "client", {
+              func: window.WebSocket,
+              getOnMessageData: msg => {
+                // console.log('msg.data', msg.data);
+                return msg.data;
+              }
+            }
+          );
+          websocket.onClose(() => {
+            console.log('close socket connection')
+          });
+        },
+        request: {
+          type: "waitForMessage",
+          condition: obj => obj.type == "connected"
+        }
+      }),
+      new BootstrapStep({
+        websocket: apiWebsocket,
+        texts: {
+            handling: "Connecting to backend...",
+            success: "Connected API to backend after %1 ms. Click to let backend connect to WhatsApp.",
+            failure: "Connection of API to backend failed: %1. Click to try again.",
+            connLost: "Connection of API to backend closed. Click to reconnect."
+        },
+        actor: websocket => {
+            websocket.waitForMessage({
+                condition: obj => obj.type == "resource_gone"  &&  obj.resource == "backend",
+                keepWhenHit: false
+            }).then(() => {
+                websocket.apiConnectedToBackend = false;
+                websocket.backendConnectedToWhatsApp = false;
+            });
+        },
+        request: {
+            type: "call",
+            callArgs: { command: "api-connectBackend" },
+            successCondition: obj => obj.type == "resource_connected"  &&  obj.resource == "backend",
+            successActor: websocket => websocket.apiConnectedToBackend = true
+        }
+      }),
+      new BootstrapStep({
+        websocket: apiWebsocket,
+        texts: {
+            handling: "Connecting to WhatsApp...",
+            success: "Connected backend to WhatsApp after %1 ms. Click to generate QR code.",
+            failure: "Connection of backend to WhatsApp failed: %1. Click to try again.",
+            connLost: "Connection of backend to WhatsApp closed. Click to reconnect."
+        },
+        actor: websocket => {
+            websocket.waitForMessage({
+                condition: obj => obj.type == "resource_gone"  &&  obj.resource == "whatsapp",
+                keepWhenHit: false
+            }).then(() => {
+                websocket.backendConnectedToWhatsApp = false;
+            });
+        },
+        request: {
+            type: "call",
+            callArgs: { command: "backend-connectWhatsApp" },
+            successCondition: obj => obj.type == "resource_connected"  &&  obj.resource == "whatsapp",
+            successActor: (websocket, obj) => websocket.backendConnectedToWhatsApp = true,
+            timeoutCondition: websocket => websocket.apiConnectedToBackend				//condition for the timeout to be possible at all (if connection to backend is closed, a timeout for connecting to WhatsApp shall not override this issue message)
+        }
+    }),
+      new BootstrapStep({
+        websocket: apiWebsocket,
+        texts: {
+            handling: "Generating QR code...",
+            success: "Generated QR code after %1 ms.",
+            failure: "Generating QR code failed: %1. Click to try again."
+        },
+        request: {
+            type: "call",
+            callArgs: { command: "backend-generateQRCode" },
+            successCondition: obj => obj.type == "generated_qr_code"  &&  obj.image,
+            successActor: (websocket, {image}) => {
+            this.setState({ qrcode: image });
+  
+            websocket.waitForMessage({
+              condition: obj => obj.type == "whatsapp_message_received"  &&  obj.message,
+              keepWhenHit: true
+            }).then(whatsAppMessage => {
+                const { data } = whatsAppMessage;
+                const { type } = data;
+                if (type !== 'whatsapp_message_received') return;
+                const [tag] = data.message;
+                if (tag !== 'action') return;
+                const msgs = data.message[2];
+                if (!msgs) return;
+                console.log('data.message', data.message);
+                msgs.forEach(m => {
+                  if (!m.message) return;
+                  const { message } = m;
+                  if (!message.conversation) return;
+                  const { conversation } = message;
+                  this.setState({
+                    messageList: [...this.state.messageList, conversation]
+                  });
+                  console.log('conversation:', conversation);
+                });
+  
+            }).run();
+          },
+          timeoutCondition: websocket => websocket.backendConnectedToWhatsApp
+        }
+      })
+    ]
   };
 
   bottomRef = React.createRef();
 
-  componentDidMount() {
+  async componentDidMount() {
     let { id } = this.state.currentUser;
     getContactById(id).then(data => {
       this.setState({
@@ -46,6 +178,19 @@ class AppChat extends Component {
     getAllContact(this.state.currentUser.id).then(data =>
       this.setState({ contactList: [...data.data] })
     );
+
+    await delayIt(1000)(() => {
+      const stepOne = this.state.bootstrapSteps[0];
+      stepOne.run(10000).then(() => console.log('stepOne ok'));
+    });
+    await delayIt(1000)(() => {
+      const stepTwo = this.state.bootstrapSteps[1];
+      stepTwo.run(10000).then(() => console.log('stepTwo ok'));
+    })
+    await delayIt(1000)(() => {
+      const stepThree = this.state.bootstrapSteps[2];
+      stepThree.run(10000).then(() => console.log('stepThree ok'));
+    })
 
     this.updateRecentContactList();
   }
