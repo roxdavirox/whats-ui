@@ -57,31 +57,29 @@ class AppChat extends Component {
             "client", {
               func: window.WebSocket,
               getOnMessageData: msg => {
-                console.log('msg.data: ', msg.data);
+                // console.log('msg.data: ', msg.data);
                 if (typeof msg.data === 'string' && msg.data.includes(`"type":"chat"`)) {
-                  var mapContact = arr => { 
-                    var [_, chatInfo] = arr;
-                    var contact = {
-                        id: chatInfo.jid,
+                  const mapContact = arr => { 
+                    const [_, chatInfo] = arr;
+                    const contact = {
+                        id: chatInfo.jid.split('@')[0],
                         name: chatInfo.name
                     }
                     return contact;
                   };
 
-                  function convertChatsToContacts(chats) {
-                    return chats.map(mapContact)
-                  }
+                  const convertChatsToContacts = chats => chats.map(mapContact)
                 
-                  function computeContacts(_data, convert) {
-                    var index = _data.indexOf(',');
-                    var jsonObject = JSON.parse(_data.substring(index +1));
-                    var { message } = jsonObject;
-                    var { type } = message[1];
+                  const computeContacts = _data => cb => {
+                    const index = _data.indexOf(',');
+                    const jsonObject = JSON.parse(_data.substring(index +1));
+                    const { message } = jsonObject;
+                    const { type } = message[1];
                     if (type !== 'chat') return {};
-                    var chats = message[2];
-                    return convert(chats);
+                    const chats = message[2];
+                    return cb(chats);
                   }
-                  const contacts = computeContacts(msg.data, convertChatsToContacts);
+                  const contacts = computeContacts(msg.data)(convertChatsToContacts);
                   this.setState({
                     contactList: contacts
                   });
@@ -90,7 +88,6 @@ class AppChat extends Component {
                 const [tag, ...restMsg] = msg.data.split(',');
                 if (!restMsg) return msg.data;
                 const jsonObj = JSON.parse(restMsg);
-                console.log('jsonObj#############', jsonObj);
                 if (!jsonObj.message) return msg.data;
                 const { message } = jsonObj;
                 const isConnected = message[0] === 'Conn';
@@ -180,22 +177,47 @@ class AppChat extends Component {
                 const { type } = data;
                 console.log('whatsappmsg', whatsAppMessage);
                 if (type !== 'whatsapp_message_received') return;
+
+
                 const [tag] = data.message;
                 if (tag !== 'action') return;
                 const msgs = data.message[2];
                 if (!msgs) return;
-                // console.log('data.message', data.message);
-                msgs.forEach(m => {
-                  if (!m.message) return;
-                  const { message } = m;
-                  if (!message.conversation) return;
-                  const { conversation } = message;
-                  this.setState({
-                    messageList: [...this.state.messageList, conversation]
+                
+                function mapConversation(messages) {
+                  var mapChat = data => ({ 
+                    contactId: data.key.remoteJid.split('@')[0],
+                    text: data.message.conversation,
                   });
-                  console.log('conversation:', conversation);
-                });
-  
+                  var filterChat = msg => {
+                    // console.log('msg', msg)
+                    return !Object.keys(msg).includes('participant')
+                  };
+                  return messages.filter(filterChat).map(mapChat);
+                }
+              
+                var computeConversations = object => cb => {
+                  if (!object.data.message) return { err: 'error msg' };
+                  if (!Object.values(object.data.message).length) {
+                    return { err: 'nao tem message '};
+                  }
+                  var { message } = object.data;
+                  var messages = message[2];
+                  return cb(messages)
+                }
+
+                const chats = computeConversations(whatsAppMessage)(mapConversation);
+                console.log('##', chats);
+                // msgs.forEach(m => {
+                //   if (!m.message) return;
+                //   const { message } = m;
+                //   if (!message.conversation) return;
+                //   const { conversation } = message;
+                //   this.setState({
+                //     messageList: [...this.state.messageList, conversation]
+                //   });
+                //   console.log('conversation:', conversation);
+                // });
             }).run();
           },
           timeoutCondition: websocket => websocket.backendConnectedToWhatsApp
@@ -343,7 +365,7 @@ class AppChat extends Component {
       opponentUser,
       currentChatRoom
     } = this.state;
-    console.log('messageList', messageList);
+    // console.log('messageList', messageList);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
