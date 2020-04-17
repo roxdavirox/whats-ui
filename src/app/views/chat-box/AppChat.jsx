@@ -19,7 +19,7 @@ import { isMobile } from "utils";
 import BootstrapStep from './BootstrapStep';
 import WebSocketClient from './WebSocketClient';
 
-const HOST_WS = 'ws://localhost:2019';
+const HOST_WS = `ws://${process.env.HOST_WS || 'localhost' }:2019`;
 const apiWebsocket = new WebSocketClient();
 
 const delayIt = time => fn => new Promise((resolve, _) =>
