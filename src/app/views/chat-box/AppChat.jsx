@@ -17,9 +17,10 @@ import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
 import BootstrapStep from './BootstrapStep';
-import apiWebsocket from './WebSocketClient';
+import WebSocketClient from './WebSocketClient';
 
-const HOST_WS = '';
+const HOST_WS = 'ws://localhost:2019';
+const apiWebsocket = new WebSocketClient();
 
 const delayIt = time => fn => new Promise((resolve, _) =>
     setTimeout(
@@ -41,7 +42,6 @@ class AppChat extends Component {
     open: true,
     bootstrapStep: null,
     qrcode: null,
-    isLastStep: false,
     bootstrapSteps: [
       new BootstrapStep({
         websocket: apiWebsocket,
@@ -57,7 +57,17 @@ class AppChat extends Component {
             "client", {
               func: window.WebSocket,
               getOnMessageData: msg => {
-                // console.log('msg.data', msg.data);
+                console.log('msg.data', msg.data);
+                const [tag, ...restMsg] = msg.data.split(',');
+                if (!restMsg) return msg.data;
+                const jsonObj = JSON.parse(restMsg);
+                console.log('jsonObj#############', jsonObj);
+                if (!jsonObj.message) return msg.data;
+                const { message } = jsonObj;
+                const isConnected = message[0] === 'Conn';
+                if (isConnected) {
+                  this.setState({ qrcode: null });
+                }
                 return msg.data;
               }
             }
@@ -139,12 +149,13 @@ class AppChat extends Component {
             }).then(whatsAppMessage => {
                 const { data } = whatsAppMessage;
                 const { type } = data;
+                // console.log('whatsappmsg', whatsAppMessage);
                 if (type !== 'whatsapp_message_received') return;
                 const [tag] = data.message;
                 if (tag !== 'action') return;
                 const msgs = data.message[2];
                 if (!msgs) return;
-                console.log('data.message', data.message);
+                // console.log('data.message', data.message);
                 msgs.forEach(m => {
                   if (!m.message) return;
                   const { message } = m;
@@ -192,9 +203,15 @@ class AppChat extends Component {
       const stepThree = this.state.bootstrapSteps[2];
       stepThree.run(10000).then(() => {
         console.log('stepThree ok');
-        this.setState({ isLastStep: true });
       });
-      
+    })
+    await delayIt(2000)(() => {
+      console.log('gerando qrcode...[#]');
+      const qrCodeStep = this.state.bootstrapSteps[3];
+      qrCodeStep.run(2000).then(() => {
+        console.log('last step');
+        this.setState({ isLastStep: true });
+      })
     })
 
     this.updateRecentContactList();
@@ -318,17 +335,17 @@ class AppChat extends Component {
             </MatxSidenav>
             <MatxSidenavContent>
               {this.state.qrcode 
-                ? <ChatContainer
-                    id={currentUser.id}
-                    opponentUser={opponentUser}
-                    messageList={messageList}
-                    currentChatRoom={currentChatRoom}
-                    setBottomRef={this.setBottomRef}
-                    handleMessageSend={this.handleMessageSend}
-                    toggleSidenav={this.toggleSidenav}
-                  />
-                : !this.state.isLastStep && <img src={this.state.qrcode} alt="qr code"/>
-              }
+                ? <img src={this.state.qrcode} alt="qr code"/>
+                : <ChatContainer
+                      id={currentUser.id}
+                      opponentUser={opponentUser}
+                      messageList={messageList}
+                      currentChatRoom={currentChatRoom}
+                      setBottomRef={this.setBottomRef}
+                      handleMessageSend={this.handleMessageSend}
+                      toggleSidenav={this.toggleSidenav}
+                    />
+                }
             </MatxSidenavContent>
           </MatxSidenavContainer>
         </Card>
