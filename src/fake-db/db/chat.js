@@ -6,10 +6,10 @@ const ChatDB = {
   user: [
     {
       id: "7863a6802ez0e277a0f98534",
-      name: "John Doe",
+      name: "Agente de atendimento",
       avatar: "assets/images/face-1.jpg",
       status: "online",
-      chatInfo: [
+      chatInfo: [ // chats abertos
         {
           chatId: "89564a680b3249760ea21fe77",
           contactId: "323sa680b3249760ea21rt47",
@@ -113,7 +113,7 @@ const ChatDB = {
     }
   ],
 
-  chatCollection: [
+  chatCollection: [ // dados dos chats abertos
     {
       id: "89564a680b3249760ea21fe77",
       chats: [

@@ -57,7 +57,36 @@ class AppChat extends Component {
             "client", {
               func: window.WebSocket,
               getOnMessageData: msg => {
-                console.log('msg.data', msg.data);
+                console.log('msg.data: ', msg.data);
+                if (typeof msg.data === 'string' && msg.data.includes(`"type":"chat"`)) {
+                  var mapContact = arr => { 
+                    var [_, chatInfo] = arr;
+                    var contact = {
+                        id: chatInfo.jid,
+                        name: chatInfo.name
+                    }
+                    return contact;
+                  };
+
+                  function convertChatsToContacts(chats) {
+                    return chats.map(mapContact)
+                  }
+                
+                  function computeContacts(_data, convert) {
+                    var index = _data.indexOf(',');
+                    var jsonObject = JSON.parse(_data.substring(index +1));
+                    var { message } = jsonObject;
+                    var { type } = message[1];
+                    if (type !== 'chat') return {};
+                    var chats = message[2];
+                    return convert(chats);
+                  }
+                  const contacts = computeContacts(msg.data, convertChatsToContacts);
+                  this.setState({
+                    contactList: contacts
+                  });
+                  console.log('contacts:', contacts);
+                }
                 const [tag, ...restMsg] = msg.data.split(',');
                 if (!restMsg) return msg.data;
                 const jsonObj = JSON.parse(restMsg);
@@ -149,7 +178,7 @@ class AppChat extends Component {
             }).then(whatsAppMessage => {
                 const { data } = whatsAppMessage;
                 const { type } = data;
-                // console.log('whatsappmsg', whatsAppMessage);
+                console.log('whatsappmsg', whatsAppMessage);
                 if (type !== 'whatsapp_message_received') return;
                 const [tag] = data.message;
                 if (tag !== 'action') return;
@@ -314,6 +343,7 @@ class AppChat extends Component {
       opponentUser,
       currentChatRoom
     } = this.state;
+    console.log('messageList', messageList);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
