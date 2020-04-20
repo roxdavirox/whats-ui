@@ -57,7 +57,12 @@ class AppChat extends Component {
             "client", {
               func: window.WebSocket,
               getOnMessageData: msg => {
-                // console.log('msg.data: ', msg.data);
+                if (msg.data.includes(`"message":["action"`)){
+                  var index = msg.data.indexOf(',');
+                  var data = msg.data.substring(index+1);
+                  let dataJson = JSON.parse(data);
+                  // console.log('dataJson::::', dataJson);
+                }
                 if (typeof msg.data === 'string' && msg.data.includes(`"type":"chat"`)) {
                   const mapContact = arr => { 
                     const [_, chatInfo] = arr;
@@ -83,7 +88,7 @@ class AppChat extends Component {
                   this.setState({
                     contactList: contacts
                   });
-                  console.log('contacts:', contacts);
+                  // console.log('contacts:', contacts);
                 }
                 const [tag, ...restMsg] = msg.data.split(',');
                 if (!restMsg) return msg.data;
@@ -175,10 +180,21 @@ class AppChat extends Component {
             }).then(whatsAppMessage => {
                 const { data } = whatsAppMessage;
                 const { type } = data;
-                console.log('whatsappmsg', whatsAppMessage);
+                // console.log('whatsAppMessage', whatsAppMessage);
                 if (type !== 'whatsapp_message_received') return;
-
-
+                const whatsAppMessageStr = JSON.stringify(whatsAppMessage);
+                if (typeof whatsAppMessageStr === 'string' && whatsAppMessageStr.includes('E2E_ENCRYPTED')) {
+                  // mensagens dos contatos, sem exibir as minhas
+                  console.log('E2E:::::', whatsAppMessage);
+                  const { data: { message } } = whatsAppMessage;
+                  const messages = message[2];
+                  if (!messages) return;
+                  const [e2e, ...restMsgs] = messages;
+                  if (!JSON.stringify(e2e).includes('E2E')) return;
+                  this.setState({
+                    messageList: [...this.state.messageList, ...restMsgs]
+                  });
+                }
                 const [tag] = data.message;
                 if (tag !== 'action') return;
                 const msgs = data.message[2];
@@ -190,7 +206,7 @@ class AppChat extends Component {
                     text: data.message.conversation,
                   });
                   var filterChat = msg => {
-                    // console.log('msg', msg)
+                    console.log('msg', msg)
                     return !Object.keys(msg).includes('participant')
                   };
                   return messages.filter(filterChat).map(mapChat);
@@ -206,8 +222,8 @@ class AppChat extends Component {
                   return cb(messages)
                 }
 
-                const chats = computeConversations(whatsAppMessage)(mapConversation);
-                console.log('##', chats);
+                // const chats = computeConversations(whatsAppMessage)(mapConversation);
+                // console.log('##', chats);
                 // msgs.forEach(m => {
                 //   if (!m.message) return;
                 //   const { message } = m;
@@ -365,7 +381,7 @@ class AppChat extends Component {
       opponentUser,
       currentChatRoom
     } = this.state;
-    // console.log('messageList', messageList);
+    console.log('messageList', messageList);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
