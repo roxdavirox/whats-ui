@@ -312,16 +312,17 @@ class AppChat extends Component {
       }));
     console.log('contactMessages', contactMessages);
     this.setState({
-      chatId: '123',
+      currentChatRoom: '123',
       messageList: contactMessages
+    }, () => {
+      this.bottomRef.scrollTop = 9999999999999;
     })
-    // getContactById(contactId).then(({ data }) => {
-    //   this.setState({
-    //     opponentUser: { ...data }
-    //   }, () => {
-    //     this.bottomRef.scrollTop = 9999999999999;
-    //   });
-    // });
+    getContactById(contactId).then(({ data }) => {
+      console.log('open user', data);
+      this.setState({
+        opponentUser: { ...data }
+      });
+    });
     // getChatRoomByContactId(this.state.currentUser.id, contactId).then(
     //   ({ data }) => {
     //     let { chatId, messageList, recentListUpdated } = data;
