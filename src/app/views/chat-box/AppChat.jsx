@@ -367,6 +367,23 @@ class AppChat extends Component {
     // );
   };
 
+  handleWhatsappMessage = msg => {
+    const { contactId } = this.state;
+    const messageStep = new BootstrapStep({
+      websocket: apiWebsocket,
+      texts: {},
+      actor: () => {},
+      request: {
+        type: "call",
+        callArgs: { command: "backend-SendWhatsAppMessage", payload: { msg, id: contactId } },
+        successCondition: obj => obj.type == "resource_connected"  &&  obj.resource == "whatsapp",
+        // successActor: (websocket, obj) => websocket.backendConnectedToWhatsApp = true,
+        timeoutCondition: websocket => websocket.apiConnectedToBackend				//condition for the timeout to be possible at all (if connection to backend is closed, a timeout for connecting to WhatsApp shall not override this issue message)
+      }
+    });
+    messageStep.run();
+  }
+
   handleMessageSend = message => {
     let { id } = this.state.currentUser;
     let { currentChatRoom, opponentUser } = this.state;
@@ -454,7 +471,7 @@ class AppChat extends Component {
                       messageList={messageList}
                       currentChatRoom={currentChatRoom}
                       setBottomRef={this.setBottomRef}
-                      handleMessageSend={this.handleMessageSend}
+                      handleMessageSend={this.handleWhatsappMessage}
                       toggleSidenav={this.toggleSidenav}
                     />
                 }
