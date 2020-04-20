@@ -37,6 +37,7 @@ class AppChat extends Component {
     contactList: [],
     recentContactList: [],
     messageList: [],
+    whatsappMessages: [],
     currentChatRoom: "",
     opponentUser: null,
     open: true,
@@ -86,7 +87,7 @@ class AppChat extends Component {
                   }
                   const contacts = computeContacts(msg.data)(convertChatsToContacts);
                   this.setState({
-                    contactList: contacts
+                    contactList: [...contacts, ...this.state.contactList]
                   });
                   // console.log('contacts:', contacts);
                 }
@@ -192,7 +193,7 @@ class AppChat extends Component {
                   const [e2e, ...restMsgs] = messages;
                   if (!JSON.stringify(e2e).includes('E2E')) return;
                   this.setState({
-                    messageList: [...this.state.messageList, ...restMsgs]
+                    whatsappMessages: [...this.state.whatsappMessages, ...restMsgs]
                   });
                 }
                 const [tag] = data.message;
@@ -299,30 +300,46 @@ class AppChat extends Component {
 
   handleContactClick = contactId => {
     if (isMobile()) this.toggleSidenav();
+    console.log('contactId', contactId);
+    if (!this.state.whatsappMessages) return;
+    console.log('this.whatsappMessages', this.state.whatsappMessages);
+    const contactMessages = this.state.whatsappMessages
+      .filter(wm => wm.key && JSON.stringify(wm).includes('conversation'))
+      .filter(m => m.key.remoteJid.includes(contactId))  
+      .map(msg => ({
+        contactId,
+        text: msg.message.conversation
+      }));
+    console.log('contactMessages', contactMessages);
+    this.setState({
+      chatId: '123',
+      messageList: contactMessages
+    })
+    // getContactById(contactId).then(({ data }) => {
+    //   this.setState({
+    //     opponentUser: { ...data }
+    //   }, () => {
+    //     this.bottomRef.scrollTop = 9999999999999;
+    //   });
+    // });
+    // getChatRoomByContactId(this.state.currentUser.id, contactId).then(
+    //   ({ data }) => {
+    //     let { chatId, messageList, recentListUpdated } = data;
 
-    getContactById(contactId).then(({ data }) => {
-      this.setState({
-        opponentUser: { ...data }
-      });
-    });
-    getChatRoomByContactId(this.state.currentUser.id, contactId).then(
-      ({ data }) => {
-        let { chatId, messageList, recentListUpdated } = data;
-
-        this.setState(
-          {
-            currentChatRoom: chatId,
-            messageList
-          },
-          () => {
-            this.bottomRef.scrollTop = 9999999999999;
-          }
-        );
-        if (recentListUpdated) {
-          this.updateRecentContactList();
-        }
-      }
-    );
+    //     this.setState(
+    //       {
+    //         currentChatRoom: chatId,
+    //         messageList
+    //       },
+    //       () => {
+    //         this.bottomRef.scrollTop = 9999999999999;
+    //       }
+    //     );
+    //     if (recentListUpdated) {
+    //       this.updateRecentContactList();
+    //     }
+    //   }
+    // );
   };
 
   handleMessageSend = message => {
