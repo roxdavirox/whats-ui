@@ -40,6 +40,7 @@ class AppChat extends Component {
     whatsappMessages: [],
     currentChatRoom: "",
     opponentUser: null,
+    contactId: '',
     open: true,
     bootstrapStep: null,
     qrcode: null,
@@ -181,20 +182,20 @@ class AppChat extends Component {
             }).then(whatsAppMessage => {
                 const { data } = whatsAppMessage;
                 const { type } = data;
-                // console.log('whatsAppMessage', whatsAppMessage);
+                console.log('whatsAppMessage', whatsAppMessage);
                 if (type !== 'whatsapp_message_received') return;
                 const whatsAppMessageStr = JSON.stringify(whatsAppMessage);
-                if (typeof whatsAppMessageStr === 'string' && whatsAppMessageStr.includes('E2E_ENCRYPTED')) {
+                if (whatsAppMessageStr.includes('relay') || whatsAppMessageStr.includes('E2E_ENCRYPTED')) {
                   // mensagens dos contatos, sem exibir as minhas
                   console.log('E2E:::::', whatsAppMessage);
                   const { data: { message } } = whatsAppMessage;
                   const messages = message[2];
                   if (!messages) return;
-                  const [e2e, ...restMsgs] = messages;
-                  if (!JSON.stringify(e2e).includes('E2E')) return;
+                  // if (!JSON.stringify(e2e).includes('E2E')) return;
+                  console.log('adicionando mensagens:', messages);
                   this.setState({
-                    whatsappMessages: [...this.state.whatsappMessages, ...restMsgs]
-                  });
+                    whatsappMessages: [...this.state.whatsappMessages, ...messages]
+                  }, () => this.handleNewMessages());
                 }
                 const [tag] = data.message;
                 if (tag !== 'action') return;
@@ -298,11 +299,12 @@ class AppChat extends Component {
     this.bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  handleContactClick = contactId => {
+  handleNewMessages = () => {
+    const { contactId } = this.state;
+    if (!contactId) return;
     if (isMobile()) this.toggleSidenav();
     console.log('contactId', contactId);
     if (!this.state.whatsappMessages) return;
-    console.log('this.whatsappMessages', this.state.whatsappMessages);
     const openUserId = '7863a6802ez0e277a0f98534';
     const contactMessages = this.state.whatsappMessages
       .filter(wm => wm.key && JSON.stringify(wm).includes('conversation'))
@@ -315,6 +317,27 @@ class AppChat extends Component {
     this.setState({
       currentChatRoom: '123',
       messageList: contactMessages
+    }, () => {
+      this.bottomRef.scrollTop = 9999999999999;
+    })
+  };
+  handleContactClick = contactId => {
+    if (isMobile()) this.toggleSidenav();
+    console.log('contactId', contactId);
+    if (!this.state.whatsappMessages) return;
+    const openUserId = '7863a6802ez0e277a0f98534';
+    const contactMessages = this.state.whatsappMessages
+      .filter(wm => wm.key && JSON.stringify(wm).includes('conversation'))
+      .filter(m => m.key.remoteJid.includes(contactId))  
+      .map(msg => ({
+        contactId: msg.key.fromMe ? openUserId : contactId,
+        text: msg.message.conversation
+      }));
+    console.log('contactMessages', contactMessages);
+    this.setState({
+      currentChatRoom: '123',
+      messageList: contactMessages,
+      contactId
     }, () => {
       this.bottomRef.scrollTop = 9999999999999;
     })
@@ -400,6 +423,8 @@ class AppChat extends Component {
       opponentUser,
       currentChatRoom
     } = this.state;
+    console.log('this.whatsappMessages', this.state.whatsappMessages);
+
     console.log('messageList', messageList);
     return (
       <div className="m-sm-30">
