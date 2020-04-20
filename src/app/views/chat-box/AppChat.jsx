@@ -303,11 +303,12 @@ class AppChat extends Component {
     console.log('contactId', contactId);
     if (!this.state.whatsappMessages) return;
     console.log('this.whatsappMessages', this.state.whatsappMessages);
+    const openUserId = '7863a6802ez0e277a0f98534';
     const contactMessages = this.state.whatsappMessages
       .filter(wm => wm.key && JSON.stringify(wm).includes('conversation'))
       .filter(m => m.key.remoteJid.includes(contactId))  
       .map(msg => ({
-        contactId,
+        contactId: msg.key.fromMe ? openUserId : contactId,
         text: msg.message.conversation
       }));
     console.log('contactMessages', contactMessages);
