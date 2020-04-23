@@ -44,7 +44,8 @@ class AppChat extends Component {
     bootstrapStep: null,
     qrcode: null,
     client: socket(),
-    chats: {}
+    chats: {},
+    users: []
   };
 
   bottomRef = React.createRef();
@@ -59,9 +60,9 @@ class AppChat extends Component {
         }
       });
     });
-    getAllContact(this.state.currentUser.id).then(data =>
-      this.setState({ contactList: [...data.data] })
-    );
+    // getAllContact(this.state.currentUser.id).then(data =>
+    //   this.setState({ contactList: [...data.data] })
+    // );
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
     client.registerQrcodeHandler(this.handleQrcode)
@@ -85,9 +86,12 @@ class AppChat extends Component {
         id: user.jid,
         name: user.name
       }));
+    const users = Object.values(chats).map(({ user }) => user);
+    console.log('users', users);
     this.setState({
-      chats, contactList: [...this.state.contactList, ...contacts], 
-      qrcode: null
+      chats, contactList: [...contacts], 
+      qrcode: null,
+      users
     });
   }
 
@@ -107,7 +111,7 @@ class AppChat extends Component {
   handleContactClick = contactId => {
     if (isMobile()) this.toggleSidenav();
     console.log('contactId', contactId);
-    if (!this.state.whatsappMessages) return;
+    
     const openUserId = '7863a6802ez0e277a0f98534';
 
     this.setState({
@@ -116,13 +120,21 @@ class AppChat extends Component {
       contactId
     }, () => {
       this.bottomRef.scrollTop = 9999999999999;
-    })
-    getContactById(contactId).then(({ data }) => {
-      console.log('open user', data);
-      this.setState({
-        opponentUser: { ...data }
-      });
     });
+    const user = {
+      ...this.state.chats[contactId].user,
+      status: 'Online',
+      avatar: 'assets/images/face-1.jpg'
+    };
+    console.log('user', user);
+    this.setState({ opponentUser: user });
+  
+    // getContactById(contactId).then(({ data }) => {
+    //   console.log('open user', data);
+    //   this.setState({
+    //     opponentUser: { ...data }
+    //   });
+    // });
     getChatRoomByContactId(this.state.currentUser.id, contactId).then(
       ({ data }) => {
         let { chatId, messageList, recentListUpdated } = data;
@@ -147,6 +159,11 @@ class AppChat extends Component {
     let { id } = this.state.currentUser;
     let { currentChatRoom, opponentUser } = this.state;
     if (currentChatRoom === "") return;
+    console.log('message', message);
+    this.state.client.message({
+      jid: opponentUser.jid,
+      text: message
+    });
     sendNewMessage({
       chatId: currentChatRoom,
       text: message,
@@ -162,25 +179,25 @@ class AppChat extends Component {
         }
       );
 
-      // bot message
-      setTimeout(() => {
-        sendNewMessage({
-          chatId: currentChatRoom,
-          text: `Hi, I'm ${opponentUser.name}. Your imaginary friend.`,
-          contactId: opponentUser.id,
-          time: new Date()
-        }).then(data => {
-          this.setState(
-            {
-              messageList: [...data.data]
-            },
-            () => {
-              this.bottomRef.scrollTop = 9999999999999;
-            }
-          );
-        });
-      }, 750);
-      // bot message ends here
+    //   // bot message
+    //   setTimeout(() => {
+    //     sendNewMessage({
+    //       chatId: currentChatRoom,
+    //       text: `Hi, I'm ${opponentUser.name}. Your imaginary friend.`,
+    //       contactId: opponentUser.id,
+    //       time: new Date()
+    //     }).then(data => {
+    //       this.setState(
+    //         {
+    //           messageList: [...data.data]
+    //         },
+    //         () => {
+    //           this.bottomRef.scrollTop = 9999999999999;
+    //         }
+    //       );
+    //     });
+    //   }, 750);
+    //   // bot message ends here
     });
   };
 
@@ -200,7 +217,6 @@ class AppChat extends Component {
       currentChatRoom
     } = this.state;
 
-    console.log('contactList', contactList);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">

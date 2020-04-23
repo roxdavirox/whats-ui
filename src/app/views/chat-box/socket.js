@@ -40,8 +40,8 @@ export default function () {
     socket.emit('leave', chatroomName, cb)
   }
 
-  function message(chatroomName, msg, cb) {
-    socket.emit('message', { chatroomName, message: msg }, cb)
+  function message(messageObject) {
+    socket.emit('message', messageObject);
   }
 
   function getChatrooms(cb) {
