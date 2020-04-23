@@ -2,6 +2,7 @@ const io = require('socket.io-client')
 
 export default function () {
   const host = process.env.HOST_WS || 'http://localhost:3001'
+  console.log('host ws:', host);
   const socket = io.connect(host)
 
   function registerHandler(onMessageReceived) {
