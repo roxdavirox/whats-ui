@@ -80,7 +80,15 @@ class AppChat extends Component {
 
   handleChats = chats => {
     console.log('chats', chats);
-    this.setState({ chats, qrcode: null });
+    const contacts = Object.values(chats)
+      .map(({ user }) => ({
+        id: user.jid,
+        name: user.name
+      }));
+    this.setState({
+      chats, contactList: [...this.state.contactList, ...contacts], 
+      qrcode: null
+    });
   }
 
   updateRecentContactList = () => {
@@ -191,9 +199,8 @@ class AppChat extends Component {
       opponentUser,
       currentChatRoom
     } = this.state;
-    console.log('this.whatsappMessages', this.state.whatsappMessages);
 
-    console.log('messageList', messageList);
+    console.log('contactList', contactList);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
