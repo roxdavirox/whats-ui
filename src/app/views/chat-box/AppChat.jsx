@@ -65,8 +65,9 @@ class AppChat extends Component {
     // );
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
-    client.registerQrcodeHandler(this.handleQrcode)
+    client.registerQrcodeHandler(this.handleQrcode);
     client.registerChatHandler(this.handleChats);
+    client.registerHandler(this.handleReceivedMessage);
     this.updateRecentContactList();
   }
 
@@ -107,6 +108,29 @@ class AppChat extends Component {
   scrollToBottom = () => {
     this.bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  handleReceivedMessage = message => {
+    console.log('mensagem recebida:', message);
+    let { id } = this.state.currentUser;
+    let { currentChatRoom, opponentUser } = this.state;
+    if (currentChatRoom === "") return;
+
+    sendNewMessage({
+      chatId: currentChatRoom,
+      text: message.text,
+      contactId: message.jid,
+      time: new Date()
+    }).then(data => {
+      this.setState(
+        {
+          messageList: [...data.data]
+        },
+        () => {
+          this.bottomRef.scrollTop = 9999999999999;
+        }
+      );
+    });
+  }
 
   handleContactClick = contactId => {
     if (isMobile()) this.toggleSidenav();
