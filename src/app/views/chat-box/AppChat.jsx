@@ -19,8 +19,6 @@ import { isMobile } from "utils";
 import socket from './socket';
 import Qrcode from 'qrcode.react';
 
-const HOST_WS = `ws://${process.env.HOST_WS || 'localhost' }:2019`;
-
 const delayIt = time => fn => new Promise((resolve, _) =>
     setTimeout(
       () => { fn(); resolve(); },
@@ -116,20 +114,20 @@ class AppChat extends Component {
     if (currentChatRoom === "") return;
 
     sendNewMessage({
-      chatId: currentChatRoom,
-      text: message.text,
-      contactId: message.jid,
-      time: new Date()
-    }).then(data => {
-      this.setState(
-        {
-          messageList: [...data.data]
-        },
-        () => {
-          this.bottomRef.scrollTop = 9999999999999;
-        }
-      );
-    });
+        chatId: currentChatRoom,
+        text: message.text,
+        contactId: message.jid,
+        time: new Date()
+      }).then(data => {
+        this.setState(
+          {
+            messageList: [...data.data]
+          },
+          () => {
+            this.bottomRef.scrollTop = 9999999999999;
+          }
+        );
+      });
   }
 
   handleContactClick = contactId => {
