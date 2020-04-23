@@ -1,7 +1,7 @@
 const io = require('socket.io-client')
 
 export default function () {
-  const host = `https://${process.env.HOST_WS}` || 'http://localhost:3001'
+  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001'
   console.log('host ws:', host);
   const socket = io.connect(host)
 
