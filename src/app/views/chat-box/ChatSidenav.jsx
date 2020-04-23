@@ -18,7 +18,7 @@ const ChatSidenav = ({
           {currentUser.name}
         </h5>
       </div>
-      <Scrollbar className="chat-contact-list position-relative h-400">
+      <Scrollbar className="chat-contact-list position-relative h-700">
         {recentContactList.map((contact, index) => (
           <div
             onClick={() => handleContactClick(contact.id)}
