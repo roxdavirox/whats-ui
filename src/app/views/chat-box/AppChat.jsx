@@ -43,7 +43,8 @@ class AppChat extends Component {
     open: true,
     bootstrapStep: null,
     qrcode: null,
-    client: socket()
+    client: socket(),
+    chats: {}
   };
 
   bottomRef = React.createRef();
@@ -64,6 +65,7 @@ class AppChat extends Component {
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
     client.registerQrcodeHandler(this.handleQrcode)
+    client.registerChatHandler(this.handleChats);
     this.updateRecentContactList();
   }
 
@@ -74,6 +76,11 @@ class AppChat extends Component {
   handleConnection = () => {
     console.log('connectado!');
     this.setState({ isConnected: true });
+  }
+
+  handleChats = chats => {
+    console.log('chats', chats);
+    this.setState({ chats, qrcode: null });
   }
 
   updateRecentContactList = () => {
@@ -207,7 +214,7 @@ class AppChat extends Component {
               />
             </MatxSidenav>
             <MatxSidenavContent>
-              {this.state.qrcode 
+              {this.state.qrcode && this.state.isConnected
                 ? <Qrcode value={this.state.qrcode} />
                 : <ChatContainer
                       id={currentUser.id}

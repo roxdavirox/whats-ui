@@ -11,6 +11,10 @@ export default function () {
     socket.on('qrcode', onQrcode)
   }
 
+  function registerChatHandler(onChats) {
+    socket.on('chats', onChats);
+  }
+
   function registerConnectHandler(onConnect) {
     socket.on('connect', onConnect)
   }
@@ -58,6 +62,7 @@ export default function () {
     registerHandler,
     unregisterHandler,
     registerConnectHandler,
-    registerQrcodeHandler
+    registerQrcodeHandler,
+    registerChatHandler
   }
 }
