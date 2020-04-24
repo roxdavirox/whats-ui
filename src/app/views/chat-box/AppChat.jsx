@@ -80,11 +80,24 @@ class AppChat extends Component {
 
   handleChats = chats => {
     console.log('chats', chats);
+    function byTime( a, b ) {
+      if ( parseInt(a.time) < parseInt(b.time) ){
+        return 1;
+      }
+      if ( parseInt(a.time) > parseInt(b.time) ){
+        return -1;
+      }
+      return 0;
+    }
+    
     const contacts = Object.values(chats)
       .map(({ user }) => ({
         id: user.jid,
-        name: user.name
-      }));
+        name: user.name,
+        time: user.time
+      }))
+      .sort(byTime);
+    console.log('sorted contacts', contacts);
     const users = Object.values(chats).map(({ user }) => user);
     console.log('users', users);
     this.setState({
