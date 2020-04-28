@@ -58,16 +58,21 @@ class AppChat extends Component {
     client.registerConnectHandler(this.handleConnection);
     client.registerQrcodeHandler(this.handleQrcode);
     client.registerChatHandler(this.handleChats);
-    client.registerHandler(this.handleReceivedMessage);
+    client.registerHandler(this.handleReceivedMessage, this.handleRethink);
     this.updateRecentContactList();
   }
 
+  handleRethink = data => {
+    console.log('data rethink:', data);
+  }
+
   handleQrcode = qrcode => {
+    console.log('[client] qrcode:', qrcode);
     this.setState({ qrcode });
   }
 
   handleConnection = () => {
-    console.log('connectado!');
+    console.log('[client] connectado!');
     this.setState({ isConnected: true });
   }
 
@@ -83,7 +88,7 @@ class AppChat extends Component {
       return 0;
     }
     
-    const contacts = Object.values(chats)
+    const contacts = chats
       .map(({ user }) => ({
         id: user.jid,
         name: user.name,
@@ -91,7 +96,7 @@ class AppChat extends Component {
       }))
       .sort(byTime);
     console.log('sorted contacts', contacts);
-    const users = Object.values(chats).map(({ user }) => user);
+    const users = chats.map(({ user }) => user);
     console.log('users', users);
     this.setState({
       chats, contactList: [...contacts], 

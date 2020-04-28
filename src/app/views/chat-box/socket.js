@@ -5,16 +5,17 @@ export default function () {
   console.log('host ws:', host);
   const socket = io.connect(host)
 
-  function registerHandler(onMessageReceived) {
+  function registerHandler(onMessageReceived, onRethink) {
     socket.on('message', onMessageReceived)
+    socket.on('rethink', onRethink);
   }
 
   function registerQrcodeHandler(onQrcode) {
     socket.on('qrcode', onQrcode)
   }
 
-  function registerChatHandler(onChats) {
-    socket.on('chats', onChats);
+  function registerChatHandler(onReceiveChats) {
+    socket.on('chats', onReceiveChats);
   }
 
   function registerConnectHandler(onConnect) {
