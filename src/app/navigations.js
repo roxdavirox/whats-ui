@@ -7,6 +7,11 @@ export const navigations = [
     icon: "dashboard",
     // auth: authRoles.guest
   },
+  {
+    name: "Conectar",
+    path: "/code",
+    icon: "important_devices"
+  },
   // {
   //   name: "CRUD Table",
   //   icon: "format_list_bulleted",

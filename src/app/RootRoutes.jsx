@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
 import sessionRoutes from "./views/sessions/SessionRoutes";
 import chatRoutes from "./views/chat-box/ChatRoutes";
-
+import qrcodeRoutes from './views/qrcode/QrcodeRoutes';
 // import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
 // import materialRoutes from "./views/material-kit/MaterialRoutes";
 // import chartsRoute from "./views/charts/ChartsRoute";
@@ -41,6 +41,7 @@ const errorRoute = [
 const routes = [
   ...sessionRoutes,
   ...dashboardRoutes,
+  ...qrcodeRoutes,
   // ...materialRoutes,
   // ...utilitiesRoutes,
   // ...chartsRoute,

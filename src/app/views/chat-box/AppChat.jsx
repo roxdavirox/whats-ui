@@ -43,7 +43,6 @@ class AppChat extends Component {
     contactId: '',
     open: true,
     bootstrapStep: null,
-    qrcode: null,
     client: socket(),
     chats: {},
     users: []
@@ -288,18 +287,15 @@ class AppChat extends Component {
               />
             </MatxSidenav>
             <MatxSidenavContent>
-              {this.state.qrcode && this.state.isConnected
-                ? <Qrcode value={this.state.qrcode} />
-                : <ChatContainer
-                      id={currentUser.id}
-                      opponentUser={opponentUser}
-                      messageList={messageList}
-                      currentChatRoom={currentChatRoom}
-                      setBottomRef={this.setBottomRef}
-                      handleMessageSend={this.handleMessageSend}
-                      toggleSidenav={this.toggleSidenav}
-                    />
-                }
+              <ChatContainer
+                id={currentUser.id}
+                opponentUser={opponentUser}
+                messageList={messageList}
+                currentChatRoom={currentChatRoom}
+                setBottomRef={this.setBottomRef}
+                handleMessageSend={this.handleMessageSend}
+                toggleSidenav={this.toggleSidenav}
+              />
             </MatxSidenavContent>
           </MatxSidenavContainer>
         </Card>
