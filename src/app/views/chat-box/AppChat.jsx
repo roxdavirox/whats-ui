@@ -19,6 +19,16 @@ import { isMobile } from "utils";
 import socket from './socket';
 import Qrcode from 'qrcode.react';
 
+function byTime( a, b ) {
+  if ( parseInt(a.time) < parseInt(b.time) ){
+    return 1;
+  }
+  if ( parseInt(a.time) > parseInt(b.time) ){
+    return -1;
+  }
+  return 0;
+}
+
 class AppChat extends Component {
   state = {
     currentUser: {
@@ -57,7 +67,7 @@ class AppChat extends Component {
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
     client.registerQrcodeHandler(this.handleQrcode);
-    client.registerChatHandler(this.handleChats);
+    client.registerChatHandler(this.handleChats, this.handleChat);
     client.registerHandler(this.handleReceivedMessage, this.handleRethink);
     this.updateRecentContactList();
   }
@@ -76,18 +86,26 @@ class AppChat extends Component {
     this.setState({ isConnected: true });
   }
 
+  handleChat = chat => {
+    console.log('chat', chat);
+
+    const chats = { ...this.state.chats, [chat.jid]: chat };
+    const contactList = Object.values(chats)
+      .map(({ user }) => ({
+        id: user.jid,
+        name: user.name,
+        time: user.time
+      }))
+      .sort(byTime);
+
+    this.setState({ 
+      chats,
+      contactList
+    });
+  }
+
   handleChats = chats => {
     console.log('chats', chats);
-    function byTime( a, b ) {
-      if ( parseInt(a.time) < parseInt(b.time) ){
-        return 1;
-      }
-      if ( parseInt(a.time) > parseInt(b.time) ){
-        return -1;
-      }
-      return 0;
-    }
-    
     const contacts = chats
       .map(({ user }) => ({
         id: user.jid,

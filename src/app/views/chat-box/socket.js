@@ -14,8 +14,9 @@ export default function () {
     socket.on('qrcode', onQrcode)
   }
 
-  function registerChatHandler(onReceiveChats) {
+  function registerChatHandler(onReceiveChats, onReceiveChat) {
     socket.on('chats', onReceiveChats);
+    socket.on('chat', onReceiveChat);
   }
 
   function registerConnectHandler(onConnect) {
