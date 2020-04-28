@@ -113,7 +113,8 @@ class AppChat extends Component {
       }))
       .sort(byTime);
     console.log('sorted contacts', contacts);
-    const users = chats.map(({ user }) => user);
+    const users = chats.map(({ user }) => user)
+      .reduce((obj, u) => ({ ...obj, [u.id]: u }), {});
     console.log('users', users);
     this.setState({
       chats, contactList: [...contacts], 
@@ -172,7 +173,7 @@ class AppChat extends Component {
       this.bottomRef.scrollTop = 9999999999999;
     });
     const user = {
-      ...this.state.chats[contactId].user,
+      ...this.state.users[contactId],
       status: 'Online',
       avatar: 'assets/faces/default-avatar.png'
     };
