@@ -19,13 +19,6 @@ import { isMobile } from "utils";
 import socket from './socket';
 import Qrcode from 'qrcode.react';
 
-const delayIt = time => fn => new Promise((resolve, _) =>
-    setTimeout(
-      () => { fn(); resolve(); },
-      time
-    )
-  )
-
 class AppChat extends Component {
   state = {
     currentUser: {
@@ -159,7 +152,7 @@ class AppChat extends Component {
     const user = {
       ...this.state.chats[contactId].user,
       status: 'Online',
-      avatar: 'assets/images/face-1.jpg'
+      avatar: 'assets/faces/default-avatar.png'
     };
     console.log('user', user);
     this.setState({ opponentUser: user });
