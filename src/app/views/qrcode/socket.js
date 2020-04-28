@@ -18,12 +18,7 @@ export default function () {
     console.log(err)
   })
 
-  function register(name, cb) {
-    socket.emit('register', name, cb)
-  }
-
   return {
-    register,
     registerConnectHandler,
     registerQrcodeHandler,
   }

@@ -15,7 +15,7 @@ const QrcodeContainer = props => {
         setQrcode(qrcode);
     }
 
-    return code ? <Qrcode value={code} /> : <><p>Carregando QRcode</p></>
+    return code ? <div style={{ margin: '10px 10px 10px 10px' }}><Qrcode  value={code} /></div> : <><p>Carregando QRcode</p></>
 }
 
 export default QrcodeContainer;

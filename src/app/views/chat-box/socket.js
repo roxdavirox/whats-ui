@@ -7,7 +7,6 @@ export default function () {
 
   function registerHandler(onMessageReceived, onRethink) {
     socket.on('message', onMessageReceived)
-    socket.on('rethink', onRethink);
   }
 
   function registerQrcodeHandler(onQrcode) {
