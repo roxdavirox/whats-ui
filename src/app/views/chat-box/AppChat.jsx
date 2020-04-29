@@ -66,7 +66,7 @@ class AppChat extends Component {
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
     client.registerChatHandler(this.handleChats, this.handleChat);
-    client.registerHandler(this.handleReceivedMessage);
+    client.registerMessageHandler(this.handleReceivedMessage);
     this.updateRecentContactList();
   }
 
@@ -134,25 +134,28 @@ class AppChat extends Component {
 
   handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    // let { id } = this.state.currentUser;
-    // let { currentChatRoom, opponentUser } = this.state;
-    // if (currentChatRoom === "") return;
+    let { id } = this.state.currentUser;
+    let { currentChatRoom, opponentUser } = this.state;
+    if (currentChatRoom === "") return;
+    const { message: { conversation }} = message;
+    if (!conversation) return;
+    const openUserId = '7863a6802ez0e277a0f98534';
 
-    // sendNewMessage({
-    //     chatId: currentChatRoom,
-    //     text: message.text,
-    //     contactId: message.jid,
-    //     time: new Date()
-    //   }).then(data => {
-    //     this.setState(
-    //       {
-    //         messageList: [...data.data]
-    //       },
-    //       () => {
-    //         this.bottomRef.scrollTop = 9999999999999;
-    //       }
-    //     );
-    //   });
+    sendNewMessage({
+        chatId: currentChatRoom,
+        text: conversation,
+        contactId: message.key.fromMe ? openUserId : message.key.remoteJid,
+        time: new Date()
+      }).then(data => {
+        this.setState(
+          {
+            messageList: [...data.data]
+          },
+          () => {
+            this.bottomRef.scrollTop = 9999999999999;
+          }
+        );
+      });
   }
 
   handleContactClick = contactId => {

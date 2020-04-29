@@ -5,7 +5,7 @@ export default function () {
   console.log('host ws:', host);
   const socket = io.connect(host)
 
-  function registerHandler(onMessageReceived) {
+  function registerMessageHandler(onMessageReceived) {
     socket.on('message', onMessageReceived)
   }
 
@@ -67,7 +67,7 @@ export default function () {
     message,
     getChatrooms,
     getAvailableUsers,
-    registerHandler,
+    registerMessageHandler,
     unregisterHandler,
     registerConnectHandler,
     registerQrcodeHandler,
