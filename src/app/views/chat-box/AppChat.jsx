@@ -209,11 +209,12 @@ class AppChat extends Component {
     let { id } = this.state.currentUser;
     let { currentChatRoom, opponentUser } = this.state;
     if (currentChatRoom === "") return;
-    console.log('message', message);
-    this.state.client.message({
+    const newMsg = {
       jid: opponentUser.jid,
       text: message
-    });
+    };
+    console.log('newMsg', newMsg);
+    this.state.client.message(newMsg);
     sendNewMessage({
       chatId: currentChatRoom,
       text: message,
