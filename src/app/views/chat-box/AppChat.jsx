@@ -65,19 +65,15 @@ class AppChat extends Component {
     // );
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
-    client.registerQrcodeHandler(this.handleQrcode);
     client.registerChatHandler(this.handleChats, this.handleChat);
-    client.registerHandler(this.handleReceivedMessage, this.handleRethink);
+    client.registerHandler(this.handleReceivedMessage);
     this.updateRecentContactList();
   }
 
-  handleRethink = data => {
-    console.log('data rethink:', data);
-  }
-
-  handleQrcode = qrcode => {
-    console.log('[client] qrcode:', qrcode);
-    this.setState({ qrcode });
+  componentWillUnmount = () => {
+    const { client } = this.state;
+    if (!client) return;
+    client.close();
   }
 
   handleConnection = () => {
@@ -114,7 +110,7 @@ class AppChat extends Component {
       .sort(byTime);
     console.log('sorted contacts', contacts);
     const users = chats.map(({ user }) => user)
-      .reduce((obj, u) => ({ ...obj, [u.id]: u }), {});
+      .reduce((obj, u) => ({ ...obj, [u.jid]: u }), {});
     console.log('users', users);
     this.setState({
       chats, contactList: [...contacts], 
@@ -138,25 +134,25 @@ class AppChat extends Component {
 
   handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    let { id } = this.state.currentUser;
-    let { currentChatRoom, opponentUser } = this.state;
-    if (currentChatRoom === "") return;
+    // let { id } = this.state.currentUser;
+    // let { currentChatRoom, opponentUser } = this.state;
+    // if (currentChatRoom === "") return;
 
-    sendNewMessage({
-        chatId: currentChatRoom,
-        text: message.text,
-        contactId: message.jid,
-        time: new Date()
-      }).then(data => {
-        this.setState(
-          {
-            messageList: [...data.data]
-          },
-          () => {
-            this.bottomRef.scrollTop = 9999999999999;
-          }
-        );
-      });
+    // sendNewMessage({
+    //     chatId: currentChatRoom,
+    //     text: message.text,
+    //     contactId: message.jid,
+    //     time: new Date()
+    //   }).then(data => {
+    //     this.setState(
+    //       {
+    //         messageList: [...data.data]
+    //       },
+    //       () => {
+    //         this.bottomRef.scrollTop = 9999999999999;
+    //       }
+    //     );
+    //   });
   }
 
   handleContactClick = contactId => {

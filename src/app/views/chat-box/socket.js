@@ -5,7 +5,7 @@ export default function () {
   console.log('host ws:', host);
   const socket = io.connect(host)
 
-  function registerHandler(onMessageReceived, onRethink) {
+  function registerHandler(onMessageReceived) {
     socket.on('message', onMessageReceived)
   }
 
@@ -55,8 +55,13 @@ export default function () {
     socket.emit('availableUsers', null, cb)
   }
 
+  function close() {
+    socket.close();
+  }
+
   return {
     register,
+    close,
     join,
     leave,
     message,
