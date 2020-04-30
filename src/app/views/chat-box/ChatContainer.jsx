@@ -49,7 +49,7 @@ const ChatContainer = ({
           {opponentUser && (
             <Fragment>
               <ChatAvatar
-                src={opponentUser.avatar}
+                src={opponentUser.eurl}
                 status={opponentUser.status}
               />
               <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">

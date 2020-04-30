@@ -102,14 +102,15 @@ class AppChat extends Component {
   handleChats = chats => {
     console.log('chats', chats);
     const contacts = chats
-      .map(({ user }) => ({
+      .map(({ user, eurl }) => ({
         id: user.jid,
         name: user.name,
-        time: user.time
+        time: user.time,
+        eurl
       }))
       .sort(byTime);
     console.log('sorted contacts', contacts);
-    const users = chats.map(({ user }) => user)
+    const users = chats.map(({ user, eurl }) => ({ ...user, eurl }))
       .reduce((obj, u) => ({ ...obj, [u.jid]: u }), {});
     console.log('users', users);
     this.setState({

@@ -25,7 +25,7 @@ const ChatSidenav = ({
             key={index}
             className="flex items-center p-4 cursor-pointer  gray-on-hover"
           >
-            <ChatAvatar src={contact.avatar} status={contact.status} />
+            <ChatAvatar src={contact.eurl || contact.avatar} status={contact.status} />
             <div className="pl-4">
               <p className="m-0">{contact.name}</p>
               <p className="m-0 text-muted">
@@ -44,7 +44,7 @@ const ChatSidenav = ({
             key={index}
             className="flex items-center px-4 py-1 cursor-pointer  gray-on-hover"
           >
-            <ChatAvatar src={contact.avatar} status={contact.status} />
+            <ChatAvatar src={contact.eurl || contact.avatar} status={contact.status} />
             <div className="pl-4">
               <p>{contact.name}</p>
             </div>
