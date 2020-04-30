@@ -12,6 +12,9 @@ export default function () {
   function registerQrcodeHandler(onQrcode) {
     socket.on('qrcode', onQrcode)
   }
+  function registerUserMetadata(handleData) {
+    socket.on('userdata', handleData);
+  }
 
   function registerChatHandler(onReceiveChats, onReceiveChat) {
     socket.on('chats', onReceiveChats);
@@ -71,6 +74,7 @@ export default function () {
     unregisterHandler,
     registerConnectHandler,
     registerQrcodeHandler,
-    registerChatHandler
+    registerChatHandler,
+    registerUserMetadata
   }
 }

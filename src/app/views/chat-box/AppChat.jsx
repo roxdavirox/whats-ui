@@ -52,14 +52,16 @@ class AppChat extends Component {
 
   async componentDidMount() {
     let { id } = this.state.currentUser;
-    getContactById(id).then(data => {
-      this.setState({
-        open: !isMobile(),
-        currentUser: {
-          ...data.data
-        }
-      });
-    });
+    // getContactById(id).then(data => {
+    //   this.setState({
+    //     open: !isMobile(),
+    //     currentUser: {
+    //       ...data.data
+    //     }
+    //   }, () => {
+    //     console.log('currentUser', this.state.currentUser);
+    //   });
+    // });
     // getAllContact(this.state.currentUser.id).then(data =>
     //   this.setState({ contactList: [...data.data] })
     // );
@@ -67,6 +69,7 @@ class AppChat extends Component {
     client.registerConnectHandler(this.handleConnection);
     client.registerChatHandler(this.handleChats, this.handleChat);
     client.registerMessageHandler(this.handleReceivedMessage);
+    client.registerUserMetadata(this.handleUserInfo);
     this.updateRecentContactList();
   }
 
@@ -74,6 +77,17 @@ class AppChat extends Component {
     const { client } = this.state;
     if (!client) return;
     client.close();
+  }
+
+  handleUserInfo = dataUser => {
+    console.log('dataUser', dataUser);
+    this.setState({
+      currentUser: {
+        name: dataUser.name,
+        id: dataUser.id,
+        eurl: dataUser.eurl
+      }
+    })
   }
 
   handleConnection = () => {
