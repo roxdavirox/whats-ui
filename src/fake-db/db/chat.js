@@ -5,23 +5,23 @@ import shortId from "shortid";
 const ChatDB = {
   user: [
     {
-      id: "7863a6802ez0e277a0f98534",
+      id: "5511977689294@c.us",
       name: "Agente de atendimento",
       avatar: "assets/images/face-1.jpg",
       status: "online",
       chatInfo: [ // chats abertos
-        {
-          chatId: "89564a680b3249760ea21fe77",
-          contactId: "323sa680b3249760ea21rt47",
-          unread: 4,
-          lastChatTime: "2017-06-12T02:10:18.931Z"
-        },
-        {
-          chatId: "3289564a680b2134760ea21fe7753",
-          contactId: "14663a3406eb47ffa63d4fec9429cb71",
-          unread: 0,
-          lastChatTime: "2019-03-10T02:10:18.931Z"
-        }
+        // {
+        //   chatId: "89564a680b3249760ea21fe77",
+        //   contactId: "323sa680b3249760ea21rt47",
+        //   unread: 4,
+        //   lastChatTime: "2017-06-12T02:10:18.931Z"
+        // },
+        // {
+        //   chatId: "3289564a680b2134760ea21fe7753",
+        //   contactId: "14663a3406eb47ffa63d4fec9429cb71",
+        //   unread: 0,
+        //   lastChatTime: "2019-03-10T02:10:18.931Z"
+        // }
       ]
     }
   ],
@@ -35,7 +35,7 @@ const ChatDB = {
       mood: ""
     },
     {
-      id: "7863a6802ez0e277a0f98534",
+      id: "5511977689294@c.us",
       name: "John Doe",
       avatar: "assets/images/face-1.jpg",
       status: "online",
@@ -269,6 +269,7 @@ Mock.onGet("/api/chat/contacts").reply(config => {
 });
 
 Mock.onPost("/api/chat/add").reply(config => {
+  console.log('config', config);
   let chatDetails = JSON.parse(config.data);
   let { chatId } = chatDetails;
   ChatDB.chatCollection.forEach(chatRoom => {
@@ -282,6 +283,7 @@ Mock.onPost("/api/chat/add").reply(config => {
 
   let response = chats.map(chat => {
     let temp = ChatDB.contacts.find(user => user.id === chat.contactId);
+    console.log('temp', temp);
     return { ...chat, ...temp };
   });
   return [200, response];

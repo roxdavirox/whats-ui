@@ -32,7 +32,7 @@ function byTime( a, b ) {
 class AppChat extends Component {
   state = {
     currentUser: {
-      id: "7863a6802ez0e277a0f98534"
+      id: "5511977689294@c.us"
     },
     contactList: [],
     recentContactList: [],
@@ -135,12 +135,12 @@ class AppChat extends Component {
   }
 
   updateRecentContactList = () => {
-    let { id } = this.state.currentUser;
-    getRecentContact(id).then(data => {
-      this.setState({
-        recentContactList: [...data.data]
-      });
-    });
+    // let { id } = this.state.currentUser;
+    // getRecentContact(id).then(data => {
+    //   this.setState({
+    //     recentContactList: [...data.data]
+    //   });
+    // });
   };
 
   scrollToBottom = () => {
@@ -149,18 +149,19 @@ class AppChat extends Component {
 
   handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    let { id } = this.state.currentUser;
+    let { id, eurl, name } = this.state.currentUser;
     let { currentChatRoom, opponentUser } = this.state;
     if (currentChatRoom === "") return;
     const { message: { conversation }} = message;
     if (!conversation) return;
-    const openUserId = '7863a6802ez0e277a0f98534';
 
     sendNewMessage({
         chatId: currentChatRoom,
         text: conversation,
-        contactId: message.key.fromMe ? openUserId : message.key.remoteJid,
-        time: new Date()
+        contactId: message.key.fromMe ? id : message.key.remoteJid,
+        time: new Date(),
+        eurl,
+        name
       }).then(data => {
         this.setState(
           {
@@ -177,8 +178,6 @@ class AppChat extends Component {
     if (isMobile()) this.toggleSidenav();
     console.log('contactId', contactId);
     
-    const openUserId = '7863a6802ez0e277a0f98534';
-
     this.setState({
       currentChatRoom: '123',
       messageList: [],

@@ -91,7 +91,7 @@ const ChatContainer = ({
         )}
         {messageList.map((message, index) => (
           <div className="flex items-start px-4 py-3" key={shortid.generate()}>
-            <ChatAvatar src={message.avatar} status={message.status} />
+            <ChatAvatar src={message.eurl} status={message.status} />
             <div className="ml-4">
               <p className="text-muted m-0 mb-2">{message.name}</p>
               <div
