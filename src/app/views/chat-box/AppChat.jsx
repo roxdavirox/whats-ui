@@ -216,20 +216,20 @@ class AppChat extends Component {
     };
     console.log('newMsg', newMsg);
     this.state.client.message(newMsg);
-    sendNewMessage({
-      chatId: currentChatRoom,
-      text: message,
-      contactId: id,
-      time: new Date()
-    }).then(data => {
-      this.setState(
-        {
-          messageList: [...data.data]
-        },
-        () => {
-          this.bottomRef.scrollTop = 9999999999999;
-        }
-      );
+    // sendNewMessage({
+    //   chatId: currentChatRoom,
+    //   text: message,
+    //   contactId: id,
+    //   time: new Date()
+    // }).then(data => {
+    //   this.setState(
+    //     {
+    //       messageList: [...data.data]
+    //     },
+    //     () => {
+    //       this.bottomRef.scrollTop = 9999999999999;
+    //     }
+    //   );
 
     //   // bot message
     //   setTimeout(() => {
@@ -250,7 +250,7 @@ class AppChat extends Component {
     //     });
     //   }, 750);
     //   // bot message ends here
-    });
+    // });
   };
 
   setBottomRef = ref => {
