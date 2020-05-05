@@ -9,6 +9,10 @@ export default function () {
     socket.on('qrcode', onQrcode)
   }
 
+  function registerContactsHandler(onReceiveContacts) {
+    socket.on('contacts', onReceiveContacts);
+  }
+
   function registerConnectHandler(onConnect) {
     socket.on('connect', onConnect)
   }
@@ -21,5 +25,6 @@ export default function () {
   return {
     registerConnectHandler,
     registerQrcodeHandler,
+    registerContactsHandler
   }
 }
