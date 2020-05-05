@@ -6,10 +6,7 @@ import ContactList from './ContactList';
 const QrcodeContainer = props => {
 	const [client, setClient] = useState(socket());
 	const [qrCode, setQrcode] = useState(null);
-	const [contacts, setContacts] = useState([{
-		name: 'Felipe',
-		phone: '+55011987654321'
-	}]);
+	const [contacts, setContacts] = useState([]);
 
 	useEffect(() => {
 		client.registerQrcodeHandler(handleQrcode);
