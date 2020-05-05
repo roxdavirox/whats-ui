@@ -12,7 +12,7 @@ import qrcodeRoutes from './views/qrcode/QrcodeRoutes';
 // import invoiceRoutes from "./views/invoice/InvoioceRoutes";
 // import calendarRoutes from "./views/calendar/CalendarRoutes";
 // import crudRoute from "./views/CRUD/CrudRoutes";
-// import inboxRoute from "./views/inbox/InboxRoutes";
+import inboxRoute from "./views/inbox/InboxRoutes";
 // import formsRoutes from "./views/forms/FormsRoutes";
 // import mapRoutes from "./views/map/MapRoutes";
 // import todoRoutes from "./views/todo/TodoRoutes";

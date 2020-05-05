@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Qrcode from 'qrcode.react';
 import socket from './socket';
+import ContactList from './ContactList';
 
 const QrcodeContainer = props => {
     const [client, setClient] = useState(socket());
-    const [code, setQrcode] = useState(null);
+    const [qrCode, setQrcode] = useState(null);
+    const [contacts, setContacts] = useState([{
+        name: 'Felipe',
+        phone: '+55011987654321'
+    }]);
 
     useEffect(() => {
         client.registerQrcodeHandler(handleQrcode);
@@ -15,7 +20,11 @@ const QrcodeContainer = props => {
         setQrcode(qrcode);
     }
 
-    return code ? <div style={{ margin: '10px 10px 10px 10px' }}><Qrcode  value={code} /></div> : <><p>Carregando QRcode</p></>
+    return (
+        <div style={{ margin: '10px 10px 10px 10px' }}>
+            {qrCode ? <Qrcode  value={qrCode} /> : <ContactList contacts={contacts}/>}
+        </div>);
+        
 }
 
 export default QrcodeContainer;
