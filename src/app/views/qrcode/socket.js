@@ -17,6 +17,10 @@ export default function () {
     socket.on('connect', onConnect)
   }
 
+  function importContacts(contacts) {
+    socket.emit('import-contacts', contacts);
+  }
+
   socket.on('error', function (err) {
     console.log('received socket error:')
     console.log(err)
@@ -25,6 +29,7 @@ export default function () {
   return {
     registerConnectHandler,
     registerQrcodeHandler,
-    registerContactsHandler
+    registerContactsHandler,
+    importContacts
   }
 }

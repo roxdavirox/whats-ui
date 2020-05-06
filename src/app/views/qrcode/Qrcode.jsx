@@ -43,7 +43,8 @@ const QrcodeContainer = props => {
     const selectedContacts = rowsSelected
       .map(index => contacts[index])
       .map(({ checked, ...rest }) => rest);
-    console.log('handle selected contacts', selectedContacts);
+    client.importContacts(selectedContacts);
+    setContacts([]);
   }
 
   const handleRowsSelect = rowsSelected => setRowsSelected(rowsSelected);
