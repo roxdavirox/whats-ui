@@ -40,21 +40,10 @@ const QrcodeContainer = props => {
   }
   
   const handleImportSelectedContacts = () => {
-    const selectedContacts = contacts
-      .filter(contact => contact.checked)
+    const selectedContacts = rowsSelected
+      .map(index => contacts[index])
       .map(({ checked, ...rest }) => rest);
     console.log('handle selected contacts', selectedContacts);
-  }
-
-  const handleContactCheck = contactIndex => {
-    console.log('contactIndex', contactIndex);
-    const changedContacts = contacts.map((contact, index) => ({
-      ...contact,
-      checked: index === contactIndex 
-        ? !contact.checked 
-        : contact.checked
-    }));
-    setContacts(changedContacts);
   }
 
   const handleRowsSelect = rowsSelected => setRowsSelected(rowsSelected);
@@ -65,7 +54,6 @@ const QrcodeContainer = props => {
         ? <Qrcode  value={qrCode} /> 
         : <ContactList 
             contacts={contacts} 
-            handleContactCheck={handleContactCheck}
             handleRowsSelect={handleRowsSelect}
             rowsSelected={rowsSelected}
             handleImportSelectedContacts={handleImportSelectedContacts} />}

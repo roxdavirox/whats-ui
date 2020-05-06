@@ -4,7 +4,6 @@ import CustomToolbarSelect from './CustomToolbarSelect';
 
 const ContactList = ({ 
   contacts,
-  handleContactCheck,
   handleImportSelectedContacts,
   handleRowsSelect,
   rowsSelected
@@ -50,10 +49,8 @@ const ContactList = ({
     },
     rowsSelected,
     onRowsSelect: (rowsSelected, allRows) => {
-      const { dataIndex } = rowsSelected[0];
-      console.log(rowsSelected, allRows);
-      handleContactCheck(dataIndex);
       handleRowsSelect(allRows.map(row => row.dataIndex));
+      console.log(rowsSelected, allRows);
     },
   };
 
