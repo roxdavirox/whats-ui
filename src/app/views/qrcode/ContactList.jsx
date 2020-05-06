@@ -3,6 +3,10 @@ import ContactItem from './ContactItem';
 import Button from "@material-ui/core/Button";
 import MuiDatatable from "mui-datatables";
 
+// TODO: 
+//  - handle contact check no datatable
+//  - substituir delete do toolbar por um botão de importação
+//      quando um item for selelcionado, deve aparecer apenas o botão de importar contatos
 const ContactList = ({ contacts, handleContactCheck }) => {
   const contactCount = Object.values(contacts).length;
   const columns = [
@@ -29,22 +33,22 @@ const ContactList = ({ contacts, handleContactCheck }) => {
       }
     }
   ]
-
   const options = {
     filterType: 'checkbox',
-    customRowRender: data => {
-      const [ jid, name, phone, eurl] = data;
+    // customRowRender: data => {
+    //   const [ jid, name, phone, eurl] = data;
       
-      return (
-        <tr key={jid}>
-          <td colSpan={4} style={{ paddingTop: "10px"}}>
-            <ContactItem
-              contact={{ name, phone, eurl }}
-            />
-          </td>
-        </tr>
-      );
-    },
+    //   return (
+    //     <tr key={jid}>
+    //       <td colSpan={4} style={{ paddingTop: "10px"}}>
+    //         <ContactItem
+    //           contact={{ jid, name, phone, eurl }}
+    //           handleContactCheck={handleContactCheck}
+    //         />
+    //       </td>
+    //     </tr>
+    //   );
+    // },
   };
 
   return (

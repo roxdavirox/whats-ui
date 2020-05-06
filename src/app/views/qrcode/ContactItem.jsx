@@ -22,7 +22,7 @@ const ContactItem = ({
 				<Grid container alignItems="center">
 				<Grid item md={5} xs={7}>
 					<div className="flex items-center">
-					<Checkbox checked={checked} onClick={handleCheck}/>
+					<Checkbox value={checked} onClick={handleCheck}/>
 					<Hidden smDown>
 						<Fab
 							className="ml-4 bg-primary box-shadow-none text-white"
