@@ -34,7 +34,7 @@ const ContactList = ({
             >
               <Avatar className="avatar" src={eurl} />
             </Fab>
-        </Hidden>
+          </Hidden>
         )
       }
     },

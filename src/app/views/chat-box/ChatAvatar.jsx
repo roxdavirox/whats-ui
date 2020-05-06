@@ -22,11 +22,13 @@ const ChatAvatar = ({ src, status, classes }) => {
   return (
     <div className="chat-avatar position-relative">
       <Avatar className={classes.avatar} src={src} />
-      <div
-        className={`${classes.status_circle} ${
-          status === "online" ? "bg-primary" : "bg-error"
-        }`}
-      />
+      {status && 
+        <div
+          className={`${classes.status_circle} ${
+            status === "online" ? "bg-primary" : "bg-error"
+          }`}
+        />
+      }
     </div>
   );
 };

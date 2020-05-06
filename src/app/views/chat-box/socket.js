@@ -21,6 +21,10 @@ export default function () {
     socket.on('chat', onReceiveChat);
   }
 
+  function registerContactsHandler(onReceiveCOntacts) {
+    socket.on('contacts', onReceiveCOntacts);
+  }
+
   function registerConnectHandler(onConnect) {
     socket.on('connect', onConnect)
   }
@@ -75,6 +79,7 @@ export default function () {
     registerConnectHandler,
     registerQrcodeHandler,
     registerChatHandler,
-    registerUserMetadata
+    registerUserMetadata,
+    registerContactsHandler
   }
 }

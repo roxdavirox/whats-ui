@@ -67,7 +67,7 @@ class AppChat extends Component {
     // );
     const { client } = this.state;
     client.registerConnectHandler(this.handleConnection);
-    client.registerChatHandler(this.handleChats, this.handleChat);
+    client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
     client.registerUserMetadata(this.handleUserInfo);
     this.updateRecentContactList();
@@ -80,6 +80,7 @@ class AppChat extends Component {
   }
 
   handleUserInfo = dataUser => {
+    if(!dataUser) return;
     console.log('dataUser', dataUser);
     this.setState({
       currentUser: {
@@ -90,48 +91,13 @@ class AppChat extends Component {
     })
   }
 
+  handleReceiveContacts = contacts => {
+    this.setState({ contactList: contacts });
+  }
+
   handleConnection = () => {
     console.log('[client] connectado!');
     this.setState({ isConnected: true });
-  }
-
-  handleChat = chat => {
-    console.log('chat', chat);
-
-    const chats = { ...this.state.chats, [chat.jid]: chat };
-    const contactList = Object.values(chats)
-      .map(({ user }) => ({
-        id: user.jid,
-        name: user.name,
-        time: user.time
-      }))
-      .sort(byTime);
-
-    this.setState({ 
-      chats,
-      contactList
-    });
-  }
-
-  handleChats = chats => {
-    console.log('chats', chats);
-    const contacts = chats
-      .map(({ user, eurl }) => ({
-        id: user.jid,
-        name: user.name,
-        time: user.time,
-        eurl
-      }))
-      .sort(byTime);
-    console.log('sorted contacts', contacts);
-    const users = chats.map(({ user, eurl }) => ({ ...user, eurl }))
-      .reduce((obj, u) => ({ ...obj, [u.jid]: u }), {});
-    console.log('users', users);
-    this.setState({
-      chats, contactList: [...contacts], 
-      qrcode: null,
-      users
-    });
   }
 
   updateRecentContactList = () => {

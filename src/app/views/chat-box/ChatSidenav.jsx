@@ -8,6 +8,8 @@ import {
   IconButton,
   Tooltip
 } from "@material-ui/core";
+import Drawer from '@material-ui/core/Drawer';
+import ContactList from './ContactList';
 
 const ChatSidenav = ({
   currentUser,
@@ -15,9 +17,13 @@ const ChatSidenav = ({
   recentContactList = [],
   handleContactClick
 }) => {
+
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
+        <Drawer anchor="left" open={false}>
+          <ContactList contacts={contactList}/>
+        </Drawer>
         <ChatAvatar src={currentUser.eurl || currentUser.avatar} status={currentUser.status} />
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
           {currentUser.name}
