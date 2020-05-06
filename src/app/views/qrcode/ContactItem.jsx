@@ -9,7 +9,6 @@ import {
   Avatar,
   Hidden
 } from "@material-ui/core";
-import PersonIcon from '@material-ui/icons/Person';
 
 const ContactItem = ({
 	contact: { jid, name, phone, eurl = '/assets/faces/default-avatar.png', checked = false  },
@@ -29,8 +28,6 @@ const ContactItem = ({
 							size="small"
 						>
 							<Avatar className="avatar" src={eurl} />
-
-							{/* <PersonIcon /> */}
 						</Fab>
 					</Hidden>
 					<span className="card__roject-name font-medium">

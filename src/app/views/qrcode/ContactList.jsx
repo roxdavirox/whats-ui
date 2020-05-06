@@ -1,12 +1,7 @@
 import React, { useState } from "react";
-import ContactItem from './ContactItem';
-import Button from "@material-ui/core/Button";
 import MuiDatatable from "mui-datatables";
+import CustomToolbarSelect from './CustomToolbarSelect';
 
-// TODO: 
-//  - handle contact check no datatable
-//  - substituir delete do toolbar por um botão de importação
-//      quando um item for selelcionado, deve aparecer apenas o botão de importar contatos
 const ContactList = ({ contacts, handleContactCheck }) => {
   const contactCount = Object.values(contacts).length;
   const columns = [
@@ -35,29 +30,28 @@ const ContactList = ({ contacts, handleContactCheck }) => {
   ]
   const options = {
     filterType: 'checkbox',
-    // customRowRender: data => {
-    //   const [ jid, name, phone, eurl] = data;
-      
-    //   return (
-    //     <tr key={jid}>
-    //       <td colSpan={4} style={{ paddingTop: "10px"}}>
-    //         <ContactItem
-    //           contact={{ jid, name, phone, eurl }}
-    //           handleContactCheck={handleContactCheck}
-    //         />
-    //       </td>
-    //     </tr>
-    //   );
-    // },
+    customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
+      <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows} />
+    ),
+    textLabels: {
+      selectedRows: {
+        text: "Contato(s) selecionado(s)",
+      },
+    }
   };
 
   return (
     <>
-      <p>{contactCount ? `Deseja importar ${contactCount} contat${contactCount > 1 ? 'os' : 'o'}?`: 'Conectado'}</p>
-      {contactCount > 0 && (<Button className="mb-4" variant="contained" color="primary">
-        Importar
-      </Button>)}
-      <MuiDatatable data={Object.values(contacts)} options={options} columns={columns} />
+      {contactCount > 0 
+        ? <>
+            <p>Selecione os contatos do celular para importar para o whatsapipe.</p>
+            <MuiDatatable 
+              title={<h6>Contatos</h6>}
+              data={Object.values(contacts)}
+              options={options}
+              columns={columns} />
+          </>
+        : 'Conectado'}
     </>
     )
     
