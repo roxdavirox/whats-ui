@@ -6,7 +6,8 @@ import ContactList from './ContactList';
 const QrcodeContainer = props => {
 	const [client, setClient] = useState(socket());
 	const [qrCode, setQrcode] = useState(null);
-	const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState([]);
+  const [rowsSelected, setRowsSelected] = useState([]);
 
 	useEffect(() => {
 		client.registerQrcodeHandler(handleQrcode);
@@ -30,27 +31,44 @@ const QrcodeContainer = props => {
       }
       return 0;
     }
-    const sortedContacts = contacts.sort(byName);
-    const contactsObject = sortedContacts
-      .map(contact => ({ ...contact, checked: false }))
-      .reduce((obj, contact) => ({ ...obj, [contact.jid]: contact }), {});
-    setContacts(contactsObject);
-    setQrcode(null);
-	}
 
-  const handleContactCheck = jid => {
-    setContacts(previousContacts => ({
-      ...previousContacts,
-      [jid]: {
-        ...previousContacts[jid],
-        checked: !previousContacts[jid].checked
-      }
-    }))
+    const sortedContacts = contacts.sort(byName)
+      .map(contact => ({ ...contact, checked: false }))
+  
+    setContacts(sortedContacts);
+    setQrcode(null);
   }
+  
+  const handleImportSelectedContacts = () => {
+    const selectedContacts = contacts
+      .filter(contact => contact.checked)
+      .map(({ checked, ...rest }) => rest);
+    console.log('handle selected contacts', selectedContacts);
+  }
+
+  const handleContactCheck = contactIndex => {
+    console.log('contactIndex', contactIndex);
+    const changedContacts = contacts.map((contact, index) => ({
+      ...contact,
+      checked: index === contactIndex 
+        ? !contact.checked 
+        : contact.checked
+    }));
+    setContacts(changedContacts);
+  }
+
+  const handleRowsSelect = rowsSelected => setRowsSelected(rowsSelected);
 
 	return (
 		<div style={{ margin: '10px 10px 10px 10px' }}>
-			{qrCode ? <Qrcode  value={qrCode} /> : <ContactList contacts={contacts} handleContactCheck={handleContactCheck} />}
+      {qrCode 
+        ? <Qrcode  value={qrCode} /> 
+        : <ContactList 
+            contacts={contacts} 
+            handleContactCheck={handleContactCheck}
+            handleRowsSelect={handleRowsSelect}
+            rowsSelected={rowsSelected}
+            handleImportSelectedContacts={handleImportSelectedContacts} />}
 		</div>);
 		
 }

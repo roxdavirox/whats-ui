@@ -17,8 +17,8 @@ const defaultToolbarSelectStyles = {
 
 class CustomToolbarSelect extends React.Component {
 
-  handleImportContacts = contacts => {
-    
+  handleImportContacts = () => {
+    this.props.handleImportSelectedContacts();
   };
 
   render() {

@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import MuiDatatable from "mui-datatables";
 import CustomToolbarSelect from './CustomToolbarSelect';
 
-const ContactList = ({ contacts, handleContactCheck }) => {
+const ContactList = ({ 
+  contacts,
+  handleContactCheck,
+  handleImportSelectedContacts,
+  handleRowsSelect,
+  rowsSelected
+}) => {
   const contactCount = Object.values(contacts).length;
   const columns = [
     {
@@ -31,13 +37,24 @@ const ContactList = ({ contacts, handleContactCheck }) => {
   const options = {
     filterType: 'checkbox',
     customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-      <CustomToolbarSelect selectedRows={selectedRows} displayData={displayData} setSelectedRows={setSelectedRows} />
+      <CustomToolbarSelect 
+        selectedRows={selectedRows} 
+        displayData={displayData} 
+        setSelectedRows={setSelectedRows}
+        handleImportSelectedContacts={handleImportSelectedContacts} />
     ),
     textLabels: {
       selectedRows: {
         text: "Contato(s) selecionado(s)",
       },
-    }
+    },
+    rowsSelected,
+    onRowsSelect: (rowsSelected, allRows) => {
+      const { dataIndex } = rowsSelected[0];
+      console.log(rowsSelected, allRows);
+      handleContactCheck(dataIndex);
+      handleRowsSelect(allRows.map(row => row.dataIndex));
+    },
   };
 
   return (
@@ -47,7 +64,7 @@ const ContactList = ({ contacts, handleContactCheck }) => {
             <p>Selecione os contatos do celular para importar para o whatsapipe.</p>
             <MuiDatatable 
               title={<h6>Contatos</h6>}
-              data={Object.values(contacts)}
+              data={contacts}
               options={options}
               columns={columns} />
           </>
