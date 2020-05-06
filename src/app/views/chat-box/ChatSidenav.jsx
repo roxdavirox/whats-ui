@@ -25,7 +25,10 @@ const ChatSidenav = ({
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         <Drawer anchor="left" open={openContactList}>
-          <ContactList contacts={contactList} onClose={handleCloseContactList} />
+          <ContactList 
+            contacts={contactList}
+            onClose={handleCloseContactList}
+            handleContactClick={handleContactClick} />
         </Drawer>
         <ChatAvatar src={currentUser.eurl || currentUser.avatar} status={currentUser.status} />
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
@@ -42,7 +45,7 @@ const ChatSidenav = ({
       <Scrollbar className="chat-contact-list position-relative h-700">
         {recentContactList.map((contact, index) => (
           <div
-            onClick={() => handleContactClick(contact.id)}
+            onClick={() => handleContactClick(contact.jid)}
             key={index}
             className="flex items-center p-4 cursor-pointer  gray-on-hover"
           >

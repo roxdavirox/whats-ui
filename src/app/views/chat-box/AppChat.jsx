@@ -93,7 +93,11 @@ class AppChat extends Component {
   }
 
   handleReceiveContacts = contacts => {
-    this.setState({ contactList: contacts });
+    const contactsObject = contacts.reduce((obj, contact) => ({
+      ...obj,
+      [contact.jid]: contact
+    }), {});
+    this.setState({ contactList: contactsObject });
   }
 
   handleConnection = () => {
@@ -153,7 +157,7 @@ class AppChat extends Component {
       this.bottomRef.scrollTop = 9999999999999;
     });
     const user = {
-      ...this.state.users[contactId],
+      ...this.state.contactList[contactId],
       status: 'Online',
       avatar: 'assets/faces/default-avatar.png'
     };
@@ -184,6 +188,7 @@ class AppChat extends Component {
         }
       }
     );
+    this.handleCloseContactList();
   };
 
   handleMessageSend = message => {

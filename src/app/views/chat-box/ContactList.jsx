@@ -5,17 +5,19 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ChatAvatar from "./ChatAvatar";
 
-const ContactList = ({ contacts }) => (
-  <List>
-    {contacts && contacts.map((contact, index) => (
-      <ListItem button key={index}>
-        <ListItemIcon>
-         <ChatAvatar src={contact.eurl} />
-        </ListItemIcon>
-        <ListItemText primary={contact.name} />
-      </ListItem>
-    ))}
-  </List>
-);
+const ContactList = ({ contacts, handleContactClick }) => {
+  return (
+    <List>
+      {Object.values(contacts) && Object.values(contacts).map((contact, index) => (
+        <ListItem button key={index}>
+          <ListItemIcon>
+          <ChatAvatar src={contact.eurl} />
+          </ListItemIcon>
+          <ListItemText primary={contact.name} onClick={() => handleContactClick(contact.jid)} />
+        </ListItem>
+      ))}
+    </List>
+  );
+}
 
 export default ContactList;
