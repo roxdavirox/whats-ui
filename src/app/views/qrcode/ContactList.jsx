@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import MuiDatatable from "mui-datatables";
 import CustomToolbarSelect from './CustomToolbarSelect';
+import {
+  Fab,
+  Avatar,
+  Hidden
+} from "@material-ui/core";
 
 const ContactList = ({ 
   contacts,
@@ -15,6 +20,22 @@ const ContactList = ({
       label: "jid",
       options: {
         display: 'excluded'
+      }
+    },
+    {
+      name: "eurl",
+      label: "Foto",
+      options: {
+        customBodyRender: (eurl) => (
+          <Hidden smDown>
+            <Fab
+              className="ml-4 bg-primary box-shadow-none text-white"
+              size="small"
+            >
+              <Avatar className="avatar" src={eurl} />
+            </Fab>
+        </Hidden>
+        )
       }
     },
     {
