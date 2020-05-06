@@ -7,8 +7,8 @@ import ChatAvatar from "./ChatAvatar";
 
 const ContactList = ({ contacts }) => (
   <List>
-    {contacts && contacts.map(contact => (
-      <ListItem button key={contact.jid}>
+    {contacts && contacts.map((contact, index) => (
+      <ListItem button key={index}>
         <ListItemIcon>
          <ChatAvatar src={contact.eurl} />
         </ListItemIcon>

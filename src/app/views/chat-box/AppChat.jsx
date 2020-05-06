@@ -45,7 +45,8 @@ class AppChat extends Component {
     bootstrapStep: null,
     client: socket(),
     chats: {},
-    users: []
+    users: [],
+    openContactList: false
   };
 
   bottomRef = React.createRef();
@@ -237,6 +238,9 @@ class AppChat extends Component {
   };
 
   toggleSidenav = () => this.setState({ open: !this.state.open });
+  
+  handleOpenContactList = () => this.setState({ openContactList: true });
+  handleCloseContactList = () => this.setState({ openContactList: false });
 
   render() {
     let {
@@ -262,9 +266,12 @@ class AppChat extends Component {
             >
               <ChatSidenav
                 currentUser={currentUser}
+                openContactList={this.state.openContactList}
                 contactList={contactList}
                 recentContactList={recentContactList}
                 handleContactClick={this.handleContactClick}
+                handleOpenContactList={this.handleOpenContactList}
+                handleCloseContactList={this.handleCloseContactList}
               />
             </MatxSidenav>
             <MatxSidenavContent>

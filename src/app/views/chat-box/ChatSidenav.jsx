@@ -15,14 +15,17 @@ const ChatSidenav = ({
   currentUser,
   contactList = [],
   recentContactList = [],
-  handleContactClick
+  handleContactClick,
+  handleOpenContactList,
+  handleCloseContactList,
+  openContactList
 }) => {
 
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
-        <Drawer anchor="left" open={false}>
-          <ContactList contacts={contactList}/>
+        <Drawer anchor="left" open={openContactList}>
+          <ContactList contacts={contactList} onClose={handleCloseContactList} />
         </Drawer>
         <ChatAvatar src={currentUser.eurl || currentUser.avatar} status={currentUser.status} />
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
@@ -30,7 +33,7 @@ const ChatSidenav = ({
         </h5>
         <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
           <Tooltip title="Iniciar conversa">
-            <IconButton>
+            <IconButton onClick={handleOpenContactList}>
               <ChatIcon />
             </IconButton>
           </Tooltip>
@@ -52,19 +55,6 @@ const ChatSidenav = ({
                   "MMMM dd, yyyy"
                 )}
               </p>
-            </div>
-          </div>
-        ))}
-        <Divider />
-        {contactList.map((contact, index) => (
-          <div
-            onClick={() => handleContactClick(contact.id)}
-            key={index}
-            className="flex items-center px-4 py-1 cursor-pointer  gray-on-hover"
-          >
-            <ChatAvatar src={contact.eurl || contact.avatar} status={contact.status} />
-            <div className="pl-4">
-              <p>{contact.name}</p>
             </div>
           </div>
         ))}
