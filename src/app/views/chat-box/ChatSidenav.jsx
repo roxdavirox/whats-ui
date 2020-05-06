@@ -3,6 +3,11 @@ import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
 import { Divider } from "@material-ui/core";
 import { format } from "date-fns";
+import ChatIcon from '@material-ui/icons/Chat';
+import {
+  IconButton,
+  Tooltip
+} from "@material-ui/core";
 
 const ChatSidenav = ({
   currentUser,
@@ -17,6 +22,13 @@ const ChatSidenav = ({
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
           {currentUser.name}
         </h5>
+        <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
+          <Tooltip title="Iniciar conversa">
+            <IconButton>
+              <ChatIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700">
         {recentContactList.map((contact, index) => (
