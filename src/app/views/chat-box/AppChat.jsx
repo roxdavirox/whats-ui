@@ -203,7 +203,7 @@ class AppChat extends Component {
       jid: opponentUser.jid,
       text: message
     };
-    console.log('newMsg', newMsg);
+    console.log('mensagem enviada', newMsg);
     this.state.client.message(newMsg);
     // sendNewMessage({
     //   chatId: currentChatRoom,
