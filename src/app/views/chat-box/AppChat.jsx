@@ -67,7 +67,11 @@ class AppChat extends Component {
     //   this.setState({ contactList: [...data.data] })
     // );
     const { client } = this.state;
-    client.registerConnectHandler(this.handleConnection);
+    const connectedUser = {
+      userId: 'a069df2c-8abe-45a1-9e15-d5d3d62b5044',
+      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee'
+    };
+    client.registerConnectHandler(this.handleConnection, connectedUser);
     client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
     client.registerUserMetadata(this.handleUserInfo);

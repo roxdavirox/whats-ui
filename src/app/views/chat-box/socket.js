@@ -25,8 +25,9 @@ export default function () {
     socket.on('contacts', onReceiveCOntacts);
   }
 
-  function registerConnectHandler(onConnect) {
-    socket.on('connect', onConnect)
+  function registerConnectHandler(onConnect, userData) {
+    socket.on('connect', onConnect);
+    socket.emit('userdata', userData);
   }
 
   function unregisterHandler() {
