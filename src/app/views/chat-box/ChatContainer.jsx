@@ -96,7 +96,7 @@ const ChatContainer = ({
               <p className="text-muted m-0 mb-2">{message.name}</p>
               <div
                 className={`px-4 py-2 mb-2 list__message ${
-                  currentUserId === message.contactId
+                  message.key.fromMe
                     ? "bg-primary text-white"
                     : "bg-paper"
                 }`}

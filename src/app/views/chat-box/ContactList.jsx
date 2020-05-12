@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -10,15 +10,15 @@ const ContactList = ({ contacts, handleContactClick }) => {
   return (
     <List>
       {Object.values(contacts) && Object.values(contacts).map((contact, index) => (
-        <>
+        <Fragment key={index}>
           <ListItem button key={index}>
             <ListItemIcon>
             <ChatAvatar src={contact.eurl} />
             </ListItemIcon>
-            <ListItemText primary={contact.name} onClick={() => handleContactClick(contact.jid)} />
+            <ListItemText primary={contact.name} onClick={() => handleContactClick(contact.id)} />
           </ListItem>
           <Divider />
-        </>
+        </Fragment>
       ))}
     </List>
   );
