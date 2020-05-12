@@ -16,9 +16,10 @@ import shortid from "shortid";
 
 const ChatContainer = ({
   id: currentUserId,
+  currentUser,
+  currentContact,
   toggleSidenav,
   currentChatRoom,
-  opponentUser,
   messageList = [],
   setBottomRef,
   handleMessageSend
@@ -31,7 +32,6 @@ const ChatContainer = ({
       setMessage("");
     }
   };
-
   return (
     <div className="chat-container flex-column position-relative">
       <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
@@ -46,14 +46,14 @@ const ChatContainer = ({
             <div className="pl-3"></div>
           </div>
 
-          {opponentUser && (
+          {currentContact && (
             <Fragment>
               <ChatAvatar
-                src={opponentUser.eurl}
-                status={opponentUser.status}
+                src={currentContact.eurl}
+                status={currentContact.status}
               />
               <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
-                {opponentUser.name}
+                {currentContact.name}
               </h5>
             </Fragment>
           )}
@@ -89,11 +89,11 @@ const ChatContainer = ({
             <p>Select a contact</p>
           </div>
         )}
-        {messageList.map((message, index) => (
+        {currentContact.chat && currentContact.chat.messages.map((message, index) => (
           <div className="flex items-start px-4 py-3" key={shortid.generate()}>
             <ChatAvatar src={message.eurl} status={message.status} />
             <div className="ml-4">
-              <p className="text-muted m-0 mb-2">{message.name}</p>
+              <p className="text-muted m-0 mb-2">{message.key.fromMe ? currentUser.name : currentContact.name}</p>
               <div
                 className={`px-4 py-2 mb-2 list__message ${
                   message.key.fromMe
@@ -101,7 +101,7 @@ const ChatContainer = ({
                     : "bg-paper"
                 }`}
               >
-                <span className="whitespace-pre-wrap">{message.text}</span>
+                <span className="whitespace-pre-wrap">{message.message.conversation}</span>
               </div>
               <small className="text-muted mb-0">
                 {getTimeDifference(new Date(message.time))} ago

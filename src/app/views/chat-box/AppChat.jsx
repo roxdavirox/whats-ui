@@ -32,7 +32,8 @@ function byTime( a, b ) {
 class AppChat extends Component {
   state = {
     currentUser: {
-      id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044"
+      id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044",
+      name: 'Davi'
     },
     contactList: [],
     recentContactList: [],
@@ -99,7 +100,7 @@ class AppChat extends Component {
   handleReceiveContacts = contacts => {
     const contactsObject = contacts.reduce((obj, contact) => ({
       ...obj,
-      [contact.id]: { ...contact, chat: { messages: [] } }
+      [contact.id]: { ...contact, status: 'Online',  chat: { messages: [] } }
     }), {});
     this.setState({ contacts: contactsObject });
   }
@@ -130,16 +131,18 @@ class AppChat extends Component {
     const contact = contacts[contactId];
     const { chat: { messages } } = contact;
     const newMessages = [...messages, message];
+    const updatedContact = {
+      ...contact,
+      chat: {
+        ...contact.chat,
+        messages: newMessages
+      }
+    };
+    console.log('updatedContact', updatedContact);
     this.setState({
       contacts: {
         ...contacts,
-        [contactId]: {
-          ...contact,
-          chat: {
-            ...contact.chat,
-            messages: newMessages
-          }
-        }
+        [contactId]: updatedContact
       }
     },
       () => {
@@ -182,11 +185,9 @@ class AppChat extends Component {
     const { contacts } = this.state;
     const currentContact = {
       ...contacts[contactId],
-      status: 'Online',
       avatar: 'assets/faces/default-avatar.png'
     };
-    console.log('currentContact', currentContact);
-    this.setState({ currentContact }, () => {
+    this.setState({ contactId }, () => {
       this.bottomRef.scrollTop = 9999999999999;
     });
   
@@ -219,10 +220,11 @@ class AppChat extends Component {
 
   handleMessageSend = message => {
     // let { jid } = this.state.currentUser;
-    let { currentContact } = this.state;
+    const currentContact = this.getCurrentContact();
     const newMsg = {
       jid: currentContact.jid,
-      text: message
+      text: message,
+      time: new Date()
     };
     console.log('mensagem enviada', newMsg);
     this.state.client.message(newMsg);
@@ -272,17 +274,21 @@ class AppChat extends Component {
   
   handleOpenContactList = () => this.setState({ openContactList: true });
   handleCloseContactList = () => this.setState({ openContactList: false });
-
+  getCurrentContact = () => {
+    const { contacts = {}, contactId = {} } = this.state;
+    if (!contactId) return {}
+    if (!contacts) return {}
+    return contacts[contactId] || {};
+  }
   render() {
     let {
       currentUser,
       contacts,
       recentContactList,
-      messageList,
-      currentContact,
       currentChatRoom
     } = this.state;
-
+    const currentContact = this.getCurrentContact();
+    console.log('currentContact', currentContact);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
@@ -308,8 +314,8 @@ class AppChat extends Component {
             <MatxSidenavContent>
               <ChatContainer
                 id={currentUser.id}
-                opponentUser={currentContact}
-                messageList={currentContact ? currentContact.chat.messages : []}
+                currentUser={currentUser}
+                currentContact={currentContact}
                 currentChatRoom={currentChatRoom}
                 setBottomRef={this.setBottomRef}
                 handleMessageSend={this.handleMessageSend}
