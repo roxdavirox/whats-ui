@@ -37,7 +37,7 @@ class AppChat extends Component {
       name: 'Davi'
     },
     contactList: [],
-    recentContactList: [],
+    recentChats: [],
     messageList: [],
     whatsappMessages: [],
     currentChatId: "1d339707-076d-4659-8147-dd6f84876f66",
@@ -58,9 +58,10 @@ class AppChat extends Component {
 
     const { client, currentUser } = this.state;
     client.registerConnectHandler(this.handleConnection, currentUser);
+    client.registerChatHandler(this.handleReceiveChats);
     client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
-    client.registerUserMetadata(this.handleUserInfo);
+    client.registerUserMetadata(this.handleReceiveUserMetadata);
     this.updateRecentContactList();
   }
 
@@ -70,7 +71,7 @@ class AppChat extends Component {
     client.close();
   }
 
-  handleUserInfo = dataUser => {
+  handleReceiveUserMetadata = dataUser => {
     if(!dataUser) return;
     console.log('dataUser', dataUser);
     this.setState({
@@ -82,7 +83,19 @@ class AppChat extends Component {
     })
   }
 
+  handleReceiveChats = chats => {
+    if(!chats) return;
+    console.log('chats recebidos: ', chats);
+    const { contacts } = this.state;
+    const chatsWithContact = chats.map(chat => ({ 
+      contact: contacts[chat.contactId], 
+      ...chat 
+    }));
+    this.setState({ recentChats: chatsWithContact });
+  }
+
   handleReceiveContacts = contacts => {
+    console.log('contacts', contacts);
     const contactsObject = contacts.reduce((obj, contact) => ({
       ...obj,
       [contact.id]: { ...contact, status: 'Online',  chat: { messages: [] } }
@@ -181,10 +194,9 @@ class AppChat extends Component {
     let {
       currentUser,
       contacts,
-      recentContactList,
+      recentChats,
       currentChatRoom
     } = this.state;
-    console.log('contacts', contacts);
     const currentContact = this.getCurrentContact();
     console.log('currentContact', currentContact);
     return (
@@ -203,7 +215,7 @@ class AppChat extends Component {
                 currentUser={currentUser}
                 openContactList={this.state.openContactList}
                 contactList={contacts}
-                recentContactList={recentContactList}
+                recentChats={recentChats}
                 handleContactClick={this.handleContactClick}
                 handleOpenContactList={this.handleOpenContactList}
                 handleCloseContactList={this.handleCloseContactList}

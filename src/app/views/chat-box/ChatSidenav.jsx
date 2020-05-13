@@ -14,7 +14,7 @@ import ContactList from './ContactList';
 const ChatSidenav = ({
   currentUser,
   contactList = [],
-  recentContactList = [],
+  recentChats = [],
   handleContactClick,
   handleOpenContactList,
   handleCloseContactList,
@@ -43,18 +43,20 @@ const ChatSidenav = ({
         </div>
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700">
-        {recentContactList.map((contact, index) => (
+        {recentChats.map((chat, index) => (
           <div
-            onClick={() => handleContactClick(contact.jid)}
+            onClick={() => handleContactClick(chat.contact.id)}
             key={index}
             className="flex items-center p-4 cursor-pointer  gray-on-hover"
           >
-            <ChatAvatar src={contact.eurl || contact.avatar} status={contact.status} />
+            <ChatAvatar src={chat.contact.eurl || chat.contact.avatar} status={chat.contact.status} />
             <div className="pl-4">
-              <p className="m-0">{contact.name}</p>
+              <p className="m-0">{chat.contact.name}</p>
               <p className="m-0 text-muted">
                 {format(
-                  new Date(contact.lastChatTime).getTime(),
+                  new Date(
+                    // chat.lastChatTime
+                    ).getTime(),
                   "MMMM dd, yyyy"
                 )}
               </p>
