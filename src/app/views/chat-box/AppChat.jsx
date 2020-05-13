@@ -33,6 +33,7 @@ class AppChat extends Component {
   state = {
     currentUser: {
       id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044",
+      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee',
       name: 'Davi'
     },
     contactList: [],
@@ -54,25 +55,9 @@ class AppChat extends Component {
 
   async componentDidMount() {
     let { id } = this.state.currentUser;
-    // getContactById(id).then(data => {
-    //   this.setState({
-    //     open: !isMobile(),
-    //     currentUser: {
-    //       ...data.data
-    //     }
-    //   }, () => {
-    //     console.log('currentUser', this.state.currentUser);
-    //   });
-    // });
-    // getAllContact(this.state.currentUser.id).then(data =>
-    //   this.setState({ contactList: [...data.data] })
-    // );
-    const { client } = this.state;
-    const connectedUser = {
-      userId: 'a069df2c-8abe-45a1-9e15-d5d3d62b5044',
-      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee'
-    };
-    client.registerConnectHandler(this.handleConnection, connectedUser);
+
+    const { client, currentUser } = this.state;
+    client.registerConnectHandler(this.handleConnection, currentUser);
     client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
     client.registerUserMetadata(this.handleUserInfo);
@@ -149,22 +134,7 @@ class AppChat extends Component {
         this.bottomRef.scrollTop = 9999999999999;
       }
     );
-    // sendNewMessage({
-    //     chatId: currentChatRoom,
-    //     text: conversation,
-    //     senderId: message.key.fromMe ? jid : message.key.remoteJid,
-    //     time: new Date(),
-    //     eurl,
-    //     name
-    //   }).then(data => {
-    //     console.log('response new message:', data);
-    //     this.setState(
-    //       {
-    //         messageList: [...data.data]
-    //       },
 
-    //     );
-    //   });
   }
 
   handleContactClick = contactId => {
@@ -174,96 +144,23 @@ class AppChat extends Component {
     // contact: { chats: { messages: [] } }
     if (isMobile()) this.toggleSidenav();
     console.log('contactId', contactId);
-    
-    // this.setState({
-    //   currentChatRoom: '123',
-    //   messageList: [],
-    //   contactId
-    // }, () => {
-    //   this.bottomRef.scrollTop = 9999999999999;
-    // });
-    const { contacts } = this.state;
-    const currentContact = {
-      ...contacts[contactId],
-      avatar: 'assets/faces/default-avatar.png'
-    };
     this.setState({ contactId }, () => {
       this.bottomRef.scrollTop = 9999999999999;
     });
-  
-    // getContactById(contactId).then(({ data }) => {
-    //   console.log('open user', data);
-    //   this.setState({
-    //     opponentUser: { ...data }
-    //   });
-    // });
-    // getChatRoomByContactId(this.state.currentUser.id, contactId).then(
-    //   ({ data }) => {
-    //     let { chatId, messageList, recentListUpdated } = data;
-
-    //     this.setState(
-    //       {
-    //         currentChatRoom: chatId,
-    //         messageList
-    //       },
-    //       () => {
-    //         this.bottomRef.scrollTop = 9999999999999;
-    //       }
-    //     );
-    //     if (recentListUpdated) {
-    //       this.updateRecentContactList();
-    //     }
-    //   }
-    // );
     this.handleCloseContactList();
   };
 
   handleMessageSend = message => {
-    // let { jid } = this.state.currentUser;
+    const { client } = this.state;
     const currentContact = this.getCurrentContact();
     const newMsg = {
+      contactId: currentContact.id,
       jid: currentContact.jid,
       text: message,
       time: new Date()
     };
     console.log('mensagem enviada', newMsg);
-    this.state.client.message(newMsg);
-    // sendNewMessage({
-    //   chatId: currentChatRoom,
-    //   text: message,
-    //   contactId: jid,
-    //   time: new Date()
-    // }).then(data => {
-    //   this.setState(
-    //     {
-    //       messageList: [...data.data]
-    //     },
-    //     () => {
-    //       this.bottomRef.scrollTop = 9999999999999;
-    //     }
-    //   )
-    // });
-
-    //   // bot message
-    //   setTimeout(() => {
-    //     sendNewMessage({
-    //       chatId: currentChatRoom,
-    //       text: `Hi, I'm ${opponentUser.name}. Your imaginary friend.`,
-    //       contactId: opponentUser.id,
-    //       time: new Date()
-    //     }).then(data => {
-    //       this.setState(
-    //         {
-    //           messageList: [...data.data]
-    //         },
-    //         () => {
-    //           this.bottomRef.scrollTop = 9999999999999;
-    //         }
-    //       );
-    //     });
-    //   }, 750);
-    //   // bot message ends here
-    // });
+    client.message(newMsg);
   };
 
   setBottomRef = ref => {
@@ -287,6 +184,7 @@ class AppChat extends Component {
       recentContactList,
       currentChatRoom
     } = this.state;
+    console.log('contacts', contacts);
     const currentContact = this.getCurrentContact();
     console.log('currentContact', currentContact);
     return (
