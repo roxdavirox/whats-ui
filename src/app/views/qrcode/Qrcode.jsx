@@ -10,11 +10,12 @@ const QrcodeContainer = props => {
   const [rowsSelected, setRowsSelected] = useState([]);
 
 	useEffect(() => {
-    const connectedUser = {
-      userId: 'a069df2c-8abe-45a1-9e15-d5d3d62b5044',
-      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee'
+    const currentUser = {
+      id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044",
+      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee',
+      name: 'Davi'
     };
-    client.registerConnectHandler(() =>{}, connectedUser);
+    client.registerConnectHandler(() =>{}, currentUser);
 		client.registerQrcodeHandler(handleQrcode);
 		client.registerContactsHandler(handleReceivedContacts);
 	}, []);

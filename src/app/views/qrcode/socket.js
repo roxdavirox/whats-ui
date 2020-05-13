@@ -10,7 +10,7 @@ export default function () {
   }
 
   function registerContactsHandler(onReceiveContacts) {
-    socket.on('contacts', onReceiveContacts);
+    socket.on('adm-contacts', onReceiveContacts);
   }
 
   function registerConnectHandler(onConnect, userData) {
