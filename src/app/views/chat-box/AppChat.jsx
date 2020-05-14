@@ -167,6 +167,7 @@ class AppChat extends Component {
     const { client, recentChats } = this.state;
     const currentContact = this.getCurrentContact();
     const chat = recentChats.find(c => c.contactId === currentContact.id);
+    if(!chat) return;
     const newMsg = {
       contactId: currentContact.id,
       jid: currentContact.jid,
