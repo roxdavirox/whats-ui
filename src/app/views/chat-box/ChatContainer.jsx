@@ -91,7 +91,7 @@ const ChatContainer = ({
         )}
         {currentContact.chat && currentContact.chat.messages.map((message, index) => (
           <div className="flex items-start px-4 py-3" key={shortid.generate()}>
-            <ChatAvatar src={message.eurl} status={message.status} />
+            <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
             <div className="ml-4">
               <p className="text-muted m-0 mb-2">{message.key.fromMe ? currentUser.name : currentContact.name}</p>
               <div
