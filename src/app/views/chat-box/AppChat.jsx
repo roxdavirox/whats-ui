@@ -164,13 +164,15 @@ class AppChat extends Component {
   };
 
   handleMessageSend = message => {
-    const { client } = this.state;
+    const { client, recentChats } = this.state;
     const currentContact = this.getCurrentContact();
+    const chat = recentChats.find(c => c.contactId === currentContact.id);
     const newMsg = {
       contactId: currentContact.id,
       jid: currentContact.jid,
       text: message,
-      time: new Date()
+      time: new Date(),
+      chatId: chat.id
     };
     console.log('mensagem enviada', newMsg);
     client.message(newMsg);
