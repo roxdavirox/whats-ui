@@ -3,7 +3,8 @@ const io = require('socket.io-client')
 export default function () {
   const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001'
   console.log('host ws:', host);
-  const socket = io.connect(host)
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.1iEUBd6EOj0xeNCvbczF_te1Ac6EdrNU641Tc3gB4Qs';
+  const socket = io.connect(host, {query: `auth_token=${token}`});
 
   function registerQrcodeHandler(onQrcode) {
     socket.on('qrcode', onQrcode)
