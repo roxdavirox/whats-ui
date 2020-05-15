@@ -6,12 +6,12 @@ class JwtAuthService {
 
   // Dummy user object just for the demo
   user = {
-    userId: "1",
-    role: 'ADMIN',
-    displayName: "Adm",
-    email: "fulano@gmail.com",
-    photoURL: "/assets/images/face-6.jpg",
-    age: 25,
+    // userId: "1",
+    // role: 'ADMIN',
+    // displayName: "Adm",
+    // email: "fulano@gmail.com",
+    // photoURL: "/assets/images/face-6.jpg",
+    // age: 25,
     // token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh"
   }
 
@@ -34,6 +34,7 @@ class JwtAuthService {
         token: data.token
       };
       this.setUser(this.user);
+      console.log('this.user', this.user);
       return this.user
     });
   };

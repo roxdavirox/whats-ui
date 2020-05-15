@@ -1,7 +1,7 @@
 import api from '../../services/api';
 import { setUserData } from "./UserActions";
 import history from "history.js";
-
+import jwtAuthService from '../../services/jwtAuthService';
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_LOADING = "LOGIN_LOADING";
@@ -21,12 +21,12 @@ export function makeLogin(email, password) {
     dispatch({
       type: LOGIN_LOADING
     });
-    const url = 'auth/authenticate';
-    api.post(url , { email, password })
-      .then(({ data }) => {
-        if (data.auth) {
-          console.log('data', data);
-          dispatch(setUserData({ ...data.user }));
+    jwtAuthService
+      .loginWithEmailAndPassword(email, password)
+      .then(user => {
+        if (user) {
+          console.log('user', user);
+          dispatch(setUserData(user));
 
           history.push({
             pathname: "/chat"

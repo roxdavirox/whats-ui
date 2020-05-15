@@ -1,9 +1,12 @@
-const io = require('socket.io-client')
+import io from 'socket.io-client';
+import localStorageService from '../../services/localStorageService';
 
 export default function () {
   const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001'
   console.log('host ws:', host);
-  const socket = io.connect(host)
+  const { token } = localStorageService.getItem('auth_user');
+  console.log('token socket', token);
+  const socket = io.connect(host, { query: `auth_token=${token}`})
 
   function registerMessageHandler(onMessageReceived) {
     socket.on('message', onMessageReceived)
