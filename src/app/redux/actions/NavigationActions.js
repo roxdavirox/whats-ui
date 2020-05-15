@@ -9,16 +9,16 @@ export function getNavigation(user) {
   }
 }
 
-export function logoutUser() {
-  return dispatch => {
-    jwtAuthService.logout();
+// export function logoutUser() {
+//   return dispatch => {
+//     jwtAuthService.logout();
 
-    history.push({
-      pathname: "/session/signin"
-    });
+//     history.push({
+//       pathname: "/session/signin"
+//     });
 
-    dispatch({
-      type: USER_LOGGED_OUT
-    });
-  };
-}
+//     dispatch({
+//       type: USER_LOGGED_OUT
+//     });
+//   };
+// }

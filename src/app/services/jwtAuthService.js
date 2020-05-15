@@ -1,5 +1,6 @@
 import axios from "axios";
 import localStorageService from "./localStorageService";
+import api from '../services/api';
 
 class JwtAuthService {
 
@@ -7,11 +8,11 @@ class JwtAuthService {
   user = {
     userId: "1",
     role: 'ADMIN',
-    displayName: "Jason Alexander",
-    email: "jasonalexander@gmail.com",
+    displayName: "Adm",
+    email: "fulano@gmail.com",
     photoURL: "/assets/images/face-6.jpg",
     age: 25,
-    token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh"
+    // token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh"
   }
 
   // You need to send http request with email and passsword to your server in this method
@@ -20,16 +21,20 @@ class JwtAuthService {
   // You can define roles in app/auth/authRoles.js
   loginWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.user);
-      }, 1000);
+      api
+        .post('auth/authenticate', { email, password })
+        .then(({ data }) => resolve(data));
     }).then(data => {
       // Login successful
       // Save token
       this.setSession(data.token);
       // Set user
-      this.setUser(data);
-      return data;
+      this.user = {
+        ...data.user,
+        token: data.token
+      };
+      this.setUser(this.user);
+      return this.user
     });
   };
 

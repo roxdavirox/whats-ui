@@ -21,7 +21,7 @@ const getAuthStatus = (props, routes) => {
     matched && matched.auth && matched.auth.length
       ? matched.auth.includes(user.role)
       : true;
-
+  console.log('authenticated', authenticated);
   return authenticated;
 };
 
