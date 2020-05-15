@@ -5,7 +5,7 @@ export const navigations = [
     name: "Dashboard",
     path: "/dashboard/analytics",
     icon: "dashboard",
-    // auth: authRoles.guest
+    auth: authRoles.admin
   },
   {
     name: "Conectar",
