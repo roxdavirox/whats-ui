@@ -17,6 +17,7 @@ const getAuthStatus = (props, routes) => {
   const { location, user } = props;
   const { pathname } = location;
   const matched = routes.find(r => r.path === pathname);
+  console.log('matched', matched);
   const authenticated =
     matched && matched.auth && matched.auth.length
       ? matched.auth.includes(user.role)

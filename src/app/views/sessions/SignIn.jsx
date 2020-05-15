@@ -31,8 +31,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "fulano@gmail.com",
-    password: "123456"
+    email: "",
+    password: ""
   };
   handleChange = event => {
     event.persist();
