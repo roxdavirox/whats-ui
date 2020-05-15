@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
-import { loginWithEmailAndPassword } from "../../redux/actions/LoginActions";
+import { makeLogin } from "../../redux/actions/LoginActions";
 
 const styles = theme => ({
   wrapper: {
@@ -31,9 +31,8 @@ const styles = theme => ({
 
 class SignIn extends Component {
   state = {
-    email: "watson@example.com",
-    password: "testpass",
-    agreement: ""
+    email: "fulano@gmail.com",
+    password: "123456"
   };
   handleChange = event => {
     event.persist();
@@ -42,7 +41,9 @@ class SignIn extends Component {
     });
   };
   handleFormSubmit = event => {
-    this.props.loginWithEmailAndPassword({ ...this.state });
+    const { email, password } = this.state;
+    const { makeLogin } = this.props;
+    makeLogin(email, password);
   };
   render() {
     let { email, password } = this.state;
@@ -139,9 +140,9 @@ class SignIn extends Component {
 }
 
 const mapStateToProps = state => ({
-  loginWithEmailAndPassword: PropTypes.func.isRequired,
+  makeLogin: PropTypes.func.isRequired,
   login: state.login
 });
 export default withStyles(styles, { withTheme: true })(
-  withRouter(connect(mapStateToProps, { loginWithEmailAndPassword })(SignIn))
+  withRouter(connect(mapStateToProps, { makeLogin })(SignIn))
 );

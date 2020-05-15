@@ -1,5 +1,5 @@
 import jwtAuthService from "../../services/jwtAuthService";
-import FirebaseAuthService from "../../services/firebase/firebaseAuthService";
+import api from '../../services/api';
 import { setUserData } from "./UserActions";
 import history from "history.js";
 
@@ -45,23 +45,14 @@ export function resetPassword({ email }) {
   };
 }
 
-export function firebaseLoginEmailPassword({ email, password }) {
+export function makeLogin(email, password) {
   return dispatch => {
-    FirebaseAuthService.signInWithEmailAndPassword(email, password)
-      .then(user => {
-        if (user) {
-          dispatch(
-            setUserData({
-              userId: "1",
-              role: "ADMIN",
-              displayName: "Watson Joyce",
-              email: "watsonjoyce@gmail.com",
-              photoURL: "/assets/images/face-7.jpg",
-              age: 25,
-              token: "faslkhfh423oiu4h4kj432rkj23h432u49ufjaklj423h4jkhkjh",
-              ...user
-            })
-          );
+    const url = 'auth/authenticate';
+    api.post(url , { email, password })
+      .then(({ data }) => {
+        console.log('data', data);
+        if (data.user) {
+          dispatch(setUserData(data));
 
           history.push({
             pathname: "/"
