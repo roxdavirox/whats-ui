@@ -43,18 +43,31 @@ class JwtAuthService {
   // This method is being used when user already logged in & app is reloaded
   loginWithToken = () => {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(this.user);
-      }, 100);
-    }).then(data => {
-      // Token is valid
+      const token = localStorageService.getToken();
+      if (!token) reject("No token provided");
+      console.log('localStorage token', token);
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      }
+
+      api
+        .post('auth/validate', { token }, config)
+        .then(resolve);
+    }).then(({ data }) => {
+      console.log('data', data);
+      if (!data.auth) {
+        console.log('auth error');
+        return;
+      }
       this.setSession(data.token);
-      this.setUser(data);
-      return data;
+      this.setUser(data.user);
+      return data.user;
     });
   };
 
   logout = () => {
+    console.log('logout - localstorage');
     this.setSession(null);
     this.removeUser();
   }
