@@ -16,6 +16,11 @@ class localStorageService {
     }
   }
 
+  getToken() {
+    const token = this.ls.getItem('jwt_token');
+    return token;
+  }
+
 }
 
 export default new localStorageService();
