@@ -10,28 +10,15 @@ import localStorageService from "../services/localStorageService";
 import history from "history.js";
 
 const checkJwtAuth = async setUserData => {
-  // You need to send token to your server to check token is valid
-  // modify loginWithToken method in jwtService
-  let user = await jwtAuthService.loginWithToken();
-  if (user) setUserData(user);
-  else
-    history.push({
-      pathname: "/session/signin"
-    });
+  let user = await jwtAuthService.refreshToken();
+
+  if (!user) {
+    history.push({ pathname: "/session/signin" });
+  }
+
+  setUserData(user);
   return user;
 };
-
-// const checkFirebaseAuth = () => {
-//   firebaseAuthService.checkAuthStatus(user => {
-//     if (user) {
-//       console.log(user.uid);
-//       console.log(user.email);
-//       console.log(user.emailVerified);
-//     } else {
-//       console.log("not logged in");
-//     }
-//   });
-// };
 
 const Auth = ({ children, setUserData, getNavigationByUser }) => {
   setUserData(localStorageService.getItem("auth_user"));

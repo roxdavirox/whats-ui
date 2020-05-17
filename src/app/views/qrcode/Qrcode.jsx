@@ -38,10 +38,10 @@ const QrcodeContainer = props => {
       return 0;
     }
 
-    const sortedContacts = contacts.sort(byName)
+    const sortedAndCheckedContacts = contacts.sort(byName)
       .map(contact => ({ ...contact, checked: false }))
   
-    setContacts(sortedContacts);
+    setContacts(sortedAndCheckedContacts);
     setQrcode(null);
   }
   
