@@ -1,9 +1,14 @@
+
 const io = require('socket.io-client')
 
 export default function () {
-  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001'
+  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001/qrcode'
   console.log('host ws:', host);
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.1iEUBd6EOj0xeNCvbczF_te1Ac6EdrNU641Tc3gB4Qs';
+  const token = localStorage.getItem('jwt_token');
+  if (!token) {
+    console.log('no token provided to socket connection');
+    return;
+  }
   const socket = io.connect(host, {query: `auth_token=${token}`});
 
   function registerQrcodeHandler(onQrcode) {

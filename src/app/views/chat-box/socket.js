@@ -1,10 +1,13 @@
 import io from 'socket.io-client';
-import localStorageService from '../../services/localStorageService';
 
 export default function () {
-  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001'
+  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001/chat'
   console.log('host ws:', host);
-  const { token } = localStorageService.getItem('auth_user');
+  const token = localStorage.getItem('jwt_token');
+  if (!token) {
+    console.log('no token provided to socket connection');
+    return;
+  }
   console.log('token socket', token);
   const socket = io.connect(host, { query: `auth_token=${token}`})
 
