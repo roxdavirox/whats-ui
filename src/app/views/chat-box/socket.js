@@ -70,6 +70,7 @@ export default function () {
   }
 
   function close() {
+    console.log('close chat socket connection');
     socket.close();
   }
 

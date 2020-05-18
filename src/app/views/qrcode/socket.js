@@ -33,10 +33,16 @@ export default function () {
     console.log(err)
   })
 
+  function close() {
+    console.log('close qrcode socket connection');
+    socket.close();
+  }
+
   return {
     registerConnectHandler,
     registerQrcodeHandler,
     registerContactsHandler,
-    importContacts
+    importContacts,
+    close
   }
 }
