@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Qrcode from 'qrcode.react';
 import socket from './socket';
 import ContactList from './ContactList';
@@ -54,7 +54,7 @@ const QrcodeContainer = props => {
   }
 
   const handleRowsSelect = rowsSelected => setRowsSelected(rowsSelected);
-
+  console.log('renderizando qrcode');
 	return (
 		<div style={{ margin: '10px 10px 10px 10px' }}>
       {qrCode 
@@ -64,8 +64,9 @@ const QrcodeContainer = props => {
             handleRowsSelect={handleRowsSelect}
             rowsSelected={rowsSelected}
             handleImportSelectedContacts={handleImportSelectedContacts} />}
-		</div>);
+    </div>
+    );
 		
 }
 
-export default QrcodeContainer;
+export default memo(QrcodeContainer);
