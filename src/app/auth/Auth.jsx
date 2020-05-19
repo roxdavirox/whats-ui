@@ -10,14 +10,19 @@ import localStorageService from "../services/localStorageService";
 import history from "history.js";
 
 const checkJwtAuth = async setUserData => {
-  let user = await jwtAuthService.refreshToken();
-
-  if (!user) {
+  try {
+    let user = await jwtAuthService.refreshToken();
+    
+    if (!user) {
+      history.push({ pathname: "/session/signin" });
+    }
+    
+    setUserData(user);
+    return user;    
+  } catch (err) {
+    console.log('[auth.jsx] checkJwtAuth error:', err);
     history.push({ pathname: "/session/signin" });
   }
-
-  setUserData(user);
-  return user;
 };
 
 const Auth = ({ children, setUserData, getNavigationByUser }) => {
