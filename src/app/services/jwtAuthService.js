@@ -44,7 +44,10 @@ class JwtAuthService {
   refreshToken = () => {
     return new Promise((resolve, reject) => {
       const token = localStorageService.getToken();
-      if (!token) reject("No token provided");
+      if (!token) {
+        reject("Token not found at localStorage:", token);
+        return;
+      }
       console.log('localStorage token', token);
 
       const config = {
