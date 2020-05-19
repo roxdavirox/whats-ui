@@ -46,23 +46,23 @@ export const navigations = [
   //   path: "/scrum-board",
     
   // },
-  {
-    name: "Matx List",
-    icon: "list",
+  // {
+  //   name: "Matx List",
+  //   icon: "list",
     
-    children: [
-      {
-        name: "Infinite Scroll",
-        path: "/infinite-scroll",
-        iconText: "I"
-      },
-      {
-        name: "List",
-        path: "/matx-list",
-        iconText: "L"
-      }
-    ]
-  },
+  //   children: [
+  //     {
+  //       name: "Infinite Scroll",
+  //       path: "/infinite-scroll",
+  //       iconText: "I"
+  //     },
+  //     {
+  //       name: "List",
+  //       path: "/matx-list",
+  //       iconText: "L"
+  //     }
+  //   ]
+  // },
   // {
   //   name: "Invoice Builder",
   //   icon: "receipt",
