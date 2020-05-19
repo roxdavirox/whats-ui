@@ -38,11 +38,17 @@ export default function () {
     socket.close();
   }
 
+  function disconnect() {
+    console.log('[qrcode-socket] disconnected');
+    socket.disconnect();
+  }
+
   return {
     registerConnectHandler,
     registerQrcodeHandler,
     registerContactsHandler,
     importContacts,
-    close
+    close,
+    disconnect
   }
 }

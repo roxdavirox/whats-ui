@@ -68,7 +68,7 @@ class AppChat extends Component {
   componentWillUnmount = () => {
     const { client } = this.state;
     if (!client) return;
-    client.close();
+    client.disconnect();
   }
 
   handleReceiveUserMetadata = dataUser => {

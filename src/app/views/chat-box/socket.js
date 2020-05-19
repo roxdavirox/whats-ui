@@ -74,9 +74,15 @@ export default function () {
     socket.close();
   }
 
+  function disconnect() {
+    console.log('[chat-socket] disconnected');
+    socket.disconnect();
+  }
+
   return {
     register,
     close,
+    disconnect,
     join,
     leave,
     message,

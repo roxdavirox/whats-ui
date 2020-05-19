@@ -18,7 +18,7 @@ const QrcodeContainer = props => {
     client.registerConnectHandler(() =>{}, currentUser);
 		client.registerQrcodeHandler(handleQrcode);
     client.registerContactsHandler(handleReceivedContacts);
-    return () => client.close();
+    return () => client.disconnect();
 	}, []);
 
 	const handleQrcode = qrcode => { 
