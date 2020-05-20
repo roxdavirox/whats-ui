@@ -9,7 +9,7 @@ export default function () {
     console.log('no token provided to socket connection');
     return;
   }
-  const socket = io.connect(host, {query: `auth_token=${token}`});
+  const socket = io.connect(host, { query: `auth_token=${token}`, reconnection: false });
 
   function registerQrcodeHandler(onQrcode) {
     socket.on('qrcode', onQrcode)
@@ -40,7 +40,13 @@ export default function () {
 
   function disconnect() {
     console.log('[qrcode-socket] disconnected');
+
+    removeQrcodeListener();
     socket.disconnect();
+  }
+
+  function removeQrcodeListener() {
+    socket.off('qrcode');
   }
 
   return {

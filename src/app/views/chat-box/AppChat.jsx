@@ -69,6 +69,7 @@ class AppChat extends Component {
     const { client } = this.state;
     if (!client) return;
     client.disconnect();
+    this.setState({ client: null });
   }
 
   handleReceiveUserMetadata = dataUser => {
