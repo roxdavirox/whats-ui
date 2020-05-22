@@ -124,10 +124,20 @@ class AppChat extends Component {
 
   handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    const { contactId } = message;
+    const { contactId, userId, ownerId, chatId } = message;
     if (!message.message.conversation) return;
     const { contacts } = this.state;
-    const contact = contacts[contactId];
+    
+    const contactNotExists = !contacts[contactId];
+    if (contactNotExists) {
+      const { recentChats } = this.state;
+      this.setState({ 
+        recentChats: [...recentChats, { id: chatId, contactId, userId, ownerId }]
+      });
+    }
+
+    const contact = contacts[contactId] || { chat: { messages: []} };
+    
     const { chat: { messages } } = contact;
     const newMessages = [...messages, message];
     const updatedContact = {
