@@ -61,6 +61,10 @@ export default function () {
     socket.emit('register', name, cb)
   }
 
+  function saveContact(data) {
+    socket.emit('saveContact', data);
+  }
+
   function join(chatroomName, cb) {
     socket.emit('join', chatroomName, cb)
   }
@@ -109,6 +113,7 @@ export default function () {
     registerContactsHandler,
     registerTransferUsers,
     transferContact,
-    registerTransferContact
+    registerTransferContact,
+    saveContact
   }
 }

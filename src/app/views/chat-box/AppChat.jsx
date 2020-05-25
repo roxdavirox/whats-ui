@@ -11,6 +11,7 @@ import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
 import socket from './socket';
 import TransferListDialog from './TransferListDialog';
+import SaveContactDialog from './SaveContactDialog';
 
 class AppChat extends Component {
   state = {
@@ -34,6 +35,7 @@ class AppChat extends Component {
     users: [],
     openContactList: false,
     openTransferList: false,
+    openSaveContact: false,
   };
 
   bottomRef = React.createRef();
@@ -254,8 +256,36 @@ class AppChat extends Component {
       }],
     });
   }
+
+  handleSaveContact = contactName => {
+    if (!contactName) return;
+    const { client, contactId, contacts, recentChats } = this.state;
+    console.log('recentChats', recentChats);
+    console.log('this contact id', contactId);
+    const updatedRecentChats = recentChats.reduce((acc, crr) => 
+      [...acc, { 
+          ...crr,
+          contact: crr.contactId === contactId 
+            ? { ...crr.contact, name: contactName, short: contactName, notify: contactName }
+            : crr.contact
+        }
+      ], []);
+    
+    client.saveContact({ contactId, name: contactName });
+    this.setState({
+      contacts: {
+        ...contacts,
+        [contactId]: { ...contacts[contactId], name: contactName, short: contactName }
+      },
+      recentChats: updatedRecentChats
+    });
+  }
+
   handleOpenContactList = () => this.setState({ openContactList: true });
   handleCloseContactList = () => this.setState({ openContactList: false });
+  handleOpenSaveContact = () => this.setState({ openSaveContact: true });
+  handleCloseSaveContact = () => this.setState({ openSaveContact: false });
+
   getCurrentContact = () => {
     const { contacts = {}, contactId = {} } = this.state;
     if (!contactId) return {}
@@ -292,15 +322,25 @@ class AppChat extends Component {
                 handleCloseContactList={this.handleCloseContactList}
               />
             </MatxSidenav>
-            {this.state.openTransferList && <TransferListDialog 
-                users={this.state.users}
-                onSelect={this.handleSelectTransferContact}
-                open={this.state.openTransferList}
-                onClose={this.handleCloseTransferList} 
-              />}
+            {this.state.openTransferList && 
+              <TransferListDialog 
+                  users={this.state.users}
+                  onSelect={this.handleSelectTransferContact}
+                  open={this.state.openTransferList}
+                  onClose={this.handleCloseTransferList} 
+                />
+            }
+            {this.state.openSaveContact && 
+              <SaveContactDialog 
+                  open={this.state.openSaveContact}
+                  onSave={this.handleSaveContact}
+                  onClose={this.handleCloseSaveContact}
+                />
+            }
             <MatxSidenavContent>
               <ChatContainer
                 handleOpenTransferList={this.handleOpenTransferList}
+                onSaveDialogOpen={this.handleOpenSaveContact}
                 currentUser={currentUser}
                 currentContact={currentContact}
                 currentChatRoom={currentChatRoom}

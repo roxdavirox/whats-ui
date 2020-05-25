@@ -15,6 +15,7 @@ import { getTimeDifference } from "utils";
 import shortid from "shortid";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CallEndIcon from '@material-ui/icons/CallEnd';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 const ChatContainer = ({
   currentUser,
   currentContact,
@@ -22,7 +23,8 @@ const ChatContainer = ({
   currentChatRoom,
   setBottomRef,
   handleMessageSend,
-  handleOpenTransferList
+  handleOpenTransferList,
+  onSaveDialogOpen
 }) => {
   let [message, setMessage] = React.useState("");
   const sendMessageOnEnter = event => {
@@ -66,6 +68,12 @@ const ChatContainer = ({
               </IconButton>
             }
           >
+            <MenuItem className="flex items-center" onClick={() => {
+              console.log('click');
+              onSaveDialogOpen();
+            }}>
+              Salvar contato <PersonAddIcon />
+            </MenuItem>
             <MenuItem className="flex items-center" onClick={handleOpenTransferList}>
               Encaminhar<ArrowForwardIosIcon />
             </MenuItem>
