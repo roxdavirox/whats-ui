@@ -6,28 +6,11 @@ import {
   MatxSidenav,
   MatxSidenavContent
 } from "matx";
-import {
-  getAllContact,
-  getRecentContact,
-  sendNewMessage,
-  getContactById,
-  getChatRoomByContactId
-} from "./ChatService";
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
 import socket from './socket';
-import Qrcode from 'qrcode.react';
-
-function byTime( a, b ) {
-  if ( parseInt(a.time) < parseInt(b.time) ){
-    return 1;
-  }
-  if ( parseInt(a.time) > parseInt(b.time) ){
-    return -1;
-  }
-  return 0;
-}
+import TransferListDialog from './TransferListDialog';
 
 class AppChat extends Component {
   state = {
@@ -40,6 +23,7 @@ class AppChat extends Component {
     recentChats: [],
     messageList: [],
     whatsappMessages: [],
+    currentChatRoom: "",
     currentChatId: "1d339707-076d-4659-8147-dd6f84876f66",
     currentContact: null,
     contactId: '',
@@ -48,20 +32,21 @@ class AppChat extends Component {
     client: socket(),
     chats: {},
     users: [],
-    openContactList: false
+    openContactList: false,
+    openTransferList: false,
   };
 
   bottomRef = React.createRef();
 
   async componentDidMount() {
-    let { id } = this.state.currentUser;
-
     const { client, currentUser } = this.state;
     client.registerConnectHandler(this.handleConnection, currentUser);
     client.registerChatHandler(this.handleReceiveChats);
     client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
     client.registerUserMetadata(this.handleReceiveUserMetadata);
+    client.registerTransferUsers(this.handleReceiveTransferUsers);
+    client.registerTransferContact(this.handleReceiveContact);
     this.updateRecentContactList();
   }
 
@@ -70,6 +55,10 @@ class AppChat extends Component {
     if (!client) return;
     client.disconnect();
     this.setState({ client: null });
+  }
+
+  handleReceiveTransferUsers = transferUsers => {
+    this.setState({ users: transferUsers });
   }
 
   handleReceiveUserMetadata = dataUser => {
@@ -191,7 +180,7 @@ class AppChat extends Component {
     // contact: { chats: { messages: [] } }
     if (isMobile()) this.toggleSidenav();
     console.log('contactId', contactId);
-    this.setState({ contactId }, () => {
+    this.setState({ contactId, currentChatRoom: null }, () => {
       this.bottomRef.scrollTop = 9999999999999;
     });
     this.handleCloseContactList();
@@ -219,6 +208,48 @@ class AppChat extends Component {
 
   toggleSidenav = () => this.setState({ open: !this.state.open });
   
+  handleOpenTransferList = () => this.setState({ openTransferList: true });
+  handleCloseTransferList = () => this.setState({ openTransferList: false });
+  handleSelectTransferContact = (selectedUserId) => {
+    console.log('transferir para:', selectedUserId);
+    const { contacts, contactId } = this.state;
+    if (!contacts[contactId]) return;
+    const filteredRecentChats = this.state.recentChats.filter(recentChat => recentChat.contactId !== contactId);
+    delete contacts[contactId];
+    this.state.client
+      .transferContact({
+        contactId, 
+        userId: selectedUserId,
+      });
+    this.setState({
+      contacts,
+      currentChatRoom: "",
+      recentChats: filteredRecentChats
+    });
+  }
+  handleReceiveContact = ({ chat, contact }) => {
+    console.log('contact recebido: ', contact);
+    if (!contact || !chat) return;
+    this.setState({ 
+      contacts: { 
+        ...this.state.contacts, 
+        [contact.id]: { 
+          ...contact, 
+          chat: { 
+            messages: []
+          }
+        }
+      },
+      contactId: contact.id,
+      recentChats: [...this.state.recentChats, { 
+        id: chat.id, 
+        contactId: contact.id, 
+        userId: contact.userId, 
+        ownerId: contact.ownerId,
+        contact
+      }],
+    });
+  }
   handleOpenContactList = () => this.setState({ openContactList: true });
   handleCloseContactList = () => this.setState({ openContactList: false });
   getCurrentContact = () => {
@@ -254,13 +285,18 @@ class AppChat extends Component {
                 contactList={contacts}
                 recentChats={recentChats}
                 handleContactClick={this.handleContactClick}
-                handleOpenContactList={this.handleOpenContactList}
                 handleCloseContactList={this.handleCloseContactList}
               />
             </MatxSidenav>
+            {this.state.openTransferList && <TransferListDialog 
+                users={this.state.users}
+                onSelect={this.handleSelectTransferContact}
+                open={this.state.openTransferList}
+                onClose={this.handleCloseTransferList} 
+              />}
             <MatxSidenavContent>
               <ChatContainer
-                id={currentUser.id}
+                handleOpenTransferList={this.handleOpenTransferList}
                 currentUser={currentUser}
                 currentContact={currentContact}
                 currentChatRoom={currentChatRoom}
