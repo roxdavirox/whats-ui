@@ -151,7 +151,7 @@ class AppChat extends Component {
         }],
         contacts: { 
           ...this.state.contacts, 
-          [contactId]: { ..._contact, chat: { messages: [] }}
+          [contactId]: { ..._contact, chat: { messages: [message] }}
         }
       }, () => {
         this.bottomRef.scrollTop = 9999999999999;
