@@ -132,7 +132,16 @@ class AppChat extends Component {
     if (contactNotExists) {
       const { recentChats } = this.state;
       this.setState({ 
-        recentChats: [...recentChats, { id: chatId, contactId, userId, ownerId }]
+        recentChats: [...recentChats, { 
+          id: 
+          chatId, 
+          contactId, 
+          userId, 
+          ownerId, 
+          contact: {
+            eurl: 'assets/faces/default-avatar.pngj',
+            status: 'Online'
+        } }]
       });
     }
 
