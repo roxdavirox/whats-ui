@@ -246,7 +246,11 @@ class AppChat extends Component {
         contactId: contact.id, 
         userId: contact.userId, 
         ownerId: contact.ownerId,
-        contact
+        contact: {
+          ...contact,
+          eurl: 'assets/faces/default-avatar.pngj',
+          status: 'Online',
+        }
       }],
     });
   }
