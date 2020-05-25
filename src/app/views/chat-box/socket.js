@@ -36,6 +36,18 @@ export default function () {
     socket.emit('userdata', userData);
   }
 
+  function registerTransferUsers(onTransferUsers) {
+    socket.on('transferUsers', onTransferUsers);
+  }
+
+  function registerTransferContact(onReceiveContact) {
+    socket.on('transferContact', onReceiveContact);
+  }
+
+  function transferContact(data) {
+    socket.emit('transfer', data);
+  }
+
   function unregisterHandler() {
     socket.off('message')
   }
@@ -94,6 +106,9 @@ export default function () {
     registerQrcodeHandler,
     registerChatHandler,
     registerUserMetadata,
-    registerContactsHandler
+    registerContactsHandler,
+    registerTransferUsers,
+    transferContact,
+    registerTransferContact
   }
 }
