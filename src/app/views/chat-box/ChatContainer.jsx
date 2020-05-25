@@ -13,16 +13,16 @@ import EmptyMessage from "./EmptyMessage";
 import ChatAvatar from "./ChatAvatar";
 import { getTimeDifference } from "utils";
 import shortid from "shortid";
-
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import CallEndIcon from '@material-ui/icons/CallEnd';
 const ChatContainer = ({
-  id: currentUserId,
   currentUser,
   currentContact,
   toggleSidenav,
   currentChatRoom,
-  messageList = [],
   setBottomRef,
-  handleMessageSend
+  handleMessageSend,
+  handleOpenTransferList
 }) => {
   let [message, setMessage] = React.useState("");
   const sendMessageOnEnter = event => {
@@ -58,23 +58,23 @@ const ChatContainer = ({
             </Fragment>
           )}
         </div>
-        <MatxMenu
-          menuButton={
-            <IconButton>
-              <Icon className="text-white">more_vert</Icon>
-            </IconButton>
-          }
-        >
-          <MenuItem className="flex items-center">
-            <Icon className="mr-4">account_circle</Icon> Contact
-          </MenuItem>
-          <MenuItem className="flex items-center">
-            <Icon className="mr-4">volume_mute</Icon> Mute
-          </MenuItem>
-          <MenuItem className="flex items-center">
-            <Icon className="mr-4">delete</Icon> Clear Chat
-          </MenuItem>
-        </MatxMenu>
+        {currentChatRoom !== "" && (
+          <MatxMenu
+            menuButton={
+              <IconButton>
+                <Icon className="text-white">more_vert</Icon>
+              </IconButton>
+            }
+          >
+            <MenuItem className="flex items-center" onClick={handleOpenTransferList}>
+              Encaminhar<ArrowForwardIosIcon />
+            </MenuItem>
+            <MenuItem className="flex items-center">
+              Finalizar <CallEndIcon />
+            </MenuItem>
+          </MatxMenu>
+        )}
+
       </div>
 
       <Scrollbar
