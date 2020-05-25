@@ -57,7 +57,7 @@ export default function () {
     socket.emit('leave', chatroomName, cb)
   }
 
-  function message(messageObject) {
+  function sendMessage(messageObject) {
     socket.emit('message', messageObject);
   }
 
@@ -85,7 +85,7 @@ export default function () {
     disconnect,
     join,
     leave,
-    message,
+    sendMessage,
     getChatrooms,
     getAvailableUsers,
     registerMessageHandler,

@@ -124,28 +124,42 @@ class AppChat extends Component {
 
   handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    const { contactId, userId, ownerId, chatId } = message;
+    const { contactId, userId, ownerId, chatId, key } = message;
     if (!message.message.conversation) return;
     const { contacts } = this.state;
     
     const contactNotExists = !contacts[contactId];
     if (contactNotExists) {
+      console.log('contactNotExists', contactNotExists);
       const { recentChats } = this.state;
-      this.setState({ 
+      const _contact = {
+        id: contactId,
+        eurl: 'assets/faces/default-avatar.pngj',
+        status: 'Online',
+        name: "Desconhecido",
+        userId,
+        ownerId,
+        jid: key.remoteJid
+      };
+      this.setState({
         recentChats: [...recentChats, { 
-          id: 
-          chatId, 
+          id: chatId, 
           contactId, 
           userId, 
-          ownerId, 
-          contact: {
-            eurl: 'assets/faces/default-avatar.pngj',
-            status: 'Online'
-        } }]
+          ownerId,
+          contact: _contact
+        }],
+        contacts: { 
+          ...this.state.contacts, 
+          [contactId]: { ..._contact, chat: { messages: [] }}
+        }
+      }, () => {
+        this.bottomRef.scrollTop = 9999999999999;
       });
+      return;
     }
-
-    const contact = contacts[contactId] || { chat: { messages: []} };
+    const defaultContact = { chat: { messages: []} };
+    const contact = contacts[contactId] || defaultContact;
     
     const { chat: { messages } } = contact;
     const newMessages = [...messages, message];
@@ -196,7 +210,7 @@ class AppChat extends Component {
       chatId: chat.id
     };
     console.log('mensagem enviada', newMsg);
-    client.message(newMsg);
+    client.sendMessage(newMsg);
   };
 
   setBottomRef = ref => {
