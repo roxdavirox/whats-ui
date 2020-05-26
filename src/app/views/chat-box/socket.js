@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 
 export default function () {
-  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001/chat'
+  const host = process.env.REACT_APP_HOST_WS || 'http://localhost:3001/'
   console.log('host ws:', host);
   const token = localStorage.getItem('jwt_token');
   if (!token) {
@@ -9,7 +9,7 @@ export default function () {
     return;
   }
   console.log('token socket', token);
-  const socket = io.connect(host, { query: `auth_token=${token}`})
+  const socket = io.connect(`${host}chat`, { query: `auth_token=${token}`})
 
   function registerMessageHandler(onMessageReceived) {
     socket.on('message', onMessageReceived)
