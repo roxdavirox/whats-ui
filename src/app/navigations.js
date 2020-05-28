@@ -10,7 +10,8 @@ export const navigations = [
   {
     name: "Conectar",
     path: "/code",
-    icon: "important_devices"
+    icon: "important_devices",
+    auth: authRoles.admin
   },
   // {
   //   name: "CRUD Table",
