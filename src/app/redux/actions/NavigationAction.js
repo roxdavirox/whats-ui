@@ -1,3 +1,5 @@
+import { navigations } from '../../navigations';
+
 export const SET_USER_NAVIGATION = "SET_USER_NAVIGATION";
 
 const getfilteredNavigations = (navList = [], role) => {
@@ -20,7 +22,10 @@ const getfilteredNavigations = (navList = [], role) => {
 
 export function getNavigationByUser() {
   return (dispatch, getState) => {
-    let { user, navigations = [] } = getState();
+    let { user, 
+      // navigations = []
+     } = getState();
+     
     console.log('user', user);
     let filteredNavigations = getfilteredNavigations(navigations, user.role);
 

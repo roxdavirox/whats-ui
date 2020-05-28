@@ -19,8 +19,7 @@ const styles = theme => ({
 });
 
 const MatxVerticalNav = props => {
-  const navigations = useSelector(({ navigations }) => navigations);
-
+  const navigations = useSelector(({ navigations, user }) =>navigations.filter(nav => nav.auth.includes(user.role)));
   const renderLevels = data => {
     return data.map((item, index) => {
       if (item.children) {
@@ -89,13 +88,8 @@ const MatxVerticalNav = props => {
     });
   };
 
-  const authUser = LocalStorageService.getItem('auth_user');
-  if (!authUser) return null;
-  console.log('auth user', authUser);
   console.log('navigations', navigations);
-  const filterUserNavigationsByRole = navigation => navigation.auth.includes(authUser.role);
-  const authNavigations = navigations.filter(filterUserNavigationsByRole);
-  return <div className="navigation">{renderLevels(authNavigations)}</div>;
+  return <div className="navigation">{renderLevels(navigations)}</div>;
 };
 
 export default withStyles(styles)(MatxVerticalNav);

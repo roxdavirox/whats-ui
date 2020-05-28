@@ -1,4 +1,5 @@
 import { setUserData } from "./UserActions";
+import { getNavigationByUser } from './NavigationAction';
 import history from "history.js";
 import jwtAuthService from '../../services/jwtAuthService';
 export const LOGIN_ERROR = "LOGIN_ERROR";
@@ -26,7 +27,7 @@ export function makeLogin(email, password) {
         if (user) {
           console.log('user', user);
           dispatch(setUserData(user));
-
+          dispatch(getNavigationByUser());
           history.push({
             pathname: "/chat"
           });
