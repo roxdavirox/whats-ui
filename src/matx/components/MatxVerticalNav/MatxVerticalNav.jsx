@@ -5,6 +5,7 @@ import TouchRipple from "@material-ui/core/ButtonBase";
 import MatxVerticalNavExpansionPanel from "./MatxVerticalNavExpansionPanel";
 import { withStyles } from "@material-ui/styles";
 import { useSelector } from "react-redux";
+import LocalStorageService from '../../../app/services/localStorageService';
 
 const styles = theme => ({
   expandIcon: {
@@ -88,7 +89,13 @@ const MatxVerticalNav = props => {
     });
   };
 
-  return <div className="navigation">{renderLevels(navigations)}</div>;
+  const authUser = LocalStorageService.getItem('auth_user');
+  if (!authUser) return null;
+  console.log('auth user', authUser);
+  console.log('navigations', navigations);
+  const filterUserNavigationsByRole = navigation => navigation.auth.includes(authUser.role);
+  const authNavigations = navigations.filter(filterUserNavigationsByRole);
+  return <div className="navigation">{renderLevels(authNavigations)}</div>;
 };
 
 export default withStyles(styles)(MatxVerticalNav);

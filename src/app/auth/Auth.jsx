@@ -26,8 +26,11 @@ const checkJwtAuth = async setUserData => {
 };
 
 const Auth = ({ children, setUserData, getNavigationByUser }) => {
-  setUserData(localStorageService.getItem("auth_user"));
-
+  const authUser = localStorageService.getItem("auth_user");
+  if (authUser) {
+    setUserData(authUser);
+  }
+  
   useEffect(() => {
     checkJwtAuth(setUserData);
     getNavigationByUser();

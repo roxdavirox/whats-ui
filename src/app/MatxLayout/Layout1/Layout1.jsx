@@ -23,6 +23,7 @@ const styles = theme => {
 
 const Layout1 = props => {
   const { routes } = useContext(AppContext);
+  console.log('routes', routes)
   let { settings, classes, theme } = props;
   let { layout1Settings } = settings;
   const topbarTheme = settings.themes[layout1Settings.topbar.theme];
