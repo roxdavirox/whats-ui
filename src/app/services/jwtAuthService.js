@@ -56,7 +56,8 @@ class JwtAuthService {
 
       api
         .post('auth/validate', { token }, config)
-        .then(resolve);
+        .then(resolve)
+        .catch(reject);
     }).then(({ data }) => {
       console.log('data', data);
       if (!data.auth) {
