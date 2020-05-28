@@ -10,12 +10,6 @@ const QrcodeContainer = props => {
   const [rowsSelected, setRowsSelected] = useState([]);
 
 	useEffect(() => {
-    const currentUser = {
-      id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044",
-      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee',
-      name: 'Davi'
-    };
-    client.registerConnectHandler(() =>{}, currentUser);
 		client.registerQrcodeHandler(handleQrcode);
     client.registerContactsHandler(handleReceivedContacts);
     return () => {
@@ -58,7 +52,6 @@ const QrcodeContainer = props => {
   }
 
   const handleRowsSelect = rowsSelected => setRowsSelected(rowsSelected);
-  console.log('renderizando qrcode');
 	return (
 		<div style={{ margin: '10px 10px 10px 10px' }}>
       {qrCode 

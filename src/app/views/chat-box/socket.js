@@ -31,9 +31,8 @@ export default function () {
     socket.on('contacts', onReceiveCOntacts);
   }
 
-  function registerConnectHandler(onConnect, userData) {
+  function registerConnectHandler(onConnect) {
     socket.on('connect', onConnect);
-    socket.emit('userdata', userData);
   }
 
   function registerTransferUsers(onTransferUsers) {

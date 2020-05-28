@@ -19,9 +19,8 @@ export default function () {
     socket.on('adm-contacts', onReceiveContacts);
   }
 
-  function registerConnectHandler(onConnect, userData) {
+  function registerConnectHandler(onConnect) {
     socket.on('connect', onConnect);
-    socket.emit('userdata', userData);
   }
 
   function importContacts(contacts) {
