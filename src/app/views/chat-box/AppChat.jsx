@@ -12,14 +12,11 @@ import { isMobile } from "utils";
 import socket from './socket';
 import TransferListDialog from './TransferListDialog';
 import SaveContactDialog from './SaveContactDialog';
+import LocalStorageService from '../../services/localStorageService';
 
 class AppChat extends Component {
   state = {
-    currentUser: {
-      id: "a069df2c-8abe-45a1-9e15-d5d3d62b5044",
-      ownerId: '8d4693dd-2fe3-41a5-913f-6e43118a70ee',
-      name: 'Davi'
-    },
+    currentUser: LocalStorageService.getItem('auth_user'),
     contactList: [],
     recentChats: [],
     messageList: [],
@@ -61,18 +58,6 @@ class AppChat extends Component {
 
   handleReceiveTransferUsers = transferUsers => {
     this.setState({ users: transferUsers });
-  }
-
-  handleReceiveUserMetadata = dataUser => {
-    if(!dataUser) return;
-    console.log('dataUser', dataUser);
-    this.setState({
-      currentUser: {
-        name: dataUser.name,
-        id: dataUser.id,
-        eurl: dataUser.eurl
-      }
-    })
   }
 
   handleReceiveChats = chats => {
