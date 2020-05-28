@@ -24,6 +24,7 @@ export function getNavigationByUser() {
 
     let filteredNavigations = getfilteredNavigations(navigations, user.role);
 
+    console.log('filteredNavigations', filteredNavigations);
     dispatch({
       type: SET_USER_NAVIGATION,
       payload: [...filteredNavigations]

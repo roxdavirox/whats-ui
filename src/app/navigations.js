@@ -5,12 +5,12 @@ export const navigations = [
     name: "Conectar",
     path: "/code",
     icon: "important_devices",
-    auth: authRoles.admin
+    auth: ['ADMIN']
   },
   {
     name: "Chat",
     icon: "chat",
     path: "/chat",
-    auth: authRoles.guest
+    auth: ['ADMIN', 'ATENDENTE']
   },
 ];

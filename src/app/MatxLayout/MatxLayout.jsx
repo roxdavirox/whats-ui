@@ -73,6 +73,7 @@ class MatxLayout extends Component {
   updateSettingsFromRouter() {
     const { routes } = this.appContext;
     const matched = matchRoutes(routes, this.props.location.pathname)[0];
+    console.log('machelo', matched);
     let { defaultSettings, settings, setLayoutSettings } = this.props;
 
     if (matched && matched.route.settings) {
