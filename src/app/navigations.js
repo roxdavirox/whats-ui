@@ -2,12 +2,6 @@ import { authRoles } from "./auth/authRoles";
 
 export const navigations = [
   {
-    name: "Dashboard",
-    path: "/dashboard/analytics",
-    icon: "dashboard",
-    auth: authRoles.admin
-  },
-  {
     name: "Conectar",
     path: "/code",
     icon: "important_devices",

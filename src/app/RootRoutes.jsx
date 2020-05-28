@@ -1,7 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 
-import dashboardRoutes from "./pages/dashboard/DashboardRoutes";
 import sessionRoutes from "./pages/sessions/SessionRoutes";
 import chatRoutes from "./pages/chat/ChatRoutes";
 import qrcodeRoutes from './pages/qrcode/QrcodeRoutes';
@@ -22,7 +21,6 @@ const errorRoute = [
 
 const routes = [
   ...sessionRoutes,
-  ...dashboardRoutes,
   ...qrcodeRoutes,
   ...chatRoutes,
   ...redirectRoute,
