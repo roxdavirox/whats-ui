@@ -20,7 +20,9 @@ const getAuthStatus = (props, routes) => {
   console.log('user.role', user.role);
   console.log('currentRoute', currentRoute);
   const authenticated =
-    currentRoute || (currentRoute.auth && currentRoute.auth.includes(user.role));
+    currentRoute && currentRoute.auth && currentRoute.auth.length
+      ? currentRoute.auth.includes(user.role)
+      : true;
   return authenticated;
 };
 
