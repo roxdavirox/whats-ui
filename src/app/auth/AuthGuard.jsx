@@ -16,13 +16,13 @@ const redirectRoute = props => {
 const getAuthStatus = (props, routes) => {
   const { location, user } = props;
   const { pathname } = location;
-  const matched = routes.find(r => r.path === pathname);
-  console.log('matched', matched);
+  const currentRoute = routes.find(r => r.path === pathname);
+  console.log('user.role', user.role);
+  console.log('currentRoute', currentRoute);
   const authenticated =
-    matched && matched.auth && matched.auth.length
-      ? matched.auth.includes(user.role)
+    currentRoute && currentRoute.auth && currentRoute.auth.length
+      ? currentRoute.auth.includes(user.role)
       : true;
-  console.log('authenticated', authenticated);
   return authenticated;
 };
 

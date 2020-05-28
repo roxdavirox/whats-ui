@@ -20,7 +20,7 @@ const userReducer = function(state = initialState, action) {
       };
     }
     case USER_LOGGED_OUT: {
-      return state;
+      return {};
     }
     default: {
       return state;

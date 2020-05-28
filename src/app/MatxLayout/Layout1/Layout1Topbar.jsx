@@ -62,6 +62,7 @@ class Layout1Topbar extends Component {
   };
 
   handleSignOut = () => {
+    console.log('[#] deslogando do painel');
     this.props.logoutUser();
   };
 

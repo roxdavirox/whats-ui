@@ -1,4 +1,3 @@
-import api from '../../services/api';
 import { setUserData } from "./UserActions";
 import history from "history.js";
 import jwtAuthService from '../../services/jwtAuthService';

@@ -2,9 +2,9 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import dashboardRoutes from "./views/dashboard/DashboardRoutes";
-import sessionRoutes from "./views/sessions/SessionRoutes";
-import chatRoutes from "./views/chat-box/ChatRoutes";
-import qrcodeRoutes from './views/qrcode/QrcodeRoutes';
+import sessionRoutes from "./pages/sessions/SessionRoutes";
+import chatRoutes from "./pages/chat-box/ChatRoutes";
+import qrcodeRoutes from './pages/qrcode/QrcodeRoutes';
 // import utilitiesRoutes from "./views/utilities/UtilitiesRoutes";
 // import materialRoutes from "./views/material-kit/MaterialRoutes";
 // import chartsRoute from "./views/charts/ChartsRoute";
