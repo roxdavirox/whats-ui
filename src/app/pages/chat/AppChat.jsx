@@ -228,10 +228,11 @@ class AppChat extends Component {
   handleCloseTransferList = () => this.setState({ openTransferList: false });
   handleSelectTransferContact = (selectedUserId) => {
     console.log('transferir para:', selectedUserId);
-    const { contacts, contactId } = this.state;
+    const { contacts, contactId, fetchedMessages } = this.state;
     if (!contacts[contactId]) return;
     const filteredRecentChats = this.state.recentChats.filter(recentChat => recentChat.contactId !== contactId);
     delete contacts[contactId];
+    delete fetchedMessages[contactId];
     this.state.client
       .transferContact({
         contactId, 
@@ -239,6 +240,7 @@ class AppChat extends Component {
       });
     this.setState({
       contacts,
+      fetchedMessages,
       currentChatRoom: "",
       recentChats: filteredRecentChats
     });
