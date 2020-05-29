@@ -98,10 +98,17 @@ const ChatContainer = ({
           </div>
         )}
         {currentContact.chat && currentContact.chat.messages.map((message, index) => (
-          <div className="flex items-start px-4 py-3" key={shortid.generate()}>
+          <div 
+            className="flex items-start px-4 py-3" 
+            style={message.key.fromMe 
+                ? { display: 'flex', flexDirection: 'row-reverse'} 
+                : {}}
+              key={shortid.generate()}>
             <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
             <div className="ml-4">
-              <p className="text-muted m-0 mb-2">{message.key.fromMe ? currentUser.name : currentContact.name}</p>
+              <p className="text-muted m-0 mb-2" style={message.key.fromMe 
+                ? { display: 'flex', flexDirection: 'row-reverse'} 
+                : {}}>{message.key.fromMe ? currentUser.name : currentContact.name}</p>
               <div
                 className={`px-4 py-2 mb-2 list__message ${
                   message.key.fromMe
@@ -111,7 +118,9 @@ const ChatContainer = ({
               >
                 <span className="whitespace-pre-wrap">{message.message.conversation}</span>
               </div>
-              <small className="text-muted mb-0">
+              <small className="text-muted mb-0" style={message.key.fromMe 
+                ? { display: 'flex', flexDirection: 'row-reverse'} 
+                : {}}>
                 {getTimeDifference(new Date(message.time))} ago
               </small>
             </div>
