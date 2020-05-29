@@ -5,7 +5,6 @@ import TouchRipple from "@material-ui/core/ButtonBase";
 import MatxVerticalNavExpansionPanel from "./MatxVerticalNavExpansionPanel";
 import { withStyles } from "@material-ui/styles";
 import { useSelector } from "react-redux";
-import LocalStorageService from '../../../app/services/localStorageService';
 
 const styles = theme => ({
   expandIcon: {

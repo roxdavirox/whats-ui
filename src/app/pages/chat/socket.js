@@ -18,8 +18,13 @@ export default function () {
   function registerQrcodeHandler(onQrcode) {
     socket.on('qrcode', onQrcode)
   }
-  function registerUserMetadata(handleData) {
-    socket.on('userdata', handleData);
+
+  function requestContactMessages(contactId) {
+    socket.emit('getContactMessages', { contactId });
+  }
+
+  function registerReceiveContactMessages(onMessagesReceive) {
+    socket.on('getContactMessages', onMessagesReceive);
   }
 
   function registerChatHandler(onReceiveChats, onReceiveChat) {
@@ -107,8 +112,9 @@ export default function () {
     unregisterHandler,
     registerConnectHandler,
     registerQrcodeHandler,
+    registerReceiveContactMessages,
     registerChatHandler,
-    registerUserMetadata,
+    requestContactMessages,
     registerContactsHandler,
     registerTransferUsers,
     transferContact,

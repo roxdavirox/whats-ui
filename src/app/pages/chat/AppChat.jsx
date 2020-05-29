@@ -33,6 +33,7 @@ class AppChat extends Component {
     openContactList: false,
     openTransferList: false,
     openSaveContact: false,
+    fetchedMessages: {}
   };
 
   bottomRef = React.createRef();
@@ -43,9 +44,9 @@ class AppChat extends Component {
     client.registerChatHandler(this.handleReceiveChats);
     client.registerContactsHandler(this.handleReceiveContacts);
     client.registerMessageHandler(this.handleReceivedMessage);
-    client.registerUserMetadata(this.handleReceiveUserMetadata);
     client.registerTransferUsers(this.handleReceiveTransferUsers);
     client.registerTransferContact(this.handleReceiveContact);
+    client.registerReceiveContactMessages(this.handleReceiveContactMessages);
     this.updateRecentContactList();
   }
 
@@ -108,11 +109,13 @@ class AppChat extends Component {
     if (contactNotExists) {
       console.log('contactNotExists', contactNotExists);
       const { recentChats } = this.state;
+      const phone = key.remoteJid.split('@')[0];
+
       const _contact = {
         id: contactId,
         eurl: 'assets/faces/default-avatar.pngj',
         status: 'Online',
-        name: "Desconhecido",
+        name: phone,
         userId,
         ownerId,
         jid: key.remoteJid
@@ -160,13 +163,39 @@ class AppChat extends Component {
 
   }
 
+  handleReceiveContactMessages = ({ messages, contactId }) => {
+    console.log('fetched messages', messages);
+    if (!messages.length) return;
+    const { contacts } = this.state;
+    const contact = contacts[contactId];
+    if (!contact) return;
+    this.setState({
+      contacts: { 
+        ...contacts,
+        [contactId]: {
+          ...contact,
+          chat: {
+            messages
+          }
+        }
+    }});
+  }
+
   handleContactClick = contactId => {
-    // utilizar apenas o contact id
-    // armazenando os contatos eu consigo pegar todas informações
-    // através do contact, como chats e mensagens que estão dentro de chats
-    // contact: { chats: { messages: [] } }
     if (isMobile()) this.toggleSidenav();
-    console.log('contactId', contactId);
+    const { fetchedMessages } = this.state;
+    const messageStatus = fetchedMessages[contactId] || { fetched: false };
+    console.log('messageStatus', messageStatus);
+    if (!messageStatus.fetched) {
+      this.state.client.requestContactMessages(contactId);
+      this.setState({ 
+        fetchedMessages: { 
+          ...fetchedMessages, 
+          [contactId]: { fetched: true }
+        }
+      })
+    }
+
     this.setState({ contactId, currentChatRoom: null }, () => {
       this.bottomRef.scrollTop = 9999999999999;
     });
