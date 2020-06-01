@@ -15,6 +15,10 @@ export default function () {
     socket.on('qrcode', onQrcode)
   }
 
+  function registerConnectionStatus(onReceiveConnectionStatus) {
+    socket.on('qrcodeStatusConnection', onReceiveConnectionStatus);
+  }
+
   function registerContactsHandler(onReceiveContacts) {
     socket.on('adm-contacts', onReceiveContacts);
   }
@@ -53,6 +57,7 @@ export default function () {
     registerQrcodeHandler,
     registerContactsHandler,
     importContacts,
+    registerConnectionStatus,
     close,
     disconnect
   }
