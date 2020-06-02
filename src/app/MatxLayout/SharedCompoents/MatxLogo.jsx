@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import logo from './whats-up-logo.png';
+import logo from './logo.png';
 
 const MatxLogo = ({className}) => {
   const settings = useSelector(state => state.layout.settings);  
