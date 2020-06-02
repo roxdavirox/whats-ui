@@ -54,7 +54,7 @@ const ChatContainer = ({
                 src={currentContact.eurl}
                 status={currentContact.status}
               />
-              <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
+              <h5 style={{ minHeight: '48px' }}className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
                 {currentContact.name}
               </h5>
             </Fragment>
@@ -97,7 +97,7 @@ const ChatContainer = ({
         {currentChatRoom === "" && (
           <div className="flex-column justify-center items-center h-full">
             <EmptyMessage />
-            <p>Select a contact</p>
+            <p>Selecioine uma conversa</p>
           </div>
         )}
         {currentContact.chat && currentContact.chat.messages.map((message, index) => (
