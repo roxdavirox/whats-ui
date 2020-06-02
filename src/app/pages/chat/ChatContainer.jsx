@@ -68,21 +68,24 @@ const ChatContainer = ({
               </IconButton>
             }
           >
-            <MenuItem className="flex items-center" onClick={() => {
-              console.log('click');
-              onSaveDialogOpen();
-            }}>
-              Salvar contato <PersonAddIcon />
-            </MenuItem>
-            <MenuItem className="flex items-center" onClick={handleOpenTransferList}>
-              Encaminhar<ArrowForwardIosIcon />
-            </MenuItem>
-            <MenuItem className="flex items-center">
-              Finalizar <CallEndIcon />
-            </MenuItem>
+            <div style={{ minWidth: '160px' }}>
+              <MenuItem 
+                style={{ justifyContent: 'space-between', width: '100%' }}
+                className="flex items-center" onClick={() => {
+                console.log('click');
+                onSaveDialogOpen();
+              }}>
+                Salvar contato <PersonAddIcon />
+              </MenuItem>
+              <MenuItem className="flex items-center" onClick={handleOpenTransferList} style={{ justifyContent: 'space-between', width: '100%' }}>
+                Encaminhar<ArrowForwardIosIcon />
+              </MenuItem>
+              <MenuItem className="flex items-center" style={{ justifyContent: 'space-between', width: '100%' }}>
+                Finalizar <CallEndIcon />
+              </MenuItem>
+            </div>
           </MatxMenu>
         )}
-
       </div>
 
       <Scrollbar
