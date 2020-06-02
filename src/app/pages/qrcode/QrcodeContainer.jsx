@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 const QrcodeContainer = props => {
 	const [client, setClient] = useState(socket());
 	const [qrcode, setQrcode] = useState(null);
+	const [qrcodeIsConnected, setQrcodeConnectionStatus] = useState(false);
 
 	useEffect(() => {
     client.registerQrcodeHandler(handleQrcode);
@@ -19,8 +20,9 @@ const QrcodeContainer = props => {
 
 
 	const handleConnection = isConnected => {
+		setQrcodeConnectionStatus(isConnected);
 		if (isConnected) {
-			history.push({ pathname: "/chat" });
+			// history.push({ pathname: "/chat" });
 		}
 	}
 
@@ -31,7 +33,7 @@ const QrcodeContainer = props => {
 
 	return (
 		<Container >
-			<QrcodeCard qrcode={qrcode} />
+			<QrcodeCard qrcode={qrcode} isConnected={qrcodeIsConnected}/>}
 		</Container>
     );
 		

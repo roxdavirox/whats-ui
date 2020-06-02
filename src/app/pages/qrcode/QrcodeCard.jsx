@@ -4,7 +4,7 @@ import QrcodeVideo from './QrcodeVideo';
 import Qrcode from 'qrcode.react';
 import Skeleton from 'react-loading-skeleton';
 
-const QrcodeCard = ({ qrcode }) => (
+const QrcodeCard = ({ qrcode, isConnected }) => (
   <div className="pricing m-sm-30 position-relative">
     <div className="w-full text-left ml-1 mb-11">
       <h3 className="m-0 pl-5 pt-4 pb-2 font-medium">
@@ -26,16 +26,20 @@ const QrcodeCard = ({ qrcode }) => (
         <Grid item lg={4} md={4} sm={4} xs={12}>
           <Card elevation={6} className="pricing__card text-center p-sm-24">
             <div className="mb-4">
-              <h5>QR Code</h5>
+              <h4 className="text-muted">QR Code</h4>
             </div>
-            {qrcode 
-              ? <Qrcode value={qrcode} style={{ width: 200, height: 200 }}/> 
-              : <Skeleton height={200} width={200} />
+            {isConnected 
+                ? <img style={{ width: 200, height: 200 }} src={'/assets/images/qrcode-whatspipe.png'} alt="qr code conectado" />
+                : qrcode
+                  ? <Qrcode value={qrcode} style={{ width: 200, height: 200 }}/> 
+                  : <Skeleton height={200} width={200} />
             }
             <div className="mb-6">
-              {qrcode
-                ? <small className="text-muted">Passe a camera aqui</small>
-                : <small className="text-muted">gerando QR code...</small>
+              {isConnected 
+                ? <small className="text-muted">Conectado!</small>
+                : qrcode
+                  ? <small className="text-muted">Passe a camera aqui</small>
+                  : <small className="text-muted">gerando QR code...</small>
               }
             </div>
           </Card>

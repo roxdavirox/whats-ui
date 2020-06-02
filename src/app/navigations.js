@@ -2,7 +2,7 @@ import { authRoles } from "./auth/authRoles";
 
 export const navigations = [
   {
-    name: "Conectar",
+    name: "QR code",
     path: "/code",
     icon: "important_devices",
     auth: ['ADMIN']
