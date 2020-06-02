@@ -2,6 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import socket from './socket';
 import history from "history.js";
 import QrcodeCard from './QrcodeCard';
+import Container from '@material-ui/core/Container';
 
 const QrcodeContainer = props => {
 	const [client, setClient] = useState(socket());
@@ -29,9 +30,9 @@ const QrcodeContainer = props => {
 	}
 
 	return (
-		<div style={{ margin: '10px 10px 10px 10px' }}>
+		<Container >
 			<QrcodeCard qrcode={qrcode} />
-    </div>
+		</Container>
     );
 		
 }
