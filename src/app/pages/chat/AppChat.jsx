@@ -50,6 +50,10 @@ class AppChat extends Component {
     this.updateRecentContactList();
   }
 
+  componentDidUpdate = () => {
+    this.bottomRef.scrollTop = 9999999999;
+  }
+
   componentWillUnmount = () => {
     const { client } = this.state;
     if (!client) return;
@@ -96,6 +100,7 @@ class AppChat extends Component {
   };
 
   scrollToBottom = () => {
+    if (!this.bottomRef.current) return;
     this.bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -133,7 +138,7 @@ class AppChat extends Component {
           [contactId]: { ..._contact, chat: { messages: [message] }}
         }
       }, () => {
-        this.bottomRef.scrollTop = 9999999999999;
+        this.scrollToBottom();
       });
       return;
     }
@@ -149,7 +154,6 @@ class AppChat extends Component {
         messages: newMessages
       }
     };
-    console.log('updatedContact', updatedContact);
     this.setState({
       contacts: {
         ...contacts,
@@ -157,7 +161,7 @@ class AppChat extends Component {
       }
     },
       () => {
-        this.bottomRef.scrollTop = 9999999999999;
+        this.scrollToBottom();
       }
     );
 
@@ -193,11 +197,13 @@ class AppChat extends Component {
           ...fetchedMessages, 
           [contactId]: { fetched: true }
         }
-      })
+      }, () => {
+        this.bottomRef.scrollTop = 9999999999;
+      });
     }
 
     this.setState({ contactId, currentChatRoom: null }, () => {
-      this.bottomRef.scrollTop = 9999999999999;
+      this.bottomRef.scrollTop = 9999999999;
     });
     this.handleCloseContactList();
   };
@@ -219,6 +225,7 @@ class AppChat extends Component {
   };
 
   setBottomRef = ref => {
+    console.log('ref', ref);
     this.bottomRef = ref;
   };
 
@@ -316,7 +323,6 @@ class AppChat extends Component {
       currentChatRoom
     } = this.state;
     const currentContact = this.getCurrentContact();
-    console.log('currentContact', currentContact);
     return (
       <div className="m-sm-30">
         <div className="mb-sm-30">
