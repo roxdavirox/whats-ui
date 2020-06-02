@@ -12,14 +12,12 @@ const QrcodeVideo = ({ startVideo }) => {
     },
   };
 
-  const handleReady = () => console.log('youtube video ready event');
-
   return (
     <div className="pricing m-sm-30 position-relative">
       <Grid container spacing={6} className="flex">
         <Grid item>
           <Card elevation={6}>
-            {startVideo && <YouTube videoId="Hcu2LX_hktQ" opts={videoOptions} onReady={handleReady} />}
+            {startVideo && <YouTube videoId="Hcu2LX_hktQ" opts={videoOptions}/>}
           </Card>
         </Grid>
       </Grid>
