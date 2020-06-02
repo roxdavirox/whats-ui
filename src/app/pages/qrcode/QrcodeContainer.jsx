@@ -1,14 +1,11 @@
 import React, { useState, useEffect, memo } from "react";
-import Qrcode from 'qrcode.react';
 import socket from './socket';
 import history from "history.js";
 import QrcodeCard from './QrcodeCard';
-import QrcodeVideo from './QrcodeVideo';
 
 const QrcodeContainer = props => {
 	const [client, setClient] = useState(socket());
-	const [qrCode, setQrcode] = useState(null);
-	const [startVideo, setVideoStart] = useState(false);
+	const [qrcode, setQrcode] = useState(null);
 
 	useEffect(() => {
     client.registerQrcodeHandler(handleQrcode);
@@ -31,18 +28,9 @@ const QrcodeContainer = props => {
 		setQrcode(qrcode);
 	}
 
-	const handleStartVideo = () => {
-		setVideoStart(true);
-		console.log('click');
-	}
-
 	return (
 		<div style={{ margin: '10px 10px 10px 10px' }}>
-			<QrcodeCard />
-      {qrCode && <Qrcode  value={qrCode} />}
-			<div onClick={handleStartVideo}>
-				<QrcodeVideo startVideo={startVideo}/>
-			</div>
+			<QrcodeCard qrcode={qrcode} />
     </div>
     );
 		
