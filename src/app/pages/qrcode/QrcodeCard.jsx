@@ -7,16 +7,16 @@ import Skeleton from 'react-loading-skeleton';
 const QrcodeCard = ({ qrcode }) => (
   <div className="pricing m-sm-30 position-relative">
     <div className="w-full text-left ml-1 mb-11">
-      <h3 className="m-0 font-medium">
+      <h3 className="m-0 pl-5 pt-4 pb-2 font-medium">
         Para usar o whatspipe no seu computador:
       </h3>
-      <p className="m-0 pt-4 text-muted">
-        1. Abra o whatsapp
+      <p className="m-0 pl-10 pt-6 text-muted">
+        1. Abra o Whatsapp
       </p>
-      <p className="m-0 pt-4 text-muted">
-        2. Toque em mais opções ou Ajustes e selecione 'Whatsapp Web'
+      <p className="m-0 pl-10 pt-6 text-muted">
+        2. Toque em mais <b>opções</b> ou <b>Ajustes</b> e selecione <b>Whatsapp Web</b>
       </p>
-      <p className="m-0 pt-4 text-muted">
+      <p className="m-0 pl-10 pt-6 text-muted">
         3. Aponte seu celular para essa tela para capturar o código
       </p>
     </div>
