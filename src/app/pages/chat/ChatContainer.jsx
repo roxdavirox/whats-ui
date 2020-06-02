@@ -105,7 +105,7 @@ const ChatContainer = ({
                 : {}}
               key={shortid.generate()}>
             <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
-            <div className="ml-4">
+            <div className={message.key.fromMe ? 'mr-4' : 'ml-4' }>
               <p className="text-muted m-0 mb-2" style={message.key.fromMe 
                 ? { display: 'flex', flexDirection: 'row-reverse'} 
                 : {}}>{message.key.fromMe ? currentUser.name : currentContact.name}</p>
