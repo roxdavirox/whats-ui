@@ -37,7 +37,7 @@ const ChatContainer = ({
   return (
     <div className="chat-container flex-column position-relative">
       <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
-        <div className="flex items-center">
+        <div className="flex items-center" style={{ minHeight: '48px' }}>
           <div className="show-on-mobile">
             <IconButton onClick={toggleSidenav}>
               <Icon className="text-white">short_text</Icon>
@@ -54,7 +54,7 @@ const ChatContainer = ({
                 src={currentContact.eurl}
                 status={currentContact.status}
               />
-              <h5 style={{ minHeight: '48px' }}className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
+              <h5 className="position-relative ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
                 {currentContact.name}
               </h5>
             </Fragment>
