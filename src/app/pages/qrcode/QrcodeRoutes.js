@@ -3,7 +3,7 @@ import React from 'react';
 const chatRoutes = [
   {
     path: "/code",
-    component: React.lazy(() => import("./Qrcode")),
+    component: React.lazy(() => import("./QrcodeContainer")),
     auth: ['ADMIN']
   }
 ];
