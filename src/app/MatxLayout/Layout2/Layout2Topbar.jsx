@@ -6,7 +6,6 @@ import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import NotificationBar from "../SharedCompoents/NotificationBar";
-import ShoppingCart from "../SharedCompoents/ShoppingCart";
 
 const styles = theme => ({
   root: {
@@ -66,8 +65,6 @@ class Layout2Topbar extends Component {
               <MatxSearchBox />
 
               <NotificationBar />
-
-              <ShoppingCart />
 
               <MatxMenu
                 menuButton={

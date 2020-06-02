@@ -27,7 +27,7 @@ import { themeColors } from "../../MatxTheme/themeColors";
 import BadgeSelected from "./BadgeSelected";
 import { mainThemes, topbarThemes } from "./customizerOptions";
 import { classList } from 'utils';
-
+import SettingsIcon from '@material-ui/icons/Settings';
 const styles = theme => ({
   label: {
     color: theme.palette.secondary.main,
@@ -172,13 +172,12 @@ const MatxCustomizer = props => {
 
   return (
     <Fragment>
-      <Tooltip title="Theme Settings" placement="left">
+      <Tooltip title="Alterar tema" placement="left">
         <span
           className={`${classes.label} ${classList({open})}`}
           onClick={tooglePanel}
         >
-          DEMOS
-          {/* <Icon className="spin">settings</Icon> */}
+          <SettingsIcon />
         </span>
       </Tooltip>
 
@@ -191,8 +190,8 @@ const MatxCustomizer = props => {
             }}
           >
             <div className="flex felx-row items-center px-5 py-4 mb-4 min-h-64 elevation-z6">
-              <Icon color="primary">settings</Icon>
-              <h5 className="mb-0 ml-2">Theme Settings</h5>
+              <SettingsIcon />
+              <h5 className="mb-0 ml-2">Alterar tema</h5>
               <IconButton onClick={tooglePanel} className="customizer-close">
                 <Icon>close</Icon>
               </IconButton>
@@ -204,14 +203,14 @@ const MatxCustomizer = props => {
                 onClick={() => handleTabChange(0)}
                 className="mr-4"
               >
-                Demos
+                Temas
               </Button>
               <Button
                 variant="outlined"
                 color={tabIndex === 1 ? "secondary" : "primary"}
                 onClick={() => handleTabChange(1)}
               >
-                Settings
+                Configurações
               </Button>
             </div>
 
