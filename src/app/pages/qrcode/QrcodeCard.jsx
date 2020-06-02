@@ -36,7 +36,7 @@ const QrcodeCard = ({ qrcode, isConnected }) => (
             }
             <div className="mb-6">
               {isConnected 
-                ? <small className="text-muted">Conectado!</small>
+                ? <p className="text-muted">Conectado</p>
                 : qrcode
                   ? <small className="text-muted">Passe a camera aqui</small>
                   : <small className="text-muted">gerando QR code...</small>
