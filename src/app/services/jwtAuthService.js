@@ -23,7 +23,8 @@ class JwtAuthService {
     return new Promise((resolve, reject) => {
       api
         .post('auth/authenticate', { email, password })
-        .then(({ data }) => resolve(data));
+        .then(({ data }) => resolve(data))
+        .catch(reject);
     }).then(data => {
       // Login successful
       // Save token
