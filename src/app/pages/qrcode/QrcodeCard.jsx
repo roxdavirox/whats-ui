@@ -14,7 +14,7 @@ const QrcodeCard = ({ qrcode }) => (
         1. Abra o Whatsapp
       </p>
       <p className="m-0 pl-10 pt-6 text-muted">
-        2. Toque em mais <b>opções</b> ou <b>Ajustes</b> e selecione <b>Whatsapp Web</b>
+        2. Toque em mais <b>Opções</b> ou <b>Ajustes</b> e selecione <b>Whatsapp Web</b>
       </p>
       <p className="m-0 pl-10 pt-6 text-muted">
         3. Aponte seu celular para essa tela para capturar o código
