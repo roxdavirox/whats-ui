@@ -7,6 +7,7 @@ import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import NavigationReducer from "./NavigationReducer";
 import QrcodeReducer from './QrcodeReducer';
+import ChatReducer from './ChatReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -16,7 +17,8 @@ const RootReducer = combineReducers({
   notifications: NotificationReducer,
   ecommerce: EcommerceReducer,
   navigations: NavigationReducer,
-  qrcode: QrcodeReducer
+  qrcode: QrcodeReducer,
+  chat: ChatReducer
 });
 
 export default RootReducer;
