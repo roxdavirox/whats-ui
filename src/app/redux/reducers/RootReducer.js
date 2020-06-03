@@ -6,6 +6,7 @@ import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
 import EcommerceReducer from "./EcommerceReducer";
 import NavigationReducer from "./NavigationReducer";
+import QrcodeReducer from './QrcodeReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
@@ -14,7 +15,8 @@ const RootReducer = combineReducers({
   scrumboard: ScrumBoardReducer,
   notifications: NotificationReducer,
   ecommerce: EcommerceReducer,
-  navigations: NavigationReducer
+  navigations: NavigationReducer,
+  qrcode: QrcodeReducer
 });
 
 export default RootReducer;

@@ -29,7 +29,7 @@ export function makeLogin(email, password) {
           dispatch(setUserData(user));
           dispatch(getNavigationByUser());
           history.push({
-            pathname: "/chat"
+            pathname: user.role === 'ADMIN' ? "/code" : "/chat"
           });
 
           console.log('make login success');

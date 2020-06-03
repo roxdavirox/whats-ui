@@ -1,42 +1,41 @@
-import React, { useState, useEffect, memo } from "react";
-import socket from './socket';
-import history from "history.js";
+import React, { useEffect, memo } from "react";
+import { useSelector, useDispatch  } from 'react-redux';
 import QrcodeCard from './QrcodeCard';
 import Container from '@material-ui/core/Container';
+import { setConnectionStatus, setQrcode } from '../../redux/actions/QrcodeActions';
+import socket from './socket';
 
 const QrcodeContainer = props => {
-	const [client, setClient] = useState(socket());
-	const [qrcode, setQrcode] = useState(null);
-	const [qrcodeIsConnected, setQrcodeConnectionStatus] = useState(false);
-
+	const dispatch = useDispatch();
+	// const client = useSelector(({ qrcode }) => qrcode.qrcodeSocketClient);
+	const code = useSelector(({ qrcode }) => qrcode.code);
+	const isConnected = useSelector(({ qrcode }) => qrcode.isConnected);
+	
 	useEffect(() => {
+		const client = socket();
     client.registerQrcodeHandler(handleQrcode);
-    client.registerConnectionStatus(handleConnection);
+		client.registerConnectionStatus(handleConnection);
+		console.log('render')
     return () => {
       client.disconnect();
-      setClient(null);
     }
 	}, []);
 
-
 	const handleConnection = isConnected => {
-		setQrcodeConnectionStatus(isConnected);
-		if (isConnected) {
-			// history.push({ pathname: "/chat" });
-		}
+		dispatch(setConnectionStatus(isConnected));
+		dispatch(setQrcode(null));
 	}
 
 	const handleQrcode = qrcode => { 
 		console.log('qrcode', qrcode);
-		setQrcode(qrcode);
+		dispatch(setQrcode(qrcode));
 	}
 
 	return (
 		<Container >
-			<QrcodeCard qrcode={qrcode} isConnected={qrcodeIsConnected}/>}
+			<QrcodeCard qrcode={code} isConnected={isConnected}/>}
 		</Container>
-    );
-		
+  );
 }
 
 export default memo(QrcodeContainer);
