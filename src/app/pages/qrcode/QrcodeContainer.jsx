@@ -7,7 +7,6 @@ import socket from './socket';
 
 const QrcodeContainer = props => {
 	const dispatch = useDispatch();
-	// const client = useSelector(({ qrcode }) => qrcode.qrcodeSocketClient);
 	const code = useSelector(({ qrcode }) => qrcode.code);
 	const isConnected = useSelector(({ qrcode }) => qrcode.isConnected);
 	
@@ -15,7 +14,6 @@ const QrcodeContainer = props => {
 		const client = socket();
     client.registerQrcodeHandler(handleQrcode);
 		client.registerConnectionStatus(handleConnection);
-		console.log('render')
     return () => {
 			client.disconnect();
 			dispatch(setQrcode(null));
@@ -27,10 +25,7 @@ const QrcodeContainer = props => {
 		dispatch(setQrcode(null));
 	}
 
-	const handleQrcode = qrcode => { 
-		console.log('qrcode', qrcode);
-		dispatch(setQrcode(qrcode));
-	}
+	const handleQrcode = qrcode => dispatch(setQrcode(qrcode));
 
 	return (
 		<Container >
