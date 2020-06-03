@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React, { useEffect, useState, memo } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Card } from "@material-ui/core";
 import {
   Breadcrumb,
@@ -9,111 +10,77 @@ import {
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
 import { isMobile } from "utils";
-import socket from './socket';
 import TransferListDialog from './TransferListDialog';
 import SaveContactDialog from './SaveContactDialog';
-import LocalStorageService from '../../services/localStorageService';
+import { 
+  setTransferUsers, 
+  setRecentChats, 
+  setContacts,
+  addRecentChat,
+  addContact,
+  addMessage,
+  closeContactListDialog,
+  openSaveContactDialog,
+  closeSaveContactDialog,
+  openTransferListDialog,
+  closeTransferListDialog,
+  setFetchedMessage,
+  setContactId,
+  setCurrentChatRoom
+ } from '../../redux/actions/ChatActions';
+import socket from './socket';
 
-class AppChat extends Component {
-  state = {
-    currentUser: LocalStorageService.getItem('auth_user'),
-    contactList: [],
-    recentChats: [],
-    messageList: [],
-    whatsappMessages: [],
-    currentChatRoom: "",
-    currentChatId: "1d339707-076d-4659-8147-dd6f84876f66",
-    currentContact: null,
-    contactId: '',
-    open: true,
-    bootstrapStep: null,
-    client: socket(),
-    chats: {},
-    users: [],
-    openContactList: false,
-    openTransferList: false,
-    openSaveContact: false,
-    fetchedMessages: {}
-  };
+const AppChat = props => {
+  const chatSocket = socket();
+  const dispatch = useDispatch();
+  console.log('chatSocket', chatSocket);
+  const currentUser = useSelector(({ chat }) => chat.currentUser);
+  const contacts = useSelector(({ chat }) => chat.contacts);
+  const recentChats = useSelector(({ chat }) => chat.recentChats);
+  const transferUsers = useSelector(({ chat }) => chat.transferUsers)
+  const fetchedMessages = useSelector(({ chat }) => chat.fetchedMessages);
+  // TODO: usar hook do ref para fazer 
+  // scroll descer sempre que chegar uma mensagem ou clicar sobre o chat
+  const [bottomRef, setBottomRef] = useState(React.createRef());
 
-  bottomRef = React.createRef();
+  useEffect(() => {
+    console.log('oi');
+    chatSocket.registerChatHandler(handleReceiveChats);
+    chatSocket.registerContactsHandler(handleReceiveContacts);
+    chatSocket.registerMessageHandler(handleReceivedMessage);
+    chatSocket.registerTransferUsers(handleReceiveTransferUsers);
+    chatSocket.registerTransferContact(handleReceiveContact);
+    chatSocket.registerReceiveContactMessages(handleReceiveContactMessages);
+    return () => {
+      chatSocket.disconnect();
+    }
+  }, []);
+  
+  // componentDidUpdate = () => {
+  //   this.bottomRef.scrollTop = 9999999999;
+  // }
 
-  async componentDidMount() {
-    const { client, currentUser } = this.state;
-    client.registerConnectHandler(this.handleConnection, currentUser);
-    client.registerChatHandler(this.handleReceiveChats);
-    client.registerContactsHandler(this.handleReceiveContacts);
-    client.registerMessageHandler(this.handleReceivedMessage);
-    client.registerTransferUsers(this.handleReceiveTransferUsers);
-    client.registerTransferContact(this.handleReceiveContact);
-    client.registerReceiveContactMessages(this.handleReceiveContactMessages);
-    this.updateRecentContactList();
-  }
+  const handleReceiveTransferUsers = transferUsers => dispatch(setTransferUsers(transferUsers));
 
-  componentDidUpdate = () => {
-    this.bottomRef.scrollTop = 9999999999;
-  }
+  const handleReceiveChats = chats => dispatch(setRecentChats(chats));
 
-  componentWillUnmount = () => {
-    const { client } = this.state;
-    if (!client) return;
-    client.disconnect();
-    this.setState({ client: null });
-  }
-
-  handleReceiveTransferUsers = transferUsers => {
-    this.setState({ users: transferUsers });
-  }
-
-  handleReceiveChats = chats => {
-    if(!chats) return;
-    console.log('chats recebidos: ', chats);
-    const { contacts } = this.state;
-    const chatsWithContact = chats.map(chat => ({ 
-      contact: contacts[chat.contactId], 
-      ...chat 
-    }));
-    this.setState({ recentChats: chatsWithContact });
-  }
-
-  handleReceiveContacts = contacts => {
+  const handleReceiveContacts = contacts => {
     console.log('contacts', contacts);
     const contactsObject = contacts.reduce((obj, contact) => ({
       ...obj,
       [contact.id]: { ...contact, status: 'Online',  chat: { messages: [] } }
     }), {});
-    this.setState({ contacts: contactsObject });
+    dispatch(setContacts(contactsObject));
   }
 
-  handleConnection = () => {
-    console.log('[client] connectado!');
-    this.setState({ isConnected: true });
-  }
-
-  updateRecentContactList = () => {
-    // let { id } = this.state.currentUser;
-    // getRecentContact(id).then(data => {
-    //   this.setState({
-    //     recentContactList: [...data.data]
-    //   });
-    // });
-  };
-
-  scrollToBottom = () => {
-    if (!this.bottomRef.current) return;
-    this.bottomRef.current.scrollIntoView({ behavior: "smooth" });
-  };
-
-  handleReceivedMessage = message => {
+  const handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
     const { contactId, userId, ownerId, chatId, key } = message;
     if (!message.message.conversation) return;
-    const { contacts } = this.state;
     
     const contactNotExists = !contacts[contactId];
     if (contactNotExists) {
       console.log('contactNotExists', contactNotExists);
-      const { recentChats } = this.state;
       const phone = key.remoteJid.split('@')[0];
 
       const _contact = {
@@ -125,52 +92,28 @@ class AppChat extends Component {
         ownerId,
         jid: key.remoteJid
       };
-      this.setState({
-        recentChats: [...recentChats, { 
-          id: chatId, 
-          contactId, 
-          userId, 
-          ownerId,
-          contact: _contact
-        }],
-        contacts: { 
-          ...this.state.contacts, 
-          [contactId]: { ..._contact, chat: { messages: [message] }}
-        }
-      }, () => {
-        this.scrollToBottom();
-      });
+      const recentChat = {
+        id: chatId, 
+        contactId, 
+        userId, 
+        ownerId,
+        contact: _contact
+      };
+      dispatch(addRecentChat(recentChat));
+      dispatch(addContact({ 
+        ..._contact, 
+        chat: { messages: [message] }
+      }));
+      // this.scrollToBottom();
       return;
     }
-    const defaultContact = { chat: { messages: []} };
-    const contact = contacts[contactId] || defaultContact;
-    
-    const { chat: { messages } } = contact;
-    const newMessages = [...messages, message];
-    const updatedContact = {
-      ...contact,
-      chat: {
-        ...contact.chat,
-        messages: newMessages
-      }
-    };
-    this.setState({
-      contacts: {
-        ...contacts,
-        [contactId]: updatedContact
-      }
-    },
-      () => {
-        this.scrollToBottom();
-      }
-    );
-
+    dispatch(addMessage(contactId, message));
+    // this.scrollToBottom();
   }
 
-  handleReceiveContactMessages = ({ messages, contactId }) => {
+  const handleReceiveContactMessages = ({ messages, contactId }) => {
     console.log('fetched messages', messages);
     if (!messages.length) return;
-    const { contacts } = this.state;
     const contact = contacts[contactId];
     if (!contact) return;
     this.setState({
@@ -185,32 +128,23 @@ class AppChat extends Component {
     }});
   }
 
-  handleContactClick = contactId => {
-    if (isMobile()) this.toggleSidenav();
-    const { fetchedMessages } = this.state;
+  const handleContactClick = contactId => {
+    // if (isMobile()) toggleSidenav();
+    
     const messageStatus = fetchedMessages[contactId] || { fetched: false };
     console.log('messageStatus', messageStatus);
     if (!messageStatus.fetched) {
-      this.state.client.requestContactMessages(contactId);
-      this.setState({ 
-        fetchedMessages: { 
-          ...fetchedMessages, 
-          [contactId]: { fetched: true }
-        }
-      }, () => {
-        this.bottomRef.scrollTop = 9999999999;
-      });
+      chatSocket.requestContactMessages(contactId);
+      dispatch(setFetchedMessage(contactId));
+      // this.bottomRef.scrollTop = 9999999999;
     }
+    dispatch(setContactId(contactId));
+    dispatch(setCurrentChatRoom(null));
 
-    this.setState({ contactId, currentChatRoom: null }, () => {
-      this.bottomRef.scrollTop = 9999999999;
-    });
-    this.handleCloseContactList();
+    handleCloseContactList();
   };
 
-  handleMessageSend = message => {
-    const { client, recentChats } = this.state;
-    const currentContact = this.getCurrentContact();
+  const handleMessageSend = message => {
     const chat = recentChats.find(c => c.contactId === currentContact.id);
     if(!chat) return;
     const newMsg = {
@@ -221,19 +155,12 @@ class AppChat extends Component {
       chatId: chat.id
     };
     console.log('mensagem enviada', newMsg);
-    client.sendMessage(newMsg);
+    chatSocket.sendMessage(newMsg);
   };
-
-  setBottomRef = ref => {
-    console.log('ref', ref);
-    this.bottomRef = ref;
-  };
-
-  toggleSidenav = () => this.setState({ open: !this.state.open });
   
-  handleOpenTransferList = () => this.setState({ openTransferList: true });
-  handleCloseTransferList = () => this.setState({ openTransferList: false });
-  handleSelectTransferContact = (selectedUserId) => {
+  const handleOpenTransferList = () => dispatch(openTransferListDialog());
+  const handleCloseTransferList = () => dispatch(closeTransferListDialog());
+  const handleSelectTransferContact = (selectedUserId) => {
     console.log('transferir para:', selectedUserId);
     const { contacts, contactId, fetchedMessages } = this.state;
     if (!contacts[contactId]) return;
@@ -252,7 +179,7 @@ class AppChat extends Component {
       recentChats: filteredRecentChats
     });
   }
-  handleReceiveContact = ({ chat, contact }) => {
+  const handleReceiveContact = ({ chat, contact }) => {
     console.log('contact recebido: ', contact);
     if (!contact || !chat) return;
     this.setState({ 
@@ -280,7 +207,7 @@ class AppChat extends Component {
     });
   }
 
-  handleSaveContact = contactName => {
+  const handleSaveContact = contactName => {
     if (!contactName) return;
     const { client, contactId, contacts, recentChats } = this.state;
     console.log('recentChats', recentChats);
@@ -304,78 +231,74 @@ class AppChat extends Component {
     });
   }
 
-  handleOpenContactList = () => this.setState({ openContactList: true });
-  handleCloseContactList = () => this.setState({ openContactList: false });
-  handleOpenSaveContact = () => this.setState({ openSaveContact: true });
-  handleCloseSaveContact = () => this.setState({ openSaveContact: false });
+  const handleCloseContactList = () => dispatch(closeContactListDialog());
+  const handleOpenSaveContact = () => dispatch(openSaveContactDialog());
+  const handleCloseSaveContact = () => dispatch(closeSaveContactDialog());
 
-  getCurrentContact = () => {
-    const { contacts = {}, contactId = {} } = this.state;
-    if (!contactId) return {}
-    if (!contacts) return {}
-    return contacts[contactId] || {};
-  }
-  render() {
-    let {
-      currentUser,
-      contacts,
-      recentChats,
-      currentChatRoom
-    } = this.state;
-    const currentContact = this.getCurrentContact();
-    return (
-      <div className="m-sm-30">
-        <div className="mb-sm-30">
-          <Breadcrumb routeSegments={[{ name: "Chat" }]} />
-        </div>
-        <Card elevation={6}>
-          <MatxSidenavContainer>
-            <MatxSidenav
-              width="230px"
-              open={this.state.open}
-              toggleSidenav={this.toggleSidenav}
-            >
-              <ChatSidenav
-                currentUser={currentUser}
-                openContactList={this.state.openContactList}
-                contactList={contacts}
-                recentChats={recentChats}
-                handleContactClick={this.handleContactClick}
-                handleCloseContactList={this.handleCloseContactList}
-              />
-            </MatxSidenav>
-            {this.state.openTransferList && 
-              <TransferListDialog 
-                  users={this.state.users}
-                  onSelect={this.handleSelectTransferContact}
-                  open={this.state.openTransferList}
-                  onClose={this.handleCloseTransferList} 
-                />
-            }
-            {this.state.openSaveContact && 
-              <SaveContactDialog 
-                  open={this.state.openSaveContact}
-                  onSave={this.handleSaveContact}
-                  onClose={this.handleCloseSaveContact}
-                />
-            }
-            <MatxSidenavContent>
-              <ChatContainer
-                handleOpenTransferList={this.handleOpenTransferList}
-                onSaveDialogOpen={this.handleOpenSaveContact}
-                currentUser={currentUser}
-                currentContact={currentContact}
-                currentChatRoom={currentChatRoom}
-                setBottomRef={this.setBottomRef}
-                handleMessageSend={this.handleMessageSend}
-                toggleSidenav={this.toggleSidenav}
-              />
-            </MatxSidenavContent>
-          </MatxSidenavContainer>
-        </Card>
+  const openContactList = useSelector(({ chat }) => chat.openContactList);
+  const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
+  const openTransferList = useSelector(({ chat }) => chat.openTransferList);
+  const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
+  const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
+
+  const _recentChats = recentChats.map(chat => ({ 
+    contact: contacts[chat.contactId], 
+    ...chat 
+  }));
+  console.log('_recentChats', _recentChats);
+  return (
+    <div className="m-sm-30">
+      <div className="mb-sm-30">
+        <Breadcrumb routeSegments={[{ name: "Chat" }]} />
       </div>
-    );
-  }
+      <Card elevation={6}>
+        <MatxSidenavContainer>
+          <MatxSidenav
+            width="230px"
+            open
+            // toggleSidenav={toggleSidenav}
+          >
+            <ChatSidenav
+              currentUser={currentUser}
+              openContactList={openContactList}
+              contactList={contacts}
+              recentChats={_recentChats}
+              handleContactClick={handleContactClick}
+              handleCloseContactList={handleCloseContactList}
+            />
+          </MatxSidenav>
+          {openTransferList && 
+            <TransferListDialog 
+                users={transferUsers}
+                onSelect={handleSelectTransferContact}
+                open={openTransferList}
+                onClose={handleCloseTransferList} 
+              />
+          }
+          {openSaveContact && 
+            <SaveContactDialog 
+                open={openSaveContact}
+                onSave={handleSaveContact}
+                onClose={handleCloseSaveContact}
+              />
+          }
+          <MatxSidenavContent>
+            <ChatContainer
+              handleOpenTransferList={handleOpenTransferList}
+              onSaveDialogOpen={handleOpenSaveContact}
+              currentUser={currentUser}
+              currentContact={currentContact}
+              currentChatRoom={currentChatRoom}
+              setBottomRef={setBottomRef}
+              handleMessageSend={handleMessageSend}
+              // toggleSidenav={toggleSidenav}
+            />
+          </MatxSidenavContent>
+        </MatxSidenavContainer>
+      </Card>
+    </div>
+  );
 }
 
-export default AppChat;
+
+export default memo(AppChat);
