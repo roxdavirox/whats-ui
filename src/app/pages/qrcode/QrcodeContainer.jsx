@@ -17,7 +17,8 @@ const QrcodeContainer = props => {
 		client.registerConnectionStatus(handleConnection);
 		console.log('render')
     return () => {
-      client.disconnect();
+			client.disconnect();
+			dispatch(setQrcode(null));
     }
 	}, []);
 
