@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   IconButton,
   Icon,
@@ -19,10 +19,10 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 const ChatContainer = ({
   toggleSidenav,
-  setBottomRef,
+  setRef,
   handleMessageSend,
   handleOpenTransferList,
-  onSaveDialogOpen
+  onSaveDialogOpen,
 }) => {
   let [message, setMessage] = React.useState("");
   const sendMessageOnEnter = event => {
@@ -94,9 +94,7 @@ const ChatContainer = ({
       </div>
 
       <Scrollbar
-        containerRef={ref => {
-          setBottomRef(ref);
-        }}
+        containerRef={ref => setRef({ current: ref })}
         className="chat-message-list flex-grow position-relative"
       >
         {currentChatRoom === "" && (

@@ -39,11 +39,6 @@ export const addContact = contact => ({
   payload: { contact }
 });
 
-export const addMessage = message => ({
-  type: ADD_MESSAGE,
-  payload: { message }
-});
-
 export const setMessages = (messages, contactId) => ({
   type: SET_MESSAGES,
   payload: { messages, contactId }
@@ -73,3 +68,42 @@ export const closeContactListDialog = () => ({ type: CLOSE_CONTACT_LIST_DIALOG }
 export const openSaveContactDialog = () => ({ type: OPEN_SAVE_CONTACT_DIALOG });
 
 export const closeSaveContactDialog = () => ({ type: CLOSE_SAVE_CONTACT_DIALOG });
+
+export const addMessage = (message) => (dispatch, getState) => {
+  const { chat: { contacts } } = getState();
+    const { contactId, userId, ownerId, chatId, key } = message;
+
+    const contactNotExists = !contacts[contactId];
+    if (contactNotExists) {
+      console.log('contactNotExists', contactNotExists);
+      const phone = key.remoteJid.split('@')[0];
+
+      const _contact = {
+        id: contactId,
+        eurl: 'assets/faces/default-avatar.pngj',
+        status: 'Online',
+        name: phone,
+        userId,
+        ownerId,
+        jid: key.remoteJid
+      };
+      const recentChat = {
+        id: chatId, 
+        contactId, 
+        userId, 
+        ownerId,
+        contact: _contact
+      };
+      dispatch(addRecentChat(recentChat));
+      dispatch(addContact({ 
+        ..._contact, 
+        chat: { messages: [message] }
+      }));
+      // this.scrollToBottom();
+      return;
+    }
+    dispatch({
+      type: ADD_MESSAGE,
+      payload: { contactId, message }
+    });
+}

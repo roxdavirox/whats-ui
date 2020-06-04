@@ -13,7 +13,7 @@ import {
   SET_FETCHED_MESSAGE,
   SET_MESSAGES,
   SET_CONTACT_ID,
-  SET_CURRENT_CHAT_ROOM
+  SET_CURRENT_CHAT_ROOM,
 } from '../actions/ChatActions';
 import localStorageService from '../../services/localStorageService';
 // um contato é responsavel por
@@ -30,6 +30,7 @@ const initialState = {
   contactId: '',
   fetchedMessages: {},
   currentChatRoom: '',
+  scroll: null,
 };
 
 const ChatReducer = function(state = initialState, action) {
