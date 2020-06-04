@@ -11,7 +11,9 @@ import {
   OPEN_TRANSFER_LIST_DIALOG,
   CLOSE_TRANSFER_LIST_DIALOG,
   SET_FETCHED_MESSAGE,
-  SET_MESSAGES
+  SET_MESSAGES,
+  SET_CONTACT_ID,
+  SET_CURRENT_CHAT_ROOM
 } from '../actions/ChatActions';
 import localStorageService from '../../services/localStorageService';
 // um contato é responsavel por
@@ -156,7 +158,18 @@ const ChatReducer = function(state = initialState, action) {
         }
       };
     }
+    
+    case SET_CONTACT_ID: {
+      return {
+        ...state, contactId: action.payload.contactId
+      };
+    }
 
+    case SET_CURRENT_CHAT_ROOM: {
+      return {
+        ...state, currentChatRoom: action.payload.currentChatRoom
+      }
+    }
     default: { return state; }
   }
 }

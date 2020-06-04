@@ -39,6 +39,8 @@ const AppChat = props => {
   const recentChats = useSelector(({ chat }) => chat.recentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
   const fetchedMessages = useSelector(({ chat }) => chat.fetchedMessages);
+  const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
+
   // TODO: usar hook do ref para fazer 
   // scroll descer sempre que chegar uma mensagem ou clicar sobre o chat
   const [bottomRef, setBottomRef] = useState(React.createRef());
@@ -114,21 +116,8 @@ const AppChat = props => {
   }
 
   const handleReceiveContactMessages = ({ messages, contactId }) => {
-    console.log('fetched messages', messages);
     if (!messages.length) return;
     dispatch(setMessages(messages, contactId));
-    // const contact = contacts[contactId];
-    // if (!contact) return;
-    // this.setState({
-    //   contacts: { 
-    //     ...contacts,
-    //     [contactId]: {
-    //       ...contact,
-    //       chat: {
-    //         messages
-    //       }
-    //     }
-    // }});
   }
 
   const handleContactClick = contactId => {
@@ -142,7 +131,7 @@ const AppChat = props => {
       // this.bottomRef.scrollTop = 9999999999;
     }
     dispatch(setContactId(contactId));
-    dispatch(setCurrentChatRoom(null));
+    dispatch(setCurrentChatRoom(1));
 
     handleCloseContactList();
   };
@@ -239,7 +228,6 @@ const AppChat = props => {
   const handleCloseSaveContact = () => dispatch(closeSaveContactDialog());
 
   const openContactList = useSelector(({ chat }) => chat.openContactList);
-  const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
@@ -289,8 +277,6 @@ const AppChat = props => {
             <ChatContainer
               handleOpenTransferList={handleOpenTransferList}
               onSaveDialogOpen={handleOpenSaveContact}
-              currentUser={currentUser}
-              currentContact={currentContact}
               currentChatRoom={currentChatRoom}
               setBottomRef={setBottomRef}
               handleMessageSend={handleMessageSend}

@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { useSelector } from 'react-redux';
 import {
   IconButton,
   Icon,
@@ -17,10 +18,7 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 const ChatContainer = ({
-  currentUser,
-  currentContact,
   toggleSidenav,
-  currentChatRoom,
   setBottomRef,
   handleMessageSend,
   handleOpenTransferList,
@@ -34,6 +32,13 @@ const ChatContainer = ({
       setMessage("");
     }
   };
+  const { 
+    contactId,
+    contacts,
+    currentUser,
+    currentChatRoom
+  } = useSelector(({ chat }) => chat);
+  const currentContact = contacts[contactId] || {} ;
   return (
     <div className="chat-container flex-column position-relative">
       <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
