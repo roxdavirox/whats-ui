@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from "@material-ui/core";
 import {
@@ -16,8 +16,6 @@ import {
   setTransferUsers, 
   setRecentChats, 
   setContacts,
-  addRecentChat,
-  addContact,
   addMessage,
   closeContactListDialog,
   openSaveContactDialog,
@@ -27,7 +25,7 @@ import {
   setFetchedMessage,
   setContactId,
   setCurrentChatRoom,
-  setMessages
+  setMessages,
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 
@@ -43,7 +41,11 @@ const AppChat = props => {
 
   // TODO: usar hook do ref para fazer 
   // scroll descer sempre que chegar uma mensagem ou clicar sobre o chat
-  const [bottomRef, setBottomRef] = useState(React.createRef());
+  let reference = useRef();
+  useEffect(() => {
+    if (!reference.current) return;
+    reference.current.scrollTop = 99999999;
+  }, [contacts]);
 
   useEffect(() => {
     let chatSocket = socket();
@@ -60,10 +62,6 @@ const AppChat = props => {
     }
   }, []);
   
-  // componentDidUpdate = () => {
-  //   this.bottomRef.scrollTop = 9999999999;
-  // }
-
   const handleReceiveTransferUsers = transferUsers => dispatch(setTransferUsers(transferUsers));
 
   const handleReceiveChats = chats => dispatch(setRecentChats(chats));
@@ -77,47 +75,21 @@ const AppChat = props => {
     dispatch(setContacts(contactsObject));
   }
 
+  const setRef = ref => reference = ref;
+
   const handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    const { contactId, userId, ownerId, chatId, key } = message;
     if (!message.message.conversation) return;
-    
-    const contactNotExists = !contacts[contactId];
-    if (contactNotExists) {
-      console.log('contactNotExists', contactNotExists);
-      const phone = key.remoteJid.split('@')[0];
-
-      const _contact = {
-        id: contactId,
-        eurl: 'assets/faces/default-avatar.pngj',
-        status: 'Online',
-        name: phone,
-        userId,
-        ownerId,
-        jid: key.remoteJid
-      };
-      const recentChat = {
-        id: chatId, 
-        contactId, 
-        userId, 
-        ownerId,
-        contact: _contact
-      };
-      dispatch(addRecentChat(recentChat));
-      dispatch(addContact({ 
-        ..._contact, 
-        chat: { messages: [message] }
-      }));
-      // this.scrollToBottom();
-      return;
-    }
-    dispatch(addMessage(contactId, message));
-    // this.scrollToBottom();
+    dispatch(addMessage(message));
+    console.log('reff', reference)
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
   }
 
   const handleReceiveContactMessages = ({ messages, contactId }) => {
     if (!messages.length) return;
     dispatch(setMessages(messages, contactId));
+    
   }
 
   const handleContactClick = contactId => {
@@ -236,7 +208,7 @@ const AppChat = props => {
     contact: contacts[chat.contactId], 
     ...chat 
   }));
-  
+  console.log('oxe contacts', contacts);
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
@@ -278,7 +250,7 @@ const AppChat = props => {
               handleOpenTransferList={handleOpenTransferList}
               onSaveDialogOpen={handleOpenSaveContact}
               currentChatRoom={currentChatRoom}
-              setBottomRef={setBottomRef}
+              setRef={setRef}
               handleMessageSend={handleMessageSend}
               // toggleSidenav={toggleSidenav}
             />
