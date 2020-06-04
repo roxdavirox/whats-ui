@@ -8,7 +8,6 @@ export default function () {
     console.log('no token provided to socket connection');
     return;
   }
-  console.log('token socket', token);
   const socket = io.connect(`${host}chat`, { query: `auth_token=${token}`})
 
   function registerMessageHandler(onMessageReceived) {
