@@ -10,6 +10,7 @@ export const CLOSE_SAVE_CONTACT_DIALOG = 'CLOSE_SAVE_CONTACT_DIALOG';
 export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
 export const CLOSE_TRANSFER_LIST_DIALOG = 'CLOSE_TRANSFER_LIST_DIALOG';
 export const SET_FETCHED_MESSAGE = 'SET_FETCHED_MESSAGE';
+export const SET_MESSAGES = 'SET_MESSAGES';
 export const SET_CONTACT_ID = 'SET_CONTACT_ID';
 export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 
@@ -41,6 +42,11 @@ export const addContact = contact => ({
 export const addMessage = message => ({
   type: ADD_MESSAGE,
   payload: { message }
+});
+
+export const setMessages = (messages, contactId) => ({
+  type: SET_MESSAGES,
+  payload: { messages, contactId }
 });
 
 export const setFetchedMessage = contactId => ({

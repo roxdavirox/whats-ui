@@ -26,7 +26,8 @@ import {
   closeTransferListDialog,
   setFetchedMessage,
   setContactId,
-  setCurrentChatRoom
+  setCurrentChatRoom,
+  setMessages
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 
@@ -115,18 +116,19 @@ const AppChat = props => {
   const handleReceiveContactMessages = ({ messages, contactId }) => {
     console.log('fetched messages', messages);
     if (!messages.length) return;
-    const contact = contacts[contactId];
-    if (!contact) return;
-    this.setState({
-      contacts: { 
-        ...contacts,
-        [contactId]: {
-          ...contact,
-          chat: {
-            messages
-          }
-        }
-    }});
+    dispatch(setMessages(messages, contactId));
+    // const contact = contacts[contactId];
+    // if (!contact) return;
+    // this.setState({
+    //   contacts: { 
+    //     ...contacts,
+    //     [contactId]: {
+    //       ...contact,
+    //       chat: {
+    //         messages
+    //       }
+    //     }
+    // }});
   }
 
   const handleContactClick = contactId => {

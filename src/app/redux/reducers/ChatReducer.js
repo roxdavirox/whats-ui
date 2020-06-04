@@ -10,7 +10,8 @@ import {
   CLOSE_CONTACT_LIST_DIALOG,
   OPEN_TRANSFER_LIST_DIALOG,
   CLOSE_TRANSFER_LIST_DIALOG,
-  SET_FETCHED_MESSAGE
+  SET_FETCHED_MESSAGE,
+  SET_MESSAGES
 } from '../actions/ChatActions';
 import localStorageService from '../../services/localStorageService';
 // um contato é responsavel por
@@ -140,6 +141,18 @@ const ChatReducer = function(state = initialState, action) {
         fetchedMessages: {
           ...state.fetchedMessages,
           [contactId]: { fetched: true }
+        }
+      };
+    }
+
+    case SET_MESSAGES: {
+      const { messages, contactId } = action.payload;
+      const contact = state.contacts[contactId];
+      return {
+        ...state,
+        contacts: {
+          ...state.contacts,
+          [contactId]: { ...contact, chat: { messages } }
         }
       };
     }
