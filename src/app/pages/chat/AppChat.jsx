@@ -30,10 +30,10 @@ import {
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 
+let chatSocket = socket();
 const AppChat = props => {
-  const chatSocket = socket();
   const dispatch = useDispatch();
-  console.log('chatSocket', chatSocket);
+
   const currentUser = useSelector(({ chat }) => chat.currentUser);
   const contacts = useSelector(({ chat }) => chat.contacts);
   const recentChats = useSelector(({ chat }) => chat.recentChats);
@@ -44,7 +44,6 @@ const AppChat = props => {
   const [bottomRef, setBottomRef] = useState(React.createRef());
 
   useEffect(() => {
-    console.log('oi');
     chatSocket.registerChatHandler(handleReceiveChats);
     chatSocket.registerContactsHandler(handleReceiveContacts);
     chatSocket.registerMessageHandler(handleReceivedMessage);
@@ -245,7 +244,7 @@ const AppChat = props => {
     contact: contacts[chat.contactId], 
     ...chat 
   }));
-  console.log('_recentChats', _recentChats);
+  
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
