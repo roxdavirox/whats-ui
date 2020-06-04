@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, memo } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
@@ -88,5 +88,5 @@ const mapStateToProps = state => ({
 });
 
 export default withStyles(styles, { withTheme: true })(
-  connect(mapStateToProps, { setLayoutSettings })(Layout1)
+  connect(mapStateToProps, { setLayoutSettings })(memo(Layout1))
 );

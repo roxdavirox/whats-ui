@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, memo } from "react";
 import { MatxLayouts } from "./index";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
@@ -86,6 +86,6 @@ const mapStateToProps = state => ({
 
 export default withRouter(
   connect(mapStateToProps, { setLayoutSettings, setDefaultSettings })(
-    MatxLayoutSFC
+    memo(MatxLayoutSFC)
   )
 );
