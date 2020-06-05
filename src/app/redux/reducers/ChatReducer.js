@@ -16,7 +16,8 @@ import {
   SET_CURRENT_CHAT_ROOM,
   SAVE_CONTACT,
   TRANSFER_CONTACT,
-  SET_RECEIVED_CONTACT
+  SET_RECEIVED_CONTACT,
+  UPDATE_RECENT_CHAT
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -94,6 +95,21 @@ const ChatReducer = function(state = initialState, action) {
         ...state,
         recentChats: [...state.recentChats, recentChat]
       };
+    }
+
+    case UPDATE_RECENT_CHAT: {
+      const { contactId, time } = action.payload;
+      const { recentChats } = state;
+      const updatedRecentChats = recentChats.reduce((allRecentChats, crrRecentChat) => {
+        if (crrRecentChat.contactId === contactId) {
+          return [...allRecentChats, { ...crrRecentChat, lastMessageTime: time }]
+        }
+        return [...allRecentChats, crrRecentChat];
+      }, []);
+      return {
+        ...state,
+        recentChats: updatedRecentChats
+      }
     }
 
     case ADD_MESSAGE: {

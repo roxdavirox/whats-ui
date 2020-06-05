@@ -16,6 +16,7 @@ export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 export const SAVE_CONTACT = 'SAVE_CONTACT';
 export const TRANSFER_CONTACT = 'TRANSFER_CONTACT';
 export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
+export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 
 export const setReceivedContact = (chat, contact) => ({
   type: SET_RECEIVED_CONTACT,
@@ -124,11 +125,14 @@ export const addMessage = (message) => (dispatch, getState) => {
         ..._contact, 
         chat: { messages: [message] }
       }));
-      // this.scrollToBottom();
       return;
     }
     dispatch({
       type: ADD_MESSAGE,
       payload: { contactId, message }
+    });
+    dispatch({
+      type: UPDATE_RECENT_CHAT,
+      payload: { contactId, time: message.time }
     });
 }
