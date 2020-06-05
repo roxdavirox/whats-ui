@@ -14,6 +14,20 @@ export const SET_MESSAGES = 'SET_MESSAGES';
 export const SET_CONTACT_ID = 'SET_CONTACT_ID';
 export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 export const SAVE_CONTACT = 'SAVE_CONTACT';
+export const TRANSFER_CONTACT = 'TRANSFER_CONTACT';
+export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
+
+export const setReceivedContact = (chat, contact) => ({
+  type: SET_RECEIVED_CONTACT,
+  payload: { chat, contact }
+});
+
+export const transferContact = (selectedUserId, socket) => (dispatch, getState) => {
+  const { chat } = getState();
+  const { contactId } = chat;
+  socket.transferContact({ contactId, userId: selectedUserId });
+  dispatch({ type: TRANSFER_CONTACT, });
+}
 
 export const saveContact = (name, socket) => (dispatch, getState) => {
   const { chat } = getState();

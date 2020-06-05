@@ -14,7 +14,9 @@ import {
   SET_MESSAGES,
   SET_CONTACT_ID,
   SET_CURRENT_CHAT_ROOM,
-  SAVE_CONTACT
+  SAVE_CONTACT,
+  TRANSFER_CONTACT,
+  SET_RECEIVED_CONTACT
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -36,6 +38,47 @@ const ChatReducer = function(state = initialState, action) {
         ...state,
         openSaveContact: true
       };
+    }
+    
+    case SET_RECEIVED_CONTACT: {
+      const { chat, contact } = action.payload;
+      const { contacts, recentChats } = state;
+      const receivedChat = {
+        id: chat.id, 
+        contactId: contact.id, 
+        userId: contact.userId, 
+        ownerId: contact.ownerId,
+        contact: {
+          ...contact,
+          eurl: 'assets/faces/default-avatar.pngj',
+          status: 'Online',
+        }
+      };
+      return { 
+        ...state,
+        contactId: contact.id,
+        contacts: { 
+          ...contacts, 
+          [contact.id]: { ...contact, chat: { messages: [] } }
+        },
+        recentChats: [...recentChats, receivedChat]
+      }
+    }
+
+    case TRANSFER_CONTACT: {
+      const { recentChats, contacts, contactId, fetchedMessages } = state;
+      const filteredRecentChats = recentChats
+        .filter(recentChat => recentChat.contactId !== contactId);
+
+      delete contacts[contactId];
+      delete fetchedMessages[contactId];
+
+      return {
+        ...state,
+        contacts,
+        recentChats: filteredRecentChats,
+        fetchedMessages
+      }
     }
 
     case CLOSE_SAVE_CONTACT_DIALOG: {
@@ -184,6 +227,7 @@ const ChatReducer = function(state = initialState, action) {
         },
       }
     }
+
     default: { return state; }
   }
 }

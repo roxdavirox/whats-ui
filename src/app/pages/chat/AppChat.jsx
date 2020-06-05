@@ -26,7 +26,9 @@ import {
   setContactId,
   setCurrentChatRoom,
   setMessages,
-  saveContact
+  saveContact,
+  transferContact,
+  setReceivedContact
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 
@@ -53,11 +55,15 @@ const AppChat = props => {
     setClient(chatSocket);
     return () => {
       chatSocket.disconnect();
-      dispatch(setCurrentChatRoom(''));
-      dispatch(setContactId(''));
+      clearChat();
     }
   }, []);
   
+  const clearChat = () => {
+    dispatch(setCurrentChatRoom(''));
+    dispatch(setContactId(''));
+  }
+
   const handleReceiveTransferUsers = transferUsers => dispatch(setTransferUsers(transferUsers));
 
   const handleReceiveChats = chats => dispatch(setRecentChats(chats));
@@ -119,50 +125,13 @@ const AppChat = props => {
   const handleOpenTransferList = () => dispatch(openTransferListDialog());
   const handleCloseTransferList = () => dispatch(closeTransferListDialog());
   const handleSelectTransferContact = (selectedUserId) => {
-    console.log('transferir para:', selectedUserId);
-    const { contacts, contactId, fetchedMessages } = this.state;
-    if (!contacts[contactId]) return;
-    const filteredRecentChats = this.state.recentChats.filter(recentChat => recentChat.contactId !== contactId);
-    delete contacts[contactId];
-    delete fetchedMessages[contactId];
-    this.state.client
-      .transferContact({
-        contactId, 
-        userId: selectedUserId,
-      });
-    this.setState({
-      contacts,
-      fetchedMessages,
-      currentChatRoom: "",
-      recentChats: filteredRecentChats
-    });
+    dispatch(transferContact(selectedUserId, chatSocket));
+    clearChat();
   }
+
   const handleReceiveContact = ({ chat, contact }) => {
-    console.log('contact recebido: ', contact);
     if (!contact || !chat) return;
-    this.setState({ 
-      contacts: { 
-        ...this.state.contacts, 
-        [contact.id]: { 
-          ...contact, 
-          chat: { 
-            messages: []
-          }
-        }
-      },
-      contactId: contact.id,
-      recentChats: [...this.state.recentChats, { 
-        id: chat.id, 
-        contactId: contact.id, 
-        userId: contact.userId, 
-        ownerId: contact.ownerId,
-        contact: {
-          ...contact,
-          eurl: 'assets/faces/default-avatar.pngj',
-          status: 'Online',
-        }
-      }],
-    });
+    dispatch(setReceivedContact(chat, contact));
   }
 
   const handleSaveContact = contactName => {
@@ -183,6 +152,7 @@ const AppChat = props => {
     contact: contacts[chat.contactId], 
     ...chat 
   }));
+  
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">
