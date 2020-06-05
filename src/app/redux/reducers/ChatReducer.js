@@ -16,12 +16,8 @@ import {
   SET_CURRENT_CHAT_ROOM,
   SAVE_CONTACT
 } from '../actions/ChatActions';
-import localStorageService from '../../services/localStorageService';
-// um contato é responsavel por
-// armazenar o chat com suas mensagens como embed docs
 
 const initialState = {
-  currentUser: localStorageService.getItem('auth_user'),
   openContactListDialog: false,
   openTransferListDialog: false,
   openSaveContactDialog: false,

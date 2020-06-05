@@ -33,7 +33,6 @@ import socket from './socket';
 const AppChat = props => {
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
-  const currentUser = useSelector(({ chat }) => chat.currentUser);
   const contacts = useSelector(({ chat }) => chat.contacts);
   const recentChats = useSelector(({ chat }) => chat.recentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
@@ -197,7 +196,6 @@ const AppChat = props => {
             // toggleSidenav={toggleSidenav}
           >
             <ChatSidenav
-              currentUser={currentUser}
               openContactList={openContactList}
               contactList={contacts}
               recentChats={_recentChats}

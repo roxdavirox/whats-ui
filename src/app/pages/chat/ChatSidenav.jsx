@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from 'react-redux';
 import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
 import { Divider } from "@material-ui/core";
@@ -12,7 +13,6 @@ import Drawer from '@material-ui/core/Drawer';
 import ContactList from './ContactList';
 
 const ChatSidenav = ({
-  currentUser,
   contactList = [],
   recentChats = [],
   handleContactClick,
@@ -20,7 +20,8 @@ const ChatSidenav = ({
   handleCloseContactList,
   openContactList
 }) => {
-  console.log('side nav recentChats', recentChats);
+  const currentUser = useSelector(({ user }) => user);
+  console.log('currentUser', currentUser);
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
@@ -30,9 +31,9 @@ const ChatSidenav = ({
             onClose={handleCloseContactList}
             handleContactClick={handleContactClick} />
         </Drawer>
-        <ChatAvatar src={currentUser.eurl || currentUser.avatar} status={currentUser.status} />
+        {currentUser && <ChatAvatar src={currentUser.eurl} status={currentUser.status} />}
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
-          {currentUser.name}
+          {currentUser && currentUser.name}
         </h5>
         <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
           <Tooltip title="Iniciar conversa">
@@ -43,7 +44,7 @@ const ChatSidenav = ({
         </div>
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700">
-        {recentChats.map((chat, index) => (
+        {recentChats && recentChats.map((chat, index) => (
           <div
             onClick={() => handleContactClick(chat.contact.id)}
             key={index}
