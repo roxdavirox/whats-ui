@@ -26,6 +26,7 @@ import {
   setContactId,
   setCurrentChatRoom,
   setMessages,
+  saveContact
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 
@@ -92,7 +93,6 @@ const AppChat = props => {
     if (!messageStatus.fetched) {
       chatSocket.requestContactMessages(contactId);
       dispatch(setFetchedMessage(contactId));
-      // this.bottomRef.scrollTop = 9999999999;
     }
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
@@ -166,26 +166,7 @@ const AppChat = props => {
 
   const handleSaveContact = contactName => {
     if (!contactName) return;
-    const { client, contactId, contacts, recentChats } = this.state;
-    console.log('recentChats', recentChats);
-    console.log('this contact id', contactId);
-    const updatedRecentChats = recentChats.reduce((acc, crr) => 
-      [...acc, { 
-          ...crr,
-          contact: crr.contactId === contactId 
-            ? { ...crr.contact, name: contactName, short: contactName, notify: contactName }
-            : crr.contact
-        }
-      ], []);
-    
-    client.saveContact({ contactId, name: contactName });
-    this.setState({
-      contacts: {
-        ...contacts,
-        [contactId]: { ...contacts[contactId], name: contactName, short: contactName }
-      },
-      recentChats: updatedRecentChats
-    });
+    dispatch(saveContact(contactName, chatSocket));
   }
 
   const handleCloseContactList = () => dispatch(closeContactListDialog());

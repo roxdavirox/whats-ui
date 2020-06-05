@@ -20,7 +20,7 @@ const ChatSidenav = ({
   handleCloseContactList,
   openContactList
 }) => {
-
+  console.log('side nav recentChats', recentChats);
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">

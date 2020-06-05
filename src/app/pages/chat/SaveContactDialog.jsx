@@ -16,11 +16,13 @@ function SaveContactDialog(props) {
     onSave(contactName);
     onClose();
   };
-  console.log('render save');
+
+  const handleChangeContactName = e => setContactName(e.target.value);
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Salvar contato</DialogTitle>
-      <TextField onChange={e => setContactName(e.target.value)} value={contactName} />
+      <TextField onChange={handleChangeContactName} value={contactName} />
       <Button onClick={handleSave}>Salvar</Button>
     </Dialog>
   );

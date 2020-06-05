@@ -14,6 +14,7 @@ import {
   SET_MESSAGES,
   SET_CONTACT_ID,
   SET_CURRENT_CHAT_ROOM,
+  SAVE_CONTACT
 } from '../actions/ChatActions';
 import localStorageService from '../../services/localStorageService';
 // um contato é responsavel por
@@ -168,6 +169,23 @@ const ChatReducer = function(state = initialState, action) {
     case SET_CURRENT_CHAT_ROOM: {
       return {
         ...state, currentChatRoom: action.payload.currentChatRoom
+      }
+    }
+
+    case SAVE_CONTACT: {
+      const { name } = action.payload;
+      const { contactId, contacts } = state;
+   
+      const contact = contacts[contactId];
+
+      return {
+        ...state,
+        contacts: {
+          ...contacts,
+          [contactId]: {
+            ...contact, name, short: name
+          }
+        },
       }
     }
     default: { return state; }

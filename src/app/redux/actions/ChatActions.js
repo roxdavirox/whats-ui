@@ -13,6 +13,17 @@ export const SET_FETCHED_MESSAGE = 'SET_FETCHED_MESSAGE';
 export const SET_MESSAGES = 'SET_MESSAGES';
 export const SET_CONTACT_ID = 'SET_CONTACT_ID';
 export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
+export const SAVE_CONTACT = 'SAVE_CONTACT';
+
+export const saveContact = (name, socket) => (dispatch, getState) => {
+  const { chat } = getState();
+  const { contactId } = chat;
+  socket.saveContact({ contactId, name });
+  dispatch({
+    type: SAVE_CONTACT,
+    payload: { name }
+  });
+}
 
 export const setTransferUsers = transferUsers => ({
   type: SET_TRANSFER_USERS,
