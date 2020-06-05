@@ -11,17 +11,18 @@ import {
 } from "@material-ui/core";
 import Drawer from '@material-ui/core/Drawer';
 import ContactList from './ContactList';
+import { getRecentChats } from '../../redux/selectors/ChatSelectors';
 
 const ChatSidenav = ({
   contactList = [],
-  recentChats = [],
   handleContactClick,
   handleOpenContactList,
   handleCloseContactList,
   openContactList
 }) => {
   const currentUser = useSelector(({ user }) => user);
-  console.log('currentUser', currentUser);
+  const recentChats = useSelector(getRecentChats);
+  console.log('recentChats', recentChats);
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
