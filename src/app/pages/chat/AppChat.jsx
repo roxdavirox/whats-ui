@@ -90,6 +90,7 @@ const AppChat = props => {
   const handleReceiveContactMessages = ({ messages, contactId }) => {
     if (!messages.length) return;
     dispatch(setMessages(messages, contactId));
+    dispatch(setFetchedMessage(contactId));
   }
 
   const handleContactClick = contactId => {
@@ -99,7 +100,6 @@ const AppChat = props => {
     console.log('messageStatus', messageStatus);
     if (!messageStatus.fetched) {
       chatSocket.requestContactMessages(contactId);
-      dispatch(setFetchedMessage(contactId));
     }
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
@@ -147,11 +147,6 @@ const AppChat = props => {
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
-
-  const _recentChats = recentChats.map(chat => ({ 
-    contact: contacts[chat.contactId], 
-    ...chat 
-  }));
   
   return (
     <div className="m-sm-30">
@@ -168,7 +163,6 @@ const AppChat = props => {
             <ChatSidenav
               openContactList={openContactList}
               contactList={contacts}
-              recentChats={_recentChats}
               handleContactClick={handleContactClick}
               handleCloseContactList={handleCloseContactList}
             />
