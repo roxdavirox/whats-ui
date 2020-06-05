@@ -39,13 +39,7 @@ const AppChat = props => {
   const fetchedMessages = useSelector(({ chat }) => chat.fetchedMessages);
   const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
 
-  // TODO: usar hook do ref para fazer 
-  // scroll descer sempre que chegar uma mensagem ou clicar sobre o chat
   let reference = useRef();
-  useEffect(() => {
-    if (!reference.current) return;
-    reference.current.scrollTop = 99999999;
-  }, [contacts]);
 
   useEffect(() => {
     let chatSocket = socket();
@@ -81,7 +75,6 @@ const AppChat = props => {
     console.log('mensagem recebida:', message);
     if (!message.message.conversation) return;
     dispatch(addMessage(message));
-    console.log('reff', reference)
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
   }
@@ -89,7 +82,6 @@ const AppChat = props => {
   const handleReceiveContactMessages = ({ messages, contactId }) => {
     if (!messages.length) return;
     dispatch(setMessages(messages, contactId));
-    
   }
 
   const handleContactClick = contactId => {
@@ -104,7 +96,8 @@ const AppChat = props => {
     }
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
-
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
     handleCloseContactList();
   };
 
@@ -208,7 +201,6 @@ const AppChat = props => {
     contact: contacts[chat.contactId], 
     ...chat 
   }));
-  console.log('oxe contacts', contacts);
   return (
     <div className="m-sm-30">
       <div className="mb-sm-30">

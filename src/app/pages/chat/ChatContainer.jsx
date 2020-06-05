@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   IconButton,
@@ -17,6 +17,33 @@ import shortid from "shortid";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+
+
+const WrapperTextField = props => {
+  const [message, setMessage] = useState('');
+  const sendMessageOnEnter = event => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      console.log('mew', message);
+      let m = message.trim();
+      if (m !== "") props.onSend(message.trim());
+      setMessage('');
+    }
+  };
+  
+  return (
+    <TextField
+      label="Type your message here*"
+      value={message}
+      onChange={e => setMessage(e.target.value)}
+      onKeyDown={sendMessageOnEnter}
+      fullWidth
+      multiline={true}
+      rows={1}
+      variant="outlined"
+    />
+  )
+}
+
 const ChatContainer = ({
   toggleSidenav,
   setRef,
@@ -25,13 +52,6 @@ const ChatContainer = ({
   onSaveDialogOpen,
 }) => {
   let [message, setMessage] = React.useState("");
-  const sendMessageOnEnter = event => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      message = message.trim();
-      if (message !== "") handleMessageSend(message);
-      setMessage("");
-    }
-  };
   const { 
     contactId,
     contacts,
@@ -77,7 +97,6 @@ const ChatContainer = ({
               <MenuItem 
                 style={{ justifyContent: 'space-between', width: '100%' }}
                 className="flex items-center" onClick={() => {
-                console.log('click');
                 onSaveDialogOpen();
               }}>
                 Salvar contato <PersonAddIcon />
@@ -139,16 +158,7 @@ const ChatContainer = ({
 
       {currentChatRoom !== "" && (
         <div className="flex items-center px-4 py-2">
-          <TextField
-            label="Type your message here*"
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            onKeyDown={sendMessageOnEnter}
-            fullWidth
-            multiline={true}
-            rows={1}
-            variant="outlined"
-          />
+          <WrapperTextField onSend={handleMessageSend}/>
           <div>
             <Fab
               onClick={() => {

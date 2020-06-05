@@ -30,7 +30,6 @@ const initialState = {
   contactId: '',
   fetchedMessages: {},
   currentChatRoom: '',
-  scroll: null,
 };
 
 const ChatReducer = function(state = initialState, action) {
