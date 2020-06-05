@@ -19,28 +19,44 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 
-const WrapperTextField = props => {
+const TextContainer = props => {
   const [message, setMessage] = useState('');
   const sendMessageOnEnter = event => {
     if (event.key === "Enter" && !event.shiftKey) {
-      console.log('mew', message);
-      let m = message.trim();
-      if (m !== "") props.onSend(message.trim());
+      let msg = message.trim();
+      if (msg !== "") props.onSend(message.trim());
       setMessage('');
     }
   };
+
+  const handleSend = () => {
+    let msg = message.trim();
+    if (msg !== "") props.onSend(message.trim());
+    setMessage('');
+  }
   
   return (
-    <TextField
-      label="Type your message here*"
-      value={message}
-      onChange={e => setMessage(e.target.value)}
-      onKeyDown={sendMessageOnEnter}
-      fullWidth
-      multiline={true}
-      rows={1}
-      variant="outlined"
-    />
+    <div className="flex items-center px-4 py-2">
+      <TextField
+        label="Digite aqui"
+        value={message}
+        onChange={e => setMessage(e.target.value)}
+        onKeyDown={sendMessageOnEnter}
+        fullWidth
+        multiline={true}
+        rows={1}
+        variant="outlined"
+      />
+     <div>
+      <Fab
+        onClick={handleSend}
+        color="primary"
+        className="ml-4"
+      >
+        <Icon>send</Icon>
+      </Fab>
+    </div>
+  </div>
   )
 }
 
@@ -157,21 +173,8 @@ const ChatContainer = ({
       <Divider />
 
       {currentChatRoom !== "" && (
-        <div className="flex items-center px-4 py-2">
-          <WrapperTextField onSend={handleMessageSend}/>
-          <div>
-            <Fab
-              onClick={() => {
-                if (message.trim() !== "") handleMessageSend(message);
-                setMessage("");
-              }}
-              color="primary"
-              className="ml-4"
-            >
-              <Icon>send</Icon>
-            </Fab>
-          </div>
-        </div>
+          <TextContainer onSend={handleMessageSend}/>
+
       )}
     </div>
   );
