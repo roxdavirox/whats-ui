@@ -58,7 +58,7 @@ const ChatContainer = ({
     currentUser,
     currentChatRoom
   } = useSelector(({ chat }) => chat);
-  const currentContact = contacts[contactId] || {} ;
+  const currentContact = contacts[contactId] || false ;
   return (
     <div className="chat-container flex-column position-relative">
       <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">

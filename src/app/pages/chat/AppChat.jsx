@@ -54,6 +54,8 @@ const AppChat = props => {
     setClient(chatSocket);
     return () => {
       chatSocket.disconnect();
+      dispatch(setCurrentChatRoom(''));
+      dispatch(setContactId(''));
     }
   }, []);
   
