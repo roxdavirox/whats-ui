@@ -31,8 +31,10 @@ import {
   setReceivedContact
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
+import useAudio from 'app/components/customHooks/Audio';
 
 const AppChat = props => {
+  const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
   const contacts = useSelector(({ chat }) => chat.contacts);
@@ -85,17 +87,19 @@ const AppChat = props => {
     dispatch(addMessage(message));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
+    toggle();
   }
 
   const handleReceiveContactMessages = ({ messages, contactId }) => {
     if (!messages.length) return;
     dispatch(setMessages(messages, contactId));
     dispatch(setFetchedMessage(contactId));
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
   }
 
   const handleContactClick = contactId => {
-    // if (isMobile()) toggleSidenav();
-    
+    // if (isMobile()) toggleSidenav();    
     const messageStatus = fetchedMessages[contactId] || { fetched: false };
     console.log('messageStatus', messageStatus);
     if (!messageStatus.fetched) {
