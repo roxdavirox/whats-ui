@@ -60,6 +60,34 @@ const TextContainer = props => {
   )
 }
 
+const isImage = message => message.message
+  && message.message.imageMessage
+  && message.message.imageMessage.imageUrl;
+
+const MessageComponent = ({ message }) => {
+  if (isImage(message)) {
+    const { message: _message } = message;
+    const { imageMessage: { imageUrl } } = _message;
+    return (
+        <img 
+          src={imageUrl}
+          style={{
+            display: 'block',
+            maxWidth: '230px',
+            maxHeight: '195px',
+            minWidth: '195px',
+            width: '100%',
+            height: 'auto',
+            objectFit: 'cover'
+          }}
+          alt="arquivo de imagem"
+        />
+    );
+  }
+
+  return <span className="whitespace-pre-wrap">{message.message.conversation}</span>;
+}
+
 const ChatContainer = ({
   toggleSidenav,
   setRef,
@@ -67,7 +95,6 @@ const ChatContainer = ({
   handleOpenTransferList,
   onSaveDialogOpen,
 }) => {
-  let [message, setMessage] = React.useState("");
   const { 
     contactId,
     contacts,
@@ -147,17 +174,22 @@ const ChatContainer = ({
               key={shortid.generate()}>
             <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
             <div className={message.key.fromMe ? 'mr-4' : 'ml-4' }>
-              <p className="text-muted m-0 mb-2" style={message.key.fromMe 
-                ? { display: 'flex', flexDirection: 'row-reverse'} 
-                : {}}>{message.key.fromMe ? currentUser.name : currentContact.name}</p>
+              <p 
+                className="text-muted m-0 mb-2"
+                style={message.key.fromMe 
+                  ? { display: 'flex', flexDirection: 'row-reverse'} 
+                  : {}}>
+                    {message.key.fromMe ? currentUser.name : currentContact.name}
+              </p>
               <div
                 className={`px-4 py-2 mb-2 list__message ${
                   message.key.fromMe
                     ? "bg-primary text-white"
                     : "bg-paper"
                 }`}
+
               >
-                <span className="whitespace-pre-wrap">{message.message.conversation}</span>
+                <MessageComponent message={message} />
               </div>
               <small className="text-muted mb-0" style={message.key.fromMe 
                 ? { display: 'flex', flexDirection: 'row-reverse'} 
