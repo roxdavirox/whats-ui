@@ -30,6 +30,7 @@
     "qrcode.react": "^1.0.0",
     "qwest": "^4.5.0",
     "react": "^16.8.6",
+    "react-audio-player": "^0.13.0",
     "react-beautiful-dnd": "^11.0.4",
     "react-big-calendar": "^0.24.0",
     "react-dom": "^16.8.6",

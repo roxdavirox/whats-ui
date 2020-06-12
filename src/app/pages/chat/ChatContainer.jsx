@@ -19,6 +19,7 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ImageModal from './ImageModal';
 import { openImageModal } from '../../redux/actions/ChatActions';
+import AudioPlayer from 'react-audio-player';
 
 const TextContainer = props => {
   const [message, setMessage] = useState('');
@@ -65,6 +66,10 @@ const isImage = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.fileUrl;
 
+const isAudio = message => message.message
+  && message.message.audioMessage
+  && message.message.audioMessage.fileUrl;
+
 const MessageComponent = ({ message }) => {
   const dispatch = useDispatch();
   if (isImage(message)) {
@@ -85,6 +90,19 @@ const MessageComponent = ({ message }) => {
           }}
           alt="arquivo de imagem"
         />
+    );
+  }
+
+  if (isAudio(message)) {
+    const { message: _message } = message;
+    const { audioMessage: { fileUrl } } = _message;
+
+    return (
+      <AudioPlayer
+        src={fileUrl}
+        autoPlay={false}
+        controls
+      />
     );
   }
 
