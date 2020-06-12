@@ -83,7 +83,7 @@ const AppChat = props => {
 
   const handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
-    if (!message.message.conversation) return;
+    if (!message.message) return;
     dispatch(addMessage(message));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
