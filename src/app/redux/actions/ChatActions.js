@@ -20,9 +20,9 @@ export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 
-export const openImageModal = url => ({
+export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
-  payload: { url }
+  payload: { fileUrl }
 });
 
 export const closeImageModal = () => ({

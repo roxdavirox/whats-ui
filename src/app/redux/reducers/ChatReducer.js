@@ -33,7 +33,7 @@ const initialState = {
   fetchedMessages: {},
   currentChatRoom: '',
   imageModalOpen: false,
-  imageUrl: null
+  fileUrl: null
 };
 
 const ChatReducer = function(state = initialState, action) {
@@ -49,7 +49,7 @@ const ChatReducer = function(state = initialState, action) {
       return {
         ...state,
         imageModalOpen: true,
-        imageUrl: action.payload.url
+        fileUrl: action.payload.fileUrl
       };
     }
 
@@ -57,7 +57,7 @@ const ChatReducer = function(state = initialState, action) {
       return {
         ...state,
         imageModalOpen: false,
-        imageUrl: null
+        fileUrl: null
        };
     }
 

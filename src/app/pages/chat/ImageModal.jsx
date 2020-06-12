@@ -32,11 +32,10 @@ export default function ImageModal({ children }) {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { imageModalOpen, imageUrl } = useSelector(({ chat }) => chat);
+  const { imageModalOpen, fileUrl } = useSelector(({ chat }) => chat);
   const [modalStyle] = React.useState(getModalStyle);
   const handleClose = () => dispatch(closeImageModal())
-  console.log('imageModalOpen', imageModalOpen);
-  console.log('imageUrl', imageUrl);
+
   return (
     <div >
       <Modal
@@ -48,7 +47,7 @@ export default function ImageModal({ children }) {
       >
         <div style={modalStyle} className={classes.paper}>
           <img
-            src={imageUrl}
+            src={fileUrl}
             alt="arquivo de imagem"
             style={{ width: '100%', height: '100%' }}
             

@@ -63,17 +63,17 @@ const TextContainer = props => {
 
 const isImage = message => message.message
   && message.message.imageMessage
-  && message.message.imageMessage.imageUrl;
+  && message.message.imageMessage.fileUrl;
 
 const MessageComponent = ({ message }) => {
   const dispatch = useDispatch();
   if (isImage(message)) {
     const { message: _message } = message;
-    const { imageMessage: { imageUrl } } = _message;
+    const { imageMessage: { fileUrl } } = _message;
     return (
         <img
-          onClick={() => dispatch(openImageModal(imageUrl))}
-          src={imageUrl}
+          onClick={() => dispatch(openImageModal(fileUrl))}
+          src={fileUrl}
           style={{
             display: 'block',
             maxWidth: '230px',
