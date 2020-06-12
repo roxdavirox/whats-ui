@@ -17,7 +17,9 @@ import {
   SAVE_CONTACT,
   TRANSFER_CONTACT,
   SET_RECEIVED_CONTACT,
-  UPDATE_RECENT_CHAT
+  UPDATE_RECENT_CHAT,
+  OPEN_IMAGE_MODAL,
+  CLOSE_IMAGE_MODAL
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -30,6 +32,8 @@ const initialState = {
   contactId: '',
   fetchedMessages: {},
   currentChatRoom: '',
+  imageModalOpen: false,
+  imageUrl: null
 };
 
 const ChatReducer = function(state = initialState, action) {
@@ -37,10 +41,26 @@ const ChatReducer = function(state = initialState, action) {
     case OPEN_SAVE_CONTACT_DIALOG: {
       return {
         ...state,
-        openSaveContact: true
+        openSaveContact: true,
       };
     }
     
+    case OPEN_IMAGE_MODAL: {
+      return {
+        ...state,
+        imageModalOpen: true,
+        imageUrl: action.payload.url
+      };
+    }
+
+    case CLOSE_IMAGE_MODAL: {
+      return {
+        ...state,
+        imageModalOpen: false,
+        imageUrl: null
+       };
+    }
+
     case SET_RECEIVED_CONTACT: {
       const { chat, contact } = action.payload;
       const { contacts, recentChats } = state;

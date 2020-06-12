@@ -17,6 +17,17 @@ export const SAVE_CONTACT = 'SAVE_CONTACT';
 export const TRANSFER_CONTACT = 'TRANSFER_CONTACT';
 export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
+export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
+export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
+
+export const openImageModal = url => ({
+  type: OPEN_IMAGE_MODAL,
+  payload: { url }
+});
+
+export const closeImageModal = () => ({
+  type: CLOSE_IMAGE_MODAL
+});
 
 export const setReceivedContact = (chat, contact) => ({
   type: SET_RECEIVED_CONTACT,
