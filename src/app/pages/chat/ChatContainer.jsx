@@ -72,7 +72,7 @@ const isAudio = message => message.message
   && message.message.audioMessage.fileUrl;
 
 const isQuote = message => message.message
-  && message.message.extendedMessage;
+  && message.message.extendedTextMessage;
 
 const MessageComponent = ({ message }) => {
   const dispatch = useDispatch();
@@ -111,9 +111,9 @@ const MessageComponent = ({ message }) => {
   }
 
   const textMessage = isQuote(message) 
-    ? message.message.extendedMessage.text
+    ? message.message.extendedTextMessage.text
     : message.message.conversation;
-    
+
   return <span className="whitespace-pre-wrap">{textMessage}</span>;
 }
 
