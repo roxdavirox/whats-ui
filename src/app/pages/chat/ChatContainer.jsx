@@ -71,6 +71,9 @@ const isAudio = message => message.message
   && message.message.audioMessage
   && message.message.audioMessage.fileUrl;
 
+const isQuote = message => message.message
+  && message.message.extendedMessage;
+
 const MessageComponent = ({ message }) => {
   const dispatch = useDispatch();
   if (isImage(message)) {
@@ -107,7 +110,11 @@ const MessageComponent = ({ message }) => {
     );
   }
 
-  return <span className="whitespace-pre-wrap">{message.message.conversation}</span>;
+  const textMessage = isQuote(message) 
+    ? message.message.extendedMessage.text
+    : message.message.conversation;
+    
+  return <span className="whitespace-pre-wrap">{textMessage}</span>;
 }
 
 const ChatContainer = ({
