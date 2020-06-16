@@ -22,7 +22,7 @@ const ChatSidenav = ({
 }) => {
   const currentUser = useSelector(({ user }) => user);
   const recentChats = useSelector(getRecentChats);
-  console.log('recentChats', recentChats);
+  console.log('currentUser', currentUser);
   return (
     <div className="chat-sidenav bg-default">
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
@@ -32,7 +32,8 @@ const ChatSidenav = ({
             onClose={handleCloseContactList}
             handleContactClick={handleContactClick} />
         </Drawer>
-        {currentUser && <ChatAvatar src={currentUser.eurl} status={currentUser.status} />}
+        {currentUser 
+          && <ChatAvatar status={currentUser.status} />}
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
           {currentUser && currentUser.name}
         </h5>
@@ -51,7 +52,7 @@ const ChatSidenav = ({
             key={index}
             className="flex items-center p-4 cursor-pointer  gray-on-hover"
           >
-            <ChatAvatar src={chat.contact.eurl || chat.contact.avatar} status={chat.contact.status} />
+            <ChatAvatar status={chat.contact.status} />
             <div className="pl-4">
               <p className="m-0">{chat.contact.name}</p>
               <p className="m-0 text-muted">
