@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   IconButton,
@@ -17,9 +17,10 @@ import shortid from "shortid";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ImageModal from './ImageModal';
-import { openImageModal } from '../../redux/actions/ChatActions';
+import ImagePreviewDialog from './ImagePreviewDialog';
+import { openImageModal, uploadImage } from '../../redux/actions/ChatActions';
 import AudioPlayer from 'react-audio-player';
+import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 
 const TextContainer = props => {
   const [message, setMessage] = useState('');
@@ -122,11 +123,37 @@ const ChatContainer = ({
     currentChatRoom,
     imageModalOpen
   } = useSelector(({ chat }) => chat);
+
   const currentUser = useSelector(({ user }) => user);
   const currentContact = contacts[contactId] || false ;
+  const inputRef = useRef();
+  const dispatch = useDispatch();
+
+  const handleUploadImageClick = () => {
+    inputRef.current.click();
+  }
+
+  const handleImageChange = e => {
+    e.preventDefault();
+    let [file] = e.target.files;
+    if (!file) return;
+    dispatch(uploadImage({ 
+      imageFile: file,
+      contactId,
+      ownerId: currentUser.ownerId,
+      userId: currentUser.id,
+    }));
+  };
+
   return (
     <>
-      {imageModalOpen && <ImageModal />}
+      <input
+        hidden
+        type="file"
+        accept="image/png, image/jpeg"
+        onChange={handleImageChange}
+        ref={inputRef} />
+      {imageModalOpen && <ImagePreviewDialog />}
       <div className="chat-container flex-column position-relative">
         <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
           <div className="flex items-center" style={{ minHeight: '48px' }}>
@@ -173,6 +200,9 @@ const ChatContainer = ({
                 </MenuItem>
                 <MenuItem className="flex items-center" style={{ justifyContent: 'space-between', width: '100%' }}>
                   Finalizar <CallEndIcon />
+                </MenuItem>
+                <MenuItem className="flex items-center" onClick={handleUploadImageClick} style={{ justifyContent: 'space-between', width: '100%' }}>
+                  Enviar imagem <InsertPhotoIcon />
                 </MenuItem>
               </div>
             </MatxMenu>
