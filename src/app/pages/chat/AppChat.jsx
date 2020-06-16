@@ -110,7 +110,8 @@ const AppChat = props => {
     dispatch(setCurrentChatRoom(1));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
-    handleCloseContactList();
+    reference.current.update();
+    // handleCloseContactList();
   };
 
   const handleMessageSend = message => {

@@ -130,7 +130,6 @@ const ChatContainer = ({
     currentChatRoom,
     imageModalOpen
   } = useSelector(({ chat }) => chat);
-
   const currentUser = useSelector(({ user }) => user);
   const currentContact = contacts[contactId] || false ;
   const inputRef = useRef();

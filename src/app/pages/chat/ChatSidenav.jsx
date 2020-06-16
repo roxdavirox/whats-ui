@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from 'react-redux';
 import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
-import { Divider } from "@material-ui/core";
 import { format } from "date-fns";
 import ChatIcon from '@material-ui/icons/Chat';
 import {
@@ -46,8 +45,8 @@ const ChatSidenav = ({
         </div>
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700">
-        {recentChats && recentChats.map((chat, index) => (
-          <>
+        {recentChats && recentChats.map((chat, index) => (     
+          <div key={index}>
             {chat && chat.contact &&
             <div
               onClick={() => handleContactClick(chat.contact.id)}
@@ -67,7 +66,7 @@ const ChatSidenav = ({
                 </p>
               </div>
             </div>}
-          </>
+          </div>
         ))}
       </Scrollbar>
     </div>
