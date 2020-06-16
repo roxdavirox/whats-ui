@@ -33,7 +33,7 @@ const ChatSidenav = ({
             handleContactClick={handleContactClick} />
         </Drawer>
         {currentUser 
-          && <ChatAvatar status={currentUser.status} />}
+          && <ChatAvatar status={'online'} />}
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
           {currentUser && currentUser.name}
         </h5>
@@ -52,7 +52,7 @@ const ChatSidenav = ({
             key={index}
             className="flex items-center p-4 cursor-pointer  gray-on-hover"
           >
-            <ChatAvatar status={chat.contact.status} />
+            <ChatAvatar status={'online'} />
             <div className="pl-4">
               <p className="m-0">{chat.contact.name}</p>
               <p className="m-0 text-muted">
