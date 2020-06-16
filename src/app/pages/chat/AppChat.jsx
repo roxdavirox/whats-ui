@@ -87,6 +87,7 @@ const AppChat = props => {
     dispatch(addMessage(message));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
+    if (message.message.key.fromMe) return;
     toggle();
   }
 
