@@ -1,3 +1,5 @@
+import api from '../../services/api';
+
 export const SET_TRANSFER_USERS = 'SET_TRANSFER_USERS';
 export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
 export const SET_CONTACTS = 'SET_CONTACTS';
@@ -146,4 +148,20 @@ export const addMessage = (message) => (dispatch, getState) => {
       type: UPDATE_RECENT_CHAT,
       payload: { contactId, time: message.time }
     });
+}
+
+export const uploadImage = 
+  ({
+    imageFile,
+    contactId,
+    ownerId,
+    userId,
+  }) => async (dispatch) => {
+    const fd = new FormData();
+    fd.append('image', imageFile);
+    fd.append('contactId', contactId);
+    fd.append('ownerId', ownerId);
+    fd.append('userId', userId);
+    const response = await api.post('chat/image', fd);
+    console.log('response', response);
 }
