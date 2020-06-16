@@ -47,24 +47,27 @@ const ChatSidenav = ({
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700">
         {recentChats && recentChats.map((chat, index) => (
-          <div
-            onClick={() => handleContactClick(chat.contact.id)}
-            key={index}
-            className="flex items-center p-4 cursor-pointer  gray-on-hover"
-          >
-            <ChatAvatar status={'online'} />
-            <div className="pl-4">
-              <p className="m-0">{chat.contact.name}</p>
-              <p className="m-0 text-muted">
-                {format(
-                  new Date(
-                    // chat.lastChatTime
-                    ).getTime(),
-                  "MMMM dd, yyyy"
-                )}
-              </p>
-            </div>
-          </div>
+          <>
+            {chat && 
+            <div
+              onClick={() => handleContactClick(chat.contact.id)}
+              key={index}
+              className="flex items-center p-4 cursor-pointer  gray-on-hover"
+            >
+              <ChatAvatar status={'online'} />
+              <div className="pl-4">
+                <p className="m-0">{chat.contact.name}</p>
+                <p className="m-0 text-muted">
+                  {format(
+                    new Date(
+                      // chat.lastChatTime
+                      ).getTime(),
+                    "MMMM dd, yyyy"
+                  )}
+                </p>
+              </div>
+            </div>}
+          </>
         ))}
       </Scrollbar>
     </div>
