@@ -32,6 +32,7 @@ import {
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
+import Container from '@material-ui/core/Container';
 
 const AppChat = props => {
   const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');
@@ -156,10 +157,10 @@ const AppChat = props => {
   
   return (
     <div className="m-sm-30">
-      <div className="mb-sm-30">
+      {/* <div className="mb-sm-30">
         <Breadcrumb routeSegments={[{ name: "Chat" }]} />
-      </div>
-      <Card elevation={6}>
+      </div> */}
+      <Card elevation={6} style={{ maxHeight: '84vh' }}>
         <MatxSidenavContainer>
           <MatxSidenav
             width="230px"
