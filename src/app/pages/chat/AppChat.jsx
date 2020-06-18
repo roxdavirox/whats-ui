@@ -32,7 +32,6 @@ import {
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
-import Container from '@material-ui/core/Container';
 
 const AppChat = props => {
   const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');

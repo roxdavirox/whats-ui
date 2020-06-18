@@ -29,7 +29,7 @@ const QrcodeContainer = props => {
 
 	return (
 		<Container >
-			<QrcodeCard qrcode={code} isConnected={isConnected}/>}
+			<QrcodeCard qrcode={code} isConnected={isConnected}/>
 		</Container>
   );
 }

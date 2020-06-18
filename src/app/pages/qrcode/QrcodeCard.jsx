@@ -21,9 +21,9 @@ const QrcodeCard = ({ qrcode, isConnected }) => (
       </p>
     </div>
     <div>
-      <Grid container spacing={6} style={{ justifyContent: 'space-evenly' }}>
-        <QrcodeVideo startVideo/>
-        <Grid item lg={4} md={4} sm={4} xs={12}>
+      <Grid container spacing={4} style={{ justifyContent: 'space-evenly' }}>
+          {/* <QrcodeVideo startVideo/> */}
+        <Grid item lg={4} md={6} sm={6} xs={12}>
           <Card elevation={6} className="pricing__card text-center p-sm-24">
             <div className="mb-4">
               <h4 className="text-muted">QR Code</h4>
