@@ -160,7 +160,7 @@ const ChatContainer = ({
         onChange={handleImageChange}
         ref={inputRef} />
       {imageModalOpen && <ImagePreviewDialog />}
-      <div className="chat-container flex-column position-relative">
+      <div className="chat-container flex-column position-relative" style={{ maxHeight: '76vh' }}>
         <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
           <div className="flex items-center" style={{ minHeight: '48px' }}>
             <div className="show-on-mobile">
