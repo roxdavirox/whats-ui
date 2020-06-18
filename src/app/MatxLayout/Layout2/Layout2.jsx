@@ -77,11 +77,11 @@ const Layout2 = props => {
         </Hidden>
 
         {settings.perfectScrollbar && (
-          <>
+          <Scrollbar>
             <div className="container p-0">{renderRoutes(routes)}</div>
             {/* <div className="my-auto"></div> */}
             {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
-          </>
+          </Scrollbar>
         )}
 
         {!settings.perfectScrollbar && (
