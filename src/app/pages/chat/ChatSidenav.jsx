@@ -23,7 +23,7 @@ const ChatSidenav = ({
   const recentChats = useSelector(getRecentChats);
   console.log('currentUser', currentUser);
   return (
-    <div className="chat-sidenav bg-default">
+    <div className="chat-sidenav bg-default" style={{ maxHeight: '76vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         <Drawer anchor="left" open={openContactList}>
           <ContactList 
@@ -44,7 +44,7 @@ const ChatSidenav = ({
           </Tooltip>
         </div>
       </div>
-      <Scrollbar className="chat-contact-list position-relative h-700">
+      <Scrollbar className="chat-contact-list position-relative h-700" style={{ height: '91%' }}>
         {recentChats && recentChats.map((chat, index) => (     
           <div key={index}>
             {chat && chat.contact &&
