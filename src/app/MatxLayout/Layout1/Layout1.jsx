@@ -44,7 +44,7 @@ const Layout1 = props => {
         )}
 
         {settings.perfectScrollbar && (
-          <Scrollbar className="scrollable-content">
+          <>
             {layout1Settings.topbar.show && !layout1Settings.topbar.fixed && (
               <ThemeProvider theme={topbarTheme}>
                 <Layout1Topbar />
@@ -54,8 +54,8 @@ const Layout1 = props => {
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
             </div>
             <div className="my-auto" />
-            {settings.footer.show && !settings.footer.fixed && <Footer />}
-          </Scrollbar>
+            {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
+          </>
         )}
 
         {!settings.perfectScrollbar && (
