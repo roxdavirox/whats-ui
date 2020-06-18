@@ -45,15 +45,15 @@ const Layout1 = props => {
 
         {settings.perfectScrollbar && (
           <>
-            {layout1Settings.topbar.show && !layout1Settings.topbar.fixed && (
+            {/* {layout1Settings.topbar.show && !layout1Settings.topbar.fixed && (
               <ThemeProvider theme={topbarTheme}>
                 <Layout1Topbar />
               </ThemeProvider>
-            )}
+            )} */}
             <div className="content">
               <MatxSuspense>{renderRoutes(routes)}</MatxSuspense>
             </div>
-            <div className="my-auto" />
+            {/* <div className="my-auto" /> */}
             {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
           </>
         )}

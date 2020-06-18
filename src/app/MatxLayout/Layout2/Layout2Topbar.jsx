@@ -6,6 +6,7 @@ import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import NotificationBar from "../SharedCompoents/NotificationBar";
+import { logoutUser } from "app/redux/actions/UserActions";
 
 const styles = theme => ({
   root: {
@@ -23,7 +24,9 @@ const styles = theme => ({
 class Layout2Topbar extends Component {
   state = {};
 
-  handleSignOut = () => {};
+  handleSignOut = () => {
+    this.props.logoutUser();
+  };
 
   updateSidebarMode = sidebarSettings => {
     let { settings, setLayoutSettings } = this.props;
@@ -56,8 +59,8 @@ class Layout2Topbar extends Component {
       <div className={`topbar ${classes.root}`}>
         <div className="flex justify-between items-center container h-full">
           <div className="flex items-center brand">
-            <img src="/assets/images/logo.svg" alt="company-logo" />
-            <span className={`brand__text ${classes.brandText}`}>Matx</span>
+            {/* <img src="/assets/images/logo.svg" alt="company-logo" /> */}
+            <span className={`brand__text ${classes.brandText}`}>Whatspipe</span>
           </div>
           <div className="mx-auto"></div>
           <div className="flex items-center">
@@ -70,12 +73,12 @@ class Layout2Topbar extends Component {
                 menuButton={
                   <img
                     className="mx-2 align-middle circular-image-small cursor-pointer"
-                    src="/assets/images/face-7.jpg"
+                    src="/assets/images/faces/default-avatar.png"
                     alt="user"
                   />
                 }
               >
-                <MenuItem className={classes.menuItem}>
+                {/* <MenuItem className={classes.menuItem}>
                   <Icon> home </Icon>
                   <span className="pl-4"> Home </span>
                 </MenuItem>
@@ -86,7 +89,7 @@ class Layout2Topbar extends Component {
                 <MenuItem className={classes.menuItem}>
                   <Icon> settings </Icon>
                   <span className="pl-4"> Settings </span>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                   onClick={this.handleSignOut}
                   className={classes.menuItem}
@@ -120,5 +123,5 @@ const mapStateToProps = state => ({
 });
 
 export default withStyles(styles, { withTheme: true })(
-  connect(mapStateToProps, { setLayoutSettings })(Layout2Topbar)
+  connect(mapStateToProps, { setLayoutSettings, logoutUser })(Layout2Topbar)
 );

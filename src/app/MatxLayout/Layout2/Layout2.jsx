@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { renderRoutes } from "react-router-config";
 import { setLayoutSettings } from "app/redux/actions/LayoutActions";
 import { withStyles } from "@material-ui/styles";
+import Container from '@material-ui/core/Container';
 
 const styles = theme => {
   return {
@@ -76,30 +77,28 @@ const Layout2 = props => {
         </Hidden>
 
         {settings.perfectScrollbar && (
-          <Scrollbar
-            options={{ suppressScrollX: true }}
-            className="scrollable-content p-0"
-          >
+          <>
             <div className="container p-0">{renderRoutes(routes)}</div>
-            <div className="my-auto"></div>
-            {settings.footer.show && !settings.footer.fixed && <Footer />}
-          </Scrollbar>
+            {/* <div className="my-auto"></div> */}
+            {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
+          </>
         )}
 
         {!settings.perfectScrollbar && (
-          <div
-            options={{ suppressScrollX: true }}
-            className="scrollable-content p-0"
-          >
-            <div className="container p-0">{renderRoutes(routes)}</div>
-            <div className="my-auto"></div>
-            {settings.footer.show && !settings.footer.fixed && <Footer />}
-          </div>
+            <div
+              options={{ suppressScrollX: true }}
+              className="scrollable-content p-0"
+            >
+              <div className="container p-0">{renderRoutes(routes)}</div>
+              {/* <div className="my-auto"></div> */}
+              {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
+            </div>
         )}
 
-        {settings.footer.show && settings.footer.fixed && <Footer />}
+        {/* {settings.footer.show && settings.footer.fixed && <Footer />} */}
       </div>
       {settings.secondarySidebar.show && <SecondarySidebar />}
+
     </Fragment>
   );
 };
