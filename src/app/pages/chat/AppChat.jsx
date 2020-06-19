@@ -159,7 +159,7 @@ const AppChat = props => {
       {/* <div className="mb-sm-30">
         <Breadcrumb routeSegments={[{ name: "Chat" }]} />
       </div> */}
-      <Card elevation={6} style={{ maxHeight: '72vh', width: '100%' }}>
+      <Card elevation={6} style={{ width: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
             width="230px"
