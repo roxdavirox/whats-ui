@@ -87,6 +87,7 @@ const Layout2 = props => {
         {!settings.perfectScrollbar && (
             <div
               options={{ suppressScrollX: true }}
+              style={{ overflow: 'hidden' }}
               className="scrollable-content p-0"
             >
               <div className="container p-0">{renderRoutes(routes)}</div>

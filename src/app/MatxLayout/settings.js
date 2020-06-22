@@ -18,7 +18,7 @@ const themes = createMatxThemes();
 export const MatxLayoutSettings = {
   activeLayout: "layout2", // layout1, layout2
   activeTheme: "blue", // View all valid theme colors inside MatxTheme/themeColors.js
-  perfectScrollbar: true,
+  perfectScrollbar: false,
 
   themes: themes,
   layout1Settings, // open Layout1/Layout1Settings.js
