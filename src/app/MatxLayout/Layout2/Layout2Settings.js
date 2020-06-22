@@ -1,9 +1,9 @@
 const Layout2Settings = {
-  mode: 'full', // boxed | contained | full
+  mode: 'contained', // boxed | contained | full
   topbar: {
-    show: false,
+    show: true,
     fixed: true,
-    theme: 'blue'
+    theme: 'slateDark2'
   },
   navbar: {
     show: true,
