@@ -92,7 +92,7 @@ const Layout2 = props => {
             >
               <div className="container p-0">{renderRoutes(routes)}</div>
               {/* <div className="my-auto"></div> */}
-              {/* {settings.footer.show && !settings.footer.fixed && <Footer />} */}
+              {settings.footer.show && !settings.footer.fixed && <Footer />}
             </div>
         )}
 

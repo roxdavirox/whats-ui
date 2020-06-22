@@ -7,7 +7,7 @@ const Layout2Settings = {
   },
   navbar: {
     show: true,
-    theme: 'blue'
+    theme: 'slateDark1'
   },
   leftSidebar: { // Only for mobile devices
     show: true,

@@ -155,7 +155,7 @@ const AppChat = props => {
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
   
   return (
-    <div className="m-sm-30" style={{ height: '76vh', minHeight: '76vh' }}>
+    <div className="m-sm-30" style={{ height: '82vh', minHeight: '76vh' }}>
       {/* <div className="mb-sm-30">
         <Breadcrumb routeSegments={[{ name: "Chat" }]} />
       </div> */}
