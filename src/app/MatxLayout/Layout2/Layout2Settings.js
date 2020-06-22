@@ -3,11 +3,11 @@ const Layout2Settings = {
   topbar: {
     show: true,
     fixed: true,
-    theme: 'slateDark2'
+    theme: 'slateDark1'
   },
   navbar: {
     show: true,
-    theme: 'slateDark1'
+    theme: 'whiteBlue'
   },
   leftSidebar: { // Only for mobile devices
     show: true,
