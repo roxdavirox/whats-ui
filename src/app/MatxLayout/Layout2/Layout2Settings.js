@@ -1,13 +1,13 @@
 const Layout2Settings = {
   mode: 'full', // boxed | contained | full
   topbar: {
-    show: true,
+    show: false,
     fixed: true,
     theme: 'blue'
   },
   navbar: {
     show: true,
-    theme: 'whiteBlue'
+    theme: 'blue'
   },
   leftSidebar: { // Only for mobile devices
     show: true,
