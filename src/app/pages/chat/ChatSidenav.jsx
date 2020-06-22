@@ -44,7 +44,7 @@ const ChatSidenav = ({
           </Tooltip>
         </div>
       </div>
-      <Scrollbar className="chat-contact-list position-relative h-700" style={{ height: '91%' }}>
+      <Scrollbar className="chat-contact-list position-relative h-700" style={{ height: '100%' }}>
         {recentChats && recentChats.map((chat, index) => (     
           <div key={index}>
             {chat && chat.contact &&
