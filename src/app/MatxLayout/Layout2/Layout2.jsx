@@ -90,7 +90,7 @@ const Layout2 = props => {
               style={{ overflow: 'hidden' }}
               className="scrollable-content p-0"
             >
-              <div className="container p-0">{renderRoutes(routes)}</div>
+              <div className="container p-0" style={{ flex: '1 0 auto' }}>{renderRoutes(routes)}</div>
               {/* <div className="my-auto"></div> */}
               {settings.footer.show && !settings.footer.fixed && <Footer />}
             </div>
