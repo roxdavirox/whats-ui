@@ -23,7 +23,7 @@ const ChatSidenav = ({
   const recentChats = useSelector(getRecentChats);
   console.log('currentUser', currentUser);
   return (
-    <div className="chat-sidenav bg-default">
+    <div className="chat-sidenav bg-default" style={{ height: '76vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         <Drawer anchor="left" open={openContactList}>
           <ContactList 
