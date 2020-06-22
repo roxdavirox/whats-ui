@@ -155,11 +155,11 @@ const AppChat = props => {
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
   
   return (
-    <div className="m-sm-30">
+    <div className="m-sm-30" style={{ height: '76vh' }}>
       {/* <div className="mb-sm-30">
         <Breadcrumb routeSegments={[{ name: "Chat" }]} />
       </div> */}
-      <Card elevation={6} style={{ width: '100%' }}>
+      <Card elevation={6} style={{ width: '100%', height: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
             width="230px"

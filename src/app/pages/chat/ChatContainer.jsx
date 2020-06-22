@@ -160,7 +160,7 @@ const ChatContainer = ({
         onChange={handleImageChange}
         ref={inputRef} />
       {imageModalOpen && <ImagePreviewDialog />}
-      <div className="chat-container flex-column position-relative">
+      <div className="chat-container flex-column position-relative" style={{ height: '100%' }}>
         <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
           <div className="flex items-center" style={{ minHeight: '48px' }}>
             <div className="show-on-mobile">
@@ -218,6 +218,7 @@ const ChatContainer = ({
         <Scrollbar
           containerRef={ref => setRef({ current: ref })}
           className="chat-message-list flex-grow position-relative"
+          style={{ height: '100%' }}
         >
           {currentChatRoom === "" && (
             <div className="flex-column justify-center items-center h-full">
