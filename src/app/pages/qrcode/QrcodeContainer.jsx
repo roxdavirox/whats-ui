@@ -4,6 +4,7 @@ import QrcodeCard from './QrcodeCard';
 import Container from '@material-ui/core/Container';
 import { setConnectionStatus, setQrcode } from '../../redux/actions/QrcodeActions';
 import socket from './socket';
+import { setPerfectScrollbar } from '../../redux/actions/LayoutActions';
 
 const QrcodeContainer = props => {
 	const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const QrcodeContainer = props => {
 	const isConnected = useSelector(({ qrcode }) => qrcode.isConnected);
 	
 	useEffect(() => {
+		dispatch(setPerfectScrollbar(true));
 		const client = socket();
     client.registerQrcodeHandler(handleQrcode);
 		client.registerConnectionStatus(handleConnection);

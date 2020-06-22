@@ -1,6 +1,7 @@
 import {
   SET_LAYOUT_SETTINGS,
-  SET_DEFAULT_LAYOUT_SETTINGS
+  SET_DEFAULT_LAYOUT_SETTINGS,
+  SET_PERFECT_SCROLLBAR
 } from "../actions/LayoutActions";
 import { MatxLayoutSettings } from "../../MatxLayout/settings";
 
@@ -24,6 +25,14 @@ const LayoutReducer = (state = initialState, action) => {
       return {
         ...state,
         defaultSettings: { ...action.data }
+      };
+    case SET_PERFECT_SCROLLBAR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          perfectScrollbar: action.perfectScrollbar
+        }
       };
     default:
       return { ...state };
