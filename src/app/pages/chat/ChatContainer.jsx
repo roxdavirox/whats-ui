@@ -78,8 +78,10 @@ const MessageComponent = ({ message }) => {
   const dispatch = useDispatch();
   if (isImage(message)) {
     const { message: _message } = message;
-    const { imageMessage: { fileUrl } } = _message;
+    const { imageMessage: { fileUrl, caption = '' } } = _message;
     return (
+      <>
+        {caption && <p><b>{caption}</b></p>}
         <img
           onClick={() => dispatch(openImageModal(fileUrl))}
           src={fileUrl}
@@ -94,6 +96,7 @@ const MessageComponent = ({ message }) => {
           }}
           alt="arquivo de imagem"
         />
+      </>
     );
   }
 
