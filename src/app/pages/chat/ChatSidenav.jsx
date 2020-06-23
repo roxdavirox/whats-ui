@@ -57,12 +57,7 @@ const ChatSidenav = ({
               <div className="pl-4">
                 <p className="m-0">{chat.contact.name}</p>
                 <p className="m-0 text-muted">
-                  {format(
-                    new Date(
-                      // chat.lastChatTime
-                      ).getTime(),
-                    "MMMM dd, yyyy"
-                  )}
+                  {format(new Date(chat.lastMessageTime).getTime(),"dd/mm/yyyy - HH:SS")}
                 </p>
               </div>
             </div>}
