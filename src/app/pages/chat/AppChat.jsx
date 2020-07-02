@@ -44,6 +44,7 @@ const AppChat = props => {
   const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
 
   let reference = useRef();
+  const [_reference, setReference] = useState(reference);
 
   useEffect(() => {
     let chatSocket = socket();
@@ -79,7 +80,10 @@ const AppChat = props => {
     dispatch(setContacts(contactsObject));
   }
 
-  const setRef = ref => reference = ref;
+  const setRef = ref => {
+    reference = ref;
+    setReference(ref);
+  };
 
   const handleReceivedMessage = message => {
     console.log('mensagem recebida:', message);
@@ -109,8 +113,8 @@ const AppChat = props => {
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
     if (!reference || !reference.current) return;
-    reference.current.scrollTop = 99999999;
-    reference.current.update();
+    reference.current.scrollTop = 999999999;
+    setReference(reference);
     // handleCloseContactList();
   };
 
@@ -153,6 +157,7 @@ const AppChat = props => {
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
+  console.log('ref', reference);
   
   return (
     <div className="m-sm-30" style={{ height: '72vh', minHeight: '72vh' }}>
@@ -194,6 +199,7 @@ const AppChat = props => {
               onSaveDialogOpen={handleOpenSaveContact}
               currentChatRoom={currentChatRoom}
               setRef={setRef}
+              parentScrollRef={_reference}
               handleMessageSend={handleMessageSend}
               // toggleSidenav={toggleSidenav}
             />
