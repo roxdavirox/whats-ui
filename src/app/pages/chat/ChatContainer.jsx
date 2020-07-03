@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
   IconButton,
@@ -18,7 +18,11 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CallEndIcon from '@material-ui/icons/CallEnd';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ImagePreviewDialog from './ImagePreviewDialog';
-import { openImageModal, uploadImage } from '../../redux/actions/ChatActions';
+import {
+  openImageModal,
+  uploadImage,
+  getMessagesByContactId
+} from '../../redux/actions/ChatActions';
 import AudioPlayer from 'react-audio-player';
 import InsertPhotoIcon from '@material-ui/icons/InsertPhoto';
 import { CircularProgress } from "@material-ui/core";
@@ -140,6 +144,7 @@ const ChatContainer = ({
   const currentContact = contacts[contactId] || false ;
   const inputRef = useRef();
   const dispatch = useDispatch();
+  const [firstScroll, setFirstScroll] = useState(true);
 
   const handleUploadImageClick = () => {
     inputRef.current.click();
@@ -156,6 +161,10 @@ const ChatContainer = ({
       userId: currentUser.id,
     }));
   };
+
+  const handleLoadMessages = (contactId, hasMoreMessage) => {
+    dispatch(getMessagesByContactId(contactId, parentScrollRef))
+  }
 
   const loader = (
     <div className="w-full text-center p-6" key="loader">
@@ -226,68 +235,83 @@ const ChatContainer = ({
             </MatxMenu>
           )}
         </div>
-
-        <Scrollbar 
-          className="p-8 h-full-screen scroll-y chat-message-list flex-grow position-relative"
-          containerRef={ref => {
-            setRef({current: ref});
-          }}
-        >
-          {parentScrollRef && parentScrollRef.current && (
-          <InfiniteScroll
-            style={{ height: '100%' }}
-            pageStart={0}
-            loadMore={() => console.log('carregando mais mensagens...')}
-            isReverse
-            hasMore={true}
-            loader={loader}
-            getScrollParent={() => parentScrollRef}
-            useWindow={true}
+          <Scrollbar 
+            className="p-8 h-full-screen scroll-y chat-message-list flex-grow position-relative"
+            containerRef={ref => {
+              setRef({current: ref});
+            }}
+            onScrollUp={e => {
+              const position = e.scrollTop;
+              if (position <= 10 && currentContact.chat.hasMoreMessage) {
+                handleLoadMessages(currentContact.id, currentContact.chat.hasMoreMessage);
+                parentScrollRef.current.scrollTop = 800;
+              }
+            }}
           >
-            <div>
-            {currentChatRoom === "" && (
-              <div className="flex-column justify-center items-center h-full">
-                <EmptyMessage />
-                <p>Selecioine uma conversa</p>
-              </div>
-            )}
-            {currentContact.chat && currentContact.chat.messages.map((message, index) => (
-              <div 
-                className="flex items-start px-4 py-3" 
-                style={message.key.fromMe 
-                    ? { display: 'flex', flexDirection: 'row-reverse'} 
-                    : {}}
-                  key={shortid.generate()}>
-                <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
-                <div className={message.key.fromMe ? 'mr-4' : 'ml-4' }>
-                  <p 
-                    className="text-muted m-0 mb-2"
-                    style={message.key.fromMe 
+            {parentScrollRef && parentScrollRef.current && currentContact.chat && (
+            <InfiniteScroll
+              style={{ height: '100%' }}
+              pageStart={0}
+              loadMore={() => {
+                // parentScrollRef.current.scrollTop = 160;
+                if (firstScroll) {
+                  parentScrollRef.current.scrollTop = 999999;
+                  setFirstScroll(false);
+                } else if (parentScrollRef.current.scrollTop >= 10 && parentScrollRef.current.scrollTop <= 20) {
+                  parentScrollRef.current.scrollTop = 25;
+                }
+              }}
+              isReverse
+              hasMore={currentContact.chat && currentContact.chat.hasMoreMessage}
+              loader={loader}
+              getScrollParent={() => parentScrollRef}
+              useWindow={true}
+              threshold={100}
+            >
+              <div>
+              {currentChatRoom === "" && (
+                <div className="flex-column justify-center items-center h-full">
+                  <EmptyMessage />
+                  <p>Selecioine uma conversa</p>
+                </div>
+              )}
+              {currentContact.chat && currentContact.chat.messages.map((message, index) => (
+                <div 
+                  className="flex items-start px-4 py-3" 
+                  style={message.key.fromMe 
+                      ? { display: 'flex', flexDirection: 'row-reverse'} 
+                      : {}}
+                    key={shortid.generate()}>
+                  <ChatAvatar src={message.key.fromMe ? currentUser.eurl : currentContact.eurl} status={'Online'} />
+                  <div className={message.key.fromMe ? 'mr-4' : 'ml-4' }>
+                    <p 
+                      className="text-muted m-0 mb-2"
+                      style={message.key.fromMe 
+                        ? { display: 'flex', flexDirection: 'row-reverse'} 
+                        : {}}>
+                          {message.key.fromMe ? currentUser.name : currentContact.name}
+                    </p>
+                    <div
+                      className={`px-4 py-2 mb-2 list__message ${
+                        message.key.fromMe
+                          ? "bg-primary text-white"
+                          : "bg-paper"
+                      }`}
+
+                    >
+                      <MessageComponent message={message} />
+                    </div>
+                    <small className="text-muted mb-0" style={message.key.fromMe 
                       ? { display: 'flex', flexDirection: 'row-reverse'} 
                       : {}}>
-                        {message.key.fromMe ? currentUser.name : currentContact.name}
-                  </p>
-                  <div
-                    className={`px-4 py-2 mb-2 list__message ${
-                      message.key.fromMe
-                        ? "bg-primary text-white"
-                        : "bg-paper"
-                    }`}
-
-                  >
-                    <MessageComponent message={message} />
+                      {getTimeDifference(new Date(message.time))} ago
+                    </small>
                   </div>
-                  <small className="text-muted mb-0" style={message.key.fromMe 
-                    ? { display: 'flex', flexDirection: 'row-reverse'} 
-                    : {}}>
-                    {getTimeDifference(new Date(message.time))} ago
-                  </small>
                 </div>
+              ))}
               </div>
-            ))}
-            </div>
-          </InfiniteScroll>)}
-        </Scrollbar>
+            </InfiniteScroll>)}
+          </Scrollbar>
         <Divider />
 
         {currentChatRoom !== "" && (

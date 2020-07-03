@@ -28,7 +28,8 @@ import {
   setMessages,
   saveContact,
   transferContact,
-  setReceivedContact
+  setReceivedContact,
+  getMessagesByContactId
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
@@ -72,12 +73,7 @@ const AppChat = props => {
   const handleReceiveChats = chats => dispatch(setRecentChats(chats));
 
   const handleReceiveContacts = contacts => {
-    console.log('contacts', contacts);
-    const contactsObject = contacts.reduce((obj, contact) => ({
-      ...obj,
-      [contact.id]: { ...contact, status: 'Online',  chat: { messages: [] } }
-    }), {});
-    dispatch(setContacts(contactsObject));
+    dispatch(setContacts(contacts));
   }
 
   const setRef = ref => {
@@ -100,22 +96,16 @@ const AppChat = props => {
     dispatch(setMessages(messages, contactId));
     dispatch(setFetchedMessage(contactId));
     if (!reference || !reference.current) return;
-    reference.current.scrollTop = 99999999;
+    reference.current.scrollTop = 999999;
   }
 
   const handleContactClick = contactId => {
-    // if (isMobile()) toggleSidenav();    
-    const messageStatus = fetchedMessages[contactId] || { fetched: false };
-    console.log('messageStatus', messageStatus);
-    if (!messageStatus.fetched) {
-      chatSocket.requestContactMessages(contactId);
-    }
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
+    dispatch(getMessagesByContactId(contactId, reference));
     if (!reference || !reference.current) return;
-    reference.current.scrollTop = 999999999;
+    reference.current.scrollTop = 999999;
     setReference(reference);
-    // handleCloseContactList();
   };
 
   const handleMessageSend = message => {
@@ -157,7 +147,6 @@ const AppChat = props => {
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
-  console.log('ref', reference);
   
   return (
     <div className="m-sm-30" style={{ height: '72vh', minHeight: '72vh' }}>

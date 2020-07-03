@@ -1,4 +1,5 @@
 import api from '../../services/api';
+import localStorageService from '../../services/localStorageService';
 
 export const SET_TRANSFER_USERS = 'SET_TRANSFER_USERS';
 export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
@@ -21,6 +22,43 @@ export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
+export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
+export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
+
+export const getMessagesByContactId = (contactId, reference) => async (dispatch, getState) => {
+  const { chat } = getState();
+  const { contacts } = chat;
+  const contact = contacts[contactId];
+  console.log('contact', contact);
+  if (!contact) return;
+
+  const { chat: contactChat } = contact;
+  const { pagination: { start, end } } = contactChat;
+  const token = localStorageService.getToken();
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+
+  const url = `/messages/${contactId}?start=${start}&end=${end}`;
+  const response = await api.get(url, config);
+  const { data } = response;
+  const { messages, nextPagination, messageCount, hasMoreMessage } = data;
+
+  dispatch({
+    type: GET_MESSAGES_SUCCESS,
+    payload: {
+      messages,
+      nextPagination,
+      hasMoreMessage,
+      messageCount,
+      contactId
+    },
+  });
+
+  if (!reference || !reference.current) return;
+  reference.current.scrollTop = 999999999;
+}
 
 export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
@@ -119,7 +157,7 @@ export const addMessage = (message) => (dispatch, getState) => {
 
       const _contact = {
         id: contactId,
-        eurl: 'assets/faces/default-avatar.pngj',
+        eurl: 'assets/faces/default-avatar.png',
         status: 'Online',
         name: phone,
         userId,

@@ -21,7 +21,6 @@ const ChatSidenav = ({
 }) => {
   const currentUser = useSelector(({ user }) => user);
   const recentChats = useSelector(getRecentChats);
-  console.log('currentUser', currentUser);
   return (
     <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">

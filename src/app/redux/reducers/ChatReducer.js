@@ -19,7 +19,8 @@ import {
   SET_RECEIVED_CONTACT,
   UPDATE_RECENT_CHAT,
   OPEN_IMAGE_MODAL,
-  CLOSE_IMAGE_MODAL
+  CLOSE_IMAGE_MODAL,
+  GET_MESSAGES_SUCCESS
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -34,6 +35,10 @@ const initialState = {
   currentChatRoom: '',
   imageModalOpen: false,
   fileUrl: null
+};
+
+const defaultPagination = {
+  start: 0, end: 15
 };
 
 const ChatReducer = function(state = initialState, action) {
@@ -61,6 +66,39 @@ const ChatReducer = function(state = initialState, action) {
        };
     }
 
+    case GET_MESSAGES_SUCCESS: {
+      const {
+        messages: previousMessages,
+        nextPagination,
+        hasMoreMessage,
+        messageCount,
+        contactId } = action.payload;
+
+        const { contacts } = state;
+
+        const contact = contacts[contactId];
+
+        const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
+        const newMessages = [...previousMessages, ...contact.chat.messages];
+        const newSortedMessages = newMessages.sort(sortByLastDate);
+        
+        return {
+          ...state,
+          contacts: {
+            ...contacts,
+            [contactId]: {
+              ...contact,
+              chat: {
+                messages: newSortedMessages,
+                pagination: nextPagination,
+                hasMoreMessage,
+                messageCount
+              }
+            }
+          }
+        }
+    }
+
     case SET_RECEIVED_CONTACT: {
       const { chat, contact } = action.payload;
       const { contacts, recentChats } = state;
@@ -75,12 +113,16 @@ const ChatReducer = function(state = initialState, action) {
           status: 'Online',
         }
       };
+      
       return { 
         ...state,
         contactId: contact.id,
         contacts: { 
           ...contacts, 
-          [contact.id]: { ...contact, chat: { messages: [] } }
+          [contact.id]: {
+            ...contact, 
+            chat: { messages: [], pagination: defaultPagination }
+          }
         },
         recentChats: [...recentChats, receivedChat]
       }
@@ -173,9 +215,21 @@ const ChatReducer = function(state = initialState, action) {
 
     case SET_CONTACTS: {
       const { contacts } = action.payload;
+      const defaultContactsObject = contacts.reduce((obj, contact) => ({
+        ...obj,
+        [contact.id]: {
+          ...contact,
+          status: 'Online',
+          chat: { 
+            messages: [],
+            pagination: defaultPagination,
+            hasMoreMessage: false,
+          }
+        }
+      }), {});
       return {
         ...state,
-        contacts
+        contacts: defaultContactsObject
       };
     }
 
@@ -226,11 +280,13 @@ const ChatReducer = function(state = initialState, action) {
     case SET_MESSAGES: {
       const { messages, contactId } = action.payload;
       const contact = state.contacts[contactId];
+      const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
+      const sortedMessages = messages.sort(sortByLastDate);
       return {
         ...state,
         contacts: {
           ...state.contacts,
-          [contactId]: { ...contact, chat: { messages } }
+          [contactId]: { ...contact, chat: { messages: sortedMessages } }
         }
       };
     }
