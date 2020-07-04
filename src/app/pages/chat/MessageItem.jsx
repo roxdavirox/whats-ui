@@ -46,7 +46,9 @@ const MessageItem = ({ message }) => {
           className="text-muted mb-0" 
           style={fromMe ? style.messageItem : {}}
         >
-          {getTimeDifference(new Date(message.createdAt))} ago
+          {new Date(message.createdAt)
+            .toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit'})
+          }
         </small>
       </div>
     </div>
