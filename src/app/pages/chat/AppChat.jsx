@@ -112,7 +112,6 @@ const AppChat = props => {
       contactId: currentContact.id,
       jid: currentContact.jid,
       text: message,
-      time: new Date(),
       chatId: chat.id
     };
     console.log('mensagem enviada', newMsg);
