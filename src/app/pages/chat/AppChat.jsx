@@ -41,7 +41,6 @@ const AppChat = props => {
   const contacts = useSelector(({ chat }) => chat.contacts);
   const recentChats = useSelector(({ chat }) => chat.recentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
-  const fetchedMessages = useSelector(({ chat }) => chat.fetchedMessages);
   const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
 
   let reference = useRef();
@@ -190,7 +189,6 @@ const AppChat = props => {
               setRef={setRef}
               parentScrollRef={_reference}
               handleMessageSend={handleMessageSend}
-              // toggleSidenav={toggleSidenav}
             />
           </MatxSidenavContent>
         </MatxSidenavContainer>
