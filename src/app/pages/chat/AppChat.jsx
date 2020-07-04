@@ -102,7 +102,7 @@ const AppChat = props => {
   const handleContactClick = contactId => {
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
-    dispatch(getMessagesByContactId(contactId, reference));
+    dispatch(getMessagesByContactId(contactId));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 999999;
     setReference(reference);

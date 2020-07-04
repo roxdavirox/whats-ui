@@ -25,7 +25,7 @@ export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 
-export const getMessagesByContactId = (contactId, reference) => async (dispatch, getState) => {
+export const getMessagesByContactId = contactId => async (dispatch, getState) => {
   const { chat } = getState();
   const { contacts } = chat;
   const contact = contacts[contactId];
@@ -55,9 +55,6 @@ export const getMessagesByContactId = (contactId, reference) => async (dispatch,
       contactId
     },
   });
-
-  if (!reference || !reference.current) return;
-  reference.current.scrollTop = 999999999;
 }
 
 export const openImageModal = fileUrl => ({

@@ -144,7 +144,6 @@ const ChatContainer = ({
   const currentContact = contacts[contactId] || false ;
   const inputRef = useRef();
   const dispatch = useDispatch();
-  const [firstScroll, setFirstScroll] = useState(true);
 
   const handleUploadImageClick = () => {
     inputRef.current.click();
@@ -163,7 +162,7 @@ const ChatContainer = ({
   };
 
   const handleLoadMessages = (contactId, hasMoreMessage) => {
-    dispatch(getMessagesByContactId(contactId, parentScrollRef))
+    dispatch(getMessagesByContactId(contactId));
   }
 
   const loader = (
@@ -242,9 +241,9 @@ const ChatContainer = ({
             }}
             onScrollUp={e => {
               const position = e.scrollTop;
-              if (position <= 10 && currentContact.chat.hasMoreMessage) {
+              if (position <= 50 && currentContact.chat.hasMoreMessage) {
                 handleLoadMessages(currentContact.id, currentContact.chat.hasMoreMessage);
-                parentScrollRef.current.scrollTop = 800;
+                parentScrollRef.current.scrollTop = 600;
               }
             }}
           >
@@ -252,15 +251,15 @@ const ChatContainer = ({
             <InfiniteScroll
               style={{ height: '100%' }}
               pageStart={0}
-              loadMore={() => {
-                // parentScrollRef.current.scrollTop = 160;
-                if (firstScroll) {
-                  parentScrollRef.current.scrollTop = 999999;
-                  setFirstScroll(false);
-                } else if (parentScrollRef.current.scrollTop >= 10 && parentScrollRef.current.scrollTop <= 20) {
-                  parentScrollRef.current.scrollTop = 25;
-                }
-              }}
+              // loadMore={() => {
+              //   // parentScrollRef.current.scrollTop = 160;
+              //   if (firstScroll) {
+              //     parentScrollRef.current.scrollTop = 999999;
+              //     setFirstScroll(false);
+              //   } else if (parentScrollRef.current.scrollTop >= 10 && parentScrollRef.current.scrollTop <= 20) {
+              //     parentScrollRef.current.scrollTop = 25;
+              //   }
+              // }}
               isReverse
               hasMore={currentContact.chat && currentContact.chat.hasMoreMessage}
               loader={loader}
