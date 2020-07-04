@@ -2,14 +2,12 @@ import React, { useEffect, useState, memo, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from "@material-ui/core";
 import {
-  Breadcrumb,
   MatxSidenavContainer,
   MatxSidenav,
   MatxSidenavContent
 } from "matx";
 import ChatSidenav from "./ChatSidenav";
 import ChatContainer from "./ChatContainer";
-import { isMobile } from "utils";
 import TransferListDialog from './TransferListDialog';
 import SaveContactDialog from './SaveContactDialog';
 import { 
@@ -149,15 +147,11 @@ const AppChat = props => {
   
   return (
     <div className="m-sm-30" style={{ height: '72vh', minHeight: '72vh' }}>
-      {/* <div className="mb-sm-30">
-        <Breadcrumb routeSegments={[{ name: "Chat" }]} />
-      </div> */}
       <Card elevation={6} style={{ width: '100%', height: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
             width="260px"
             open
-            // toggleSidenav={toggleSidenav}
           >
             <ChatSidenav
               openContactList={openContactList}

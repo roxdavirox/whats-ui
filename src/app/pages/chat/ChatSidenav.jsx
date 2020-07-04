@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector } from 'react-redux';
 import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
-import { format } from "date-fns";
 import ChatIcon from '@material-ui/icons/Chat';
 import {
   IconButton,
