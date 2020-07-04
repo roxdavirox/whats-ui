@@ -160,11 +160,11 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case UPDATE_RECENT_CHAT: {
-      const { contactId, time } = action.payload;
+      const { contactId, createdAt } = action.payload;
       const { recentChats } = state;
       const updatedRecentChats = recentChats.reduce((allRecentChats, crrRecentChat) => {
         if (crrRecentChat.contactId === contactId) {
-          return [...allRecentChats, { ...crrRecentChat, lastMessageTime: time }]
+          return [...allRecentChats, { ...crrRecentChat, lastMessageTime: createdAt }]
         }
         return [...allRecentChats, crrRecentChat];
       }, []);

@@ -181,7 +181,7 @@ export const addMessage = (message) => (dispatch, getState) => {
     });
     dispatch({
       type: UPDATE_RECENT_CHAT,
-      payload: { contactId, time: message.time }
+      payload: { contactId, createdAt: message.createdAt }
     });
 }
 
