@@ -81,7 +81,7 @@ const ChatContainer = ({
             const position = e.scrollTop;
             if (position <= 50 && currentContact.chat.hasMoreMessage) {
               handleLoadMessages(currentContact.id, currentContact.chat.hasMoreMessage);
-              parentScrollRef.current.scrollTop = 600;
+              parentScrollRef.current.scrollTop = parentScrollRef.current.scrollHeight / 4;
             }
           }}
         >
