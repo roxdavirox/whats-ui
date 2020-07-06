@@ -27,9 +27,9 @@ export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 
 export const getMessagesByContactId = contactId => async (dispatch, getState) => {
   const { chat } = getState();
-  const { contacts } = chat;
+  const { contacts, isFetching } = chat;
+  if (isFetching) return;
   const contact = contacts[contactId];
-  console.log('contact', contact);
   if (!contact) return;
 
   const { chat: contactChat } = contact;

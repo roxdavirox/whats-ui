@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import EmptyMessage from "./EmptyMessage";
 import MessageList from './MessageList';
 import { getMessagesByContactId } from '../../redux/actions/ChatActions';
+import { useDebouncedCallback } from 'use-debounce';
 
 const ChatContainer = ({
   setRef,
@@ -52,9 +53,17 @@ const ChatContainer = ({
     }));
   };
 
+  const [handleLoadMessagesDebounce] = useDebouncedCallback(
+    (contactId) => {
+      dispatch(getMessagesByContactId(contactId));
+      console.log('debounce request');
+    },
+    1000
+  );
+
   const handleLoadMessages = (contactId, hasMoreMessage) => {
     if (!hasMoreMessage) return;
-    dispatch(getMessagesByContactId(contactId));
+    handleLoadMessagesDebounce(contactId);
   }
 
   return (

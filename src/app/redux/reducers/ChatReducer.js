@@ -20,7 +20,8 @@ import {
   UPDATE_RECENT_CHAT,
   OPEN_IMAGE_MODAL,
   CLOSE_IMAGE_MODAL,
-  GET_MESSAGES_SUCCESS
+  GET_MESSAGES_SUCCESS,
+  GET_MESSAGES_BY_CONTACT_ID
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -34,7 +35,8 @@ const initialState = {
   fetchedMessages: {},
   currentChatRoom: '',
   imageModalOpen: false,
-  fileUrl: null
+  fileUrl: null,
+  isFetching: false,
 };
 
 const defaultPagination = {
@@ -66,6 +68,13 @@ const ChatReducer = function(state = initialState, action) {
        };
     }
 
+    case GET_MESSAGES_BY_CONTACT_ID: {
+      return {
+        ...state,
+        isFetching: true,
+      }
+    }
+
     case GET_MESSAGES_SUCCESS: {
       const {
         messages: previousMessages,
@@ -95,7 +104,8 @@ const ChatReducer = function(state = initialState, action) {
                 messageCount
               }
             }
-          }
+          },
+          isFetching: false
         }
     }
 
