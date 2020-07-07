@@ -44,6 +44,15 @@ const defaultPagination = {
   start: 0, end: 15
 };
 
+const defaultContact = {
+  status: 'Online',
+  chat: { 
+    messages: [],
+    pagination: defaultPagination,
+    hasMoreMessage: false,
+  }
+};
+
 const ChatReducer = function(state = initialState, action) {
   switch(action.type) {
     case OPEN_SAVE_CONTACT_DIALOG: {
@@ -193,7 +202,6 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case ADD_MESSAGE: {
-      const defaultContact = { chat: { messages: []} };
       const { contacts } = state;
       const { contactId, message } = action.payload;
       const contact = contacts[contactId] || defaultContact;
@@ -233,18 +241,15 @@ const ChatReducer = function(state = initialState, action) {
 
     case SET_CONTACTS: {
       const { contacts } = action.payload;
-      const defaultContactsObject = contacts.reduce((obj, contact) => ({
+
+      const reduceToObject = (obj, contact) => ({
         ...obj,
         [contact.id]: {
           ...contact,
-          status: 'Online',
-          chat: { 
-            messages: [],
-            pagination: defaultPagination,
-            hasMoreMessage: false,
-          }
+          ...defaultContact
         }
-      }), {});
+      });
+      const defaultContactsObject = contacts.reduce(reduceToObject, {});
       return {
         ...state,
         contacts: defaultContactsObject
