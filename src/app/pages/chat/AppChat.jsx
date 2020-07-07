@@ -140,7 +140,6 @@ const AppChat = props => {
     dispatch(openContactList());
   }
 
-  const handleCloseContactList = () => dispatch(closeContactListDialog());
   const handleOpenSaveContact = () => dispatch(openSaveContactDialog());
   const handleCloseSaveContact = () => dispatch(closeSaveContactDialog());
 
@@ -159,10 +158,8 @@ const AppChat = props => {
           >
             <ChatSidenav
               isContactListOpen={isContactListOpen}
-              contactList={contacts}
               onOpenContactList={handleOpenContactList}
               handleContactClick={handleContactClick}
-              onCloseContactList={handleCloseContactList}
             />
           </MatxSidenav>
           {openTransferList && 

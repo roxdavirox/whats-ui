@@ -63,7 +63,7 @@ const ChatReducer = function(state = initialState, action) {
     case CLOSE_SAVE_CONTACT_DIALOG: {
       return {
         ...state,
-        isContactListOpen: false
+        openSaveContactDialog: false
       };
     }
     
@@ -266,7 +266,7 @@ const ChatReducer = function(state = initialState, action) {
     case CLOSE_CONTACT_LIST_DIALOG: {
       return {
         ...state,
-        openContactList: false
+        isContactListOpen: false
       };
     }
 
