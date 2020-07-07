@@ -24,6 +24,11 @@ export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
+export const OPEN_CONTACT_LIST = 'OPEN_CONTACT_LIST';
+
+export const openContactList = () => ({
+  type: OPEN_CONTACT_LIST
+});
 
 export const getMessagesByContactId = contactId => async (dispatch, getState) => {
   const { chat } = getState();

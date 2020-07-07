@@ -27,7 +27,8 @@ import {
   saveContact,
   transferContact,
   setReceivedContact,
-  getMessagesByContactId
+  getMessagesByContactId,
+  openContactList
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
@@ -135,11 +136,15 @@ const AppChat = props => {
     dispatch(saveContact(contactName, chatSocket));
   }
 
+  const handleOpenContactList = () => {
+    dispatch(openContactList());
+  }
+
   const handleCloseContactList = () => dispatch(closeContactListDialog());
   const handleOpenSaveContact = () => dispatch(openSaveContactDialog());
   const handleCloseSaveContact = () => dispatch(closeSaveContactDialog());
 
-  const openContactList = useSelector(({ chat }) => chat.openContactList);
+  const isContactListOpen = useSelector(({ chat }) => chat.isContactListOpen);
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
@@ -153,10 +158,11 @@ const AppChat = props => {
             open
           >
             <ChatSidenav
-              openContactList={openContactList}
+              isContactListOpen={isContactListOpen}
               contactList={contacts}
+              onOpenContactList={handleOpenContactList}
               handleContactClick={handleContactClick}
-              handleCloseContactList={handleCloseContactList}
+              onCloseContactList={handleCloseContactList}
             />
           </MatxSidenav>
           {openTransferList && 

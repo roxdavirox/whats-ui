@@ -14,19 +14,19 @@ import { getRecentChats } from '../../redux/selectors/ChatSelectors';
 const ChatSidenav = ({
   contactList = [],
   handleContactClick,
-  handleOpenContactList,
-  handleCloseContactList,
-  openContactList
+  onOpenContactList,
+  onCloseContactList,
+  isContactListOpen
 }) => {
   const currentUser = useSelector(({ user }) => user);
   const recentChats = useSelector(getRecentChats);
   return (
     <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
-        <Drawer anchor="left" open={openContactList}>
+        <Drawer anchor="left" open={isContactListOpen}>
           <ContactList 
             contacts={contactList}
-            onClose={handleCloseContactList}
+            onClose={onCloseContactList}
             handleContactClick={handleContactClick} />
         </Drawer>
         {currentUser 
@@ -36,7 +36,7 @@ const ChatSidenav = ({
         </h5>
         <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
           <Tooltip title="Iniciar conversa">
-            <IconButton onClick={handleOpenContactList}>
+            <IconButton onClick={onOpenContactList}>
               <ChatIcon />
             </IconButton>
           </Tooltip>

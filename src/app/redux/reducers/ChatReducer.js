@@ -21,11 +21,12 @@ import {
   OPEN_IMAGE_MODAL,
   CLOSE_IMAGE_MODAL,
   GET_MESSAGES_SUCCESS,
-  GET_MESSAGES_BY_CONTACT_ID
+  GET_MESSAGES_BY_CONTACT_ID,
+  OPEN_CONTACT_LIST
 } from '../actions/ChatActions';
 
 const initialState = {
-  openContactListDialog: false,
+  isContactListOpen: false,
   openTransferListDialog: false,
   openSaveContactDialog: false,
   transferUsers: [],
@@ -49,6 +50,20 @@ const ChatReducer = function(state = initialState, action) {
       return {
         ...state,
         openSaveContact: true,
+      };
+    }
+
+    case OPEN_CONTACT_LIST: {
+      return {
+        ...state,
+        isContactListOpen: true
+      }
+    }
+
+    case CLOSE_SAVE_CONTACT_DIALOG: {
+      return {
+        ...state,
+        isContactListOpen: false
       };
     }
     
@@ -152,13 +167,6 @@ const ChatReducer = function(state = initialState, action) {
         recentChats: filteredRecentChats,
         fetchedMessages
       }
-    }
-
-    case CLOSE_SAVE_CONTACT_DIALOG: {
-      return {
-        ...state,
-        openSaveContact: false
-      };
     }
     
     case ADD_RECENT_CHAT: {
