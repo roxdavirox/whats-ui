@@ -22,7 +22,8 @@ import {
   CLOSE_IMAGE_MODAL,
   GET_MESSAGES_SUCCESS,
   GET_MESSAGES_BY_CONTACT_ID,
-  OPEN_CONTACT_LIST
+  OPEN_CONTACT_LIST,
+  LOAD_FIRST_MESSAGES
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -50,6 +51,7 @@ const defaultContact = {
     messages: [],
     pagination: defaultPagination,
     hasMoreMessage: false,
+    firstMessageLoad: false,
   }
 };
 
@@ -122,10 +124,11 @@ const ChatReducer = function(state = initialState, action) {
             [contactId]: {
               ...contact,
               chat: {
+                ...contact.chat,
                 messages: newSortedMessages,
                 pagination: nextPagination,
                 hasMoreMessage,
-                messageCount
+                messageCount,
               }
             }
           },
@@ -223,6 +226,24 @@ const ChatReducer = function(state = initialState, action) {
       };
     }
 
+    case LOAD_FIRST_MESSAGES: {
+      const { contactId } = action.payload;
+      const contact = state.contacts[contactId];
+      return {
+        ...state,
+        contacts: {
+          ...state.contacts,
+          [contactId]: {
+            ...contact,
+            chat: {
+              ...contact.chat,
+              firstMessageLoad: true,
+            }
+          }
+        }
+      }
+    }
+
     case SET_TRANSFER_USERS: {
       const { transferUsers } = action.payload;
       return {
@@ -267,6 +288,7 @@ const ChatReducer = function(state = initialState, action) {
             ...contact,
             chat: {
               pagination: defaultPagination,
+              firstMessageLoad: true,
               messages: [...contact.chat.messages],
             }
           }

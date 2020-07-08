@@ -28,7 +28,8 @@ import {
   transferContact,
   setReceivedContact,
   getMessagesByContactId,
-  openContactList
+  openContactList,
+  loadFirstMessages
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
@@ -90,7 +91,7 @@ const AppChat = props => {
   const handleContactClick = contactId => {
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
-    dispatch(getMessagesByContactId(contactId));
+    dispatch(loadFirstMessages(contactId))
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 999999;
     setReference(reference);
