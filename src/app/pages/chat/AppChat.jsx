@@ -15,24 +15,21 @@ import {
   setRecentChats, 
   setContacts,
   addMessage,
-  closeContactListDialog,
   openSaveContactDialog,
   closeSaveContactDialog,
   openTransferListDialog,
   closeTransferListDialog,
-  setFetchedMessage,
   setContactId,
   setCurrentChatRoom,
-  setMessages,
   saveContact,
   transferContact,
   setReceivedContact,
-  getMessagesByContactId,
   openContactList,
   loadFirstMessages
  } from '../../redux/actions/ChatActions';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
+import AddContactDialog from "./AddContactDialog";
 
 const AppChat = props => {
   const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');
@@ -139,7 +136,7 @@ const AppChat = props => {
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
-  
+
   return (
     <div className="m-sm-30" style={{ height: '72vh', minHeight: '72vh' }}>
       <Card elevation={6} style={{ width: '100%', height: '100%' }}>
@@ -169,6 +166,7 @@ const AppChat = props => {
                 onClose={handleCloseSaveContact}
               />
           }
+          <AddContactDialog />
           <MatxSidenavContent>
             <ChatContainer
               handleOpenTransferList={handleOpenTransferList}

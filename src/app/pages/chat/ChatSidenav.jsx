@@ -13,7 +13,7 @@ import { getRecentChats } from '../../redux/selectors/ChatSelectors';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { closeContactListDialog } from '../../redux/actions/ChatActions';
+import { closeContactListDialog, openAddContactDialog } from '../../redux/actions/ChatActions';
 import { useDebouncedCallback } from 'use-debounce';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
@@ -62,6 +62,11 @@ const ChatSidenav = ({
   const currentUser = useSelector(({ user }) => user);
   const recentChats = useSelector(getRecentChats);
   const contacts = useSelector(({ chat }) => chat.contacts);
+  const dispatch = useDispatch();
+
+  const handleOpenAddDialog = () => {
+    dispatch(openAddContactDialog());
+  }
 
   const [searchContact, setSearchContact] = useState('');
 
@@ -100,7 +105,7 @@ const ChatSidenav = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Adicionar contato">
-            <IconButton onClick={onOpenContactList}>
+            <IconButton onClick={handleOpenAddDialog}>
               <PersonAddIcon />
             </IconButton>
           </Tooltip>
