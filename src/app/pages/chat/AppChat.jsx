@@ -145,7 +145,7 @@ const AppChat = props => {
       <Card elevation={6} style={{ width: '100%', height: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
-            width="260px"
+            width="270px"
             open
           >
             <ChatSidenav
