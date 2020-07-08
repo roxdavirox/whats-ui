@@ -171,8 +171,8 @@ export const addMessage = (message) => (dispatch, getState) => {
         contactId, 
         userId, 
         ownerId,
-        lastMessageTime: message.createdAt
-        // contact: _contact
+        lastMessageTime: message.createdAt,
+        contact: _contact
       };
       dispatch(addRecentChat(recentChat));
       dispatch(addContact({ 
