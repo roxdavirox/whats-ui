@@ -79,18 +79,20 @@ const ChatSidenav = ({
       />
     </div>
   ));
-
+  
   return (
     <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         {currentUser 
           && <ChatAvatar status={'online'} />}
-        <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
-          {currentUser 
-            && currentUser.name.length > 8 
+        <Tooltip title={currentUser.name || ''}>
+          <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
+            {currentUser 
+              && currentUser.name.length > 8 
               ? `${currentUser.name.substring(0, 8)} ...` : currentUser.name
-          }
-        </h5>
+            }
+          </h5>
+        </Tooltip>
         <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
           <Tooltip title="Iniciar conversa">
             <IconButton onClick={onOpenContactList}>
