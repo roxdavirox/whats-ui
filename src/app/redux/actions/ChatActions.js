@@ -171,7 +171,8 @@ export const addMessage = (message) => (dispatch, getState) => {
         contactId, 
         userId, 
         ownerId,
-        contact: _contact
+        lastMessageTime: message.createdAt
+        // contact: _contact
       };
       dispatch(addRecentChat(recentChat));
       dispatch(addContact({ 
@@ -186,7 +187,7 @@ export const addMessage = (message) => (dispatch, getState) => {
     });
     dispatch({
       type: UPDATE_RECENT_CHAT,
-      payload: { contactId, createdAt: message.createdAt }
+      payload: { contactId, lastMessageTime: message.createdAt }
     });
 }
 

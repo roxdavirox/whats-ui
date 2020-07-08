@@ -263,7 +263,13 @@ const ChatReducer = function(state = initialState, action) {
         ...state,
         contacts: {
           ...state.contacts,
-          [id]: contact
+          [id]: { 
+            ...contact,
+            chat: {
+              pagination: defaultPagination,
+              messages: [...contact.chat.messages],
+            }
+          }
         }
       };
     }
