@@ -38,7 +38,7 @@ export const getMessagesByContactId = contactId => async (dispatch, getState) =>
   if (!contact) return;
 
   const { chat: contactChat } = contact;
-  const { pagination: { start, end } } = contactChat;
+  const { pagination: { start = 0, end= 15 } } = contactChat;
   const token = localStorageService.getToken();
 
   const config = {
