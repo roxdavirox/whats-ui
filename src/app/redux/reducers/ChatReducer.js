@@ -28,7 +28,7 @@ import {
 const initialState = {
   isContactListOpen: false,
   openTransferListDialog: false,
-  openSaveContactDialog: false,
+  openSaveContact: false,
   transferUsers: [],
   contacts: {},
   recentChats: [],
@@ -72,7 +72,7 @@ const ChatReducer = function(state = initialState, action) {
     case CLOSE_SAVE_CONTACT_DIALOG: {
       return {
         ...state,
-        openSaveContactDialog: false
+        openSaveContact: false
       };
     }
     

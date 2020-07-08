@@ -134,6 +134,7 @@ const AppChat = props => {
   const handleSaveContact = contactName => {
     if (!contactName) return;
     dispatch(saveContact(contactName, chatSocket));
+    handleCloseSaveContact();
   }
 
   const handleOpenContactList = () => {
