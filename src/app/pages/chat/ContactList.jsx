@@ -14,7 +14,7 @@ const ContactList = ({ contacts, handleContactClick }) => {
 
   return (
     <List>
-      {Object.values(contacts) && Object.values(contacts).map((contact, index) => (
+      {contacts && contacts.map((contact, index) => (
         <Fragment >
           <ListItem button >
             <ListItemIcon>

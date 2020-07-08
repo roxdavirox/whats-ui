@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
 import ChatIcon from '@material-ui/icons/Chat';
@@ -10,6 +10,48 @@ import {
 import Slide from '@material-ui/core/Slide';
 import ContactList from './ContactList';
 import { getRecentChats } from '../../redux/selectors/ChatSelectors';
+import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { closeContactListDialog } from '../../redux/actions/ChatActions';
+import { useDebouncedCallback } from 'use-debounce';
+
+const SearchContact = ({ onSearch, initialValue = '' }) => {
+  const [searchContact, setSearchContact] = useState(initialValue);
+  const dispatch = useDispatch();
+  const handleCloseContactList = () => dispatch(closeContactListDialog());
+
+  const [handleSearchDebounce] = useDebouncedCallback(
+    (term) => {
+      onSearch(term);
+    },
+    500
+  );
+
+  const handleSearch = term => {
+    setSearchContact(term);
+    handleSearchDebounce(term);
+  }
+
+  return (
+    <div style={{ display: 'flex', height: '50px' }}>
+    <Tooltip title="Voltar">
+      <IconButton onClick={handleCloseContactList}>
+        <ArrowBackIcon />
+      </IconButton>
+    </Tooltip>
+    <TextField 
+      label="Buscar contato"
+      type="search"
+      variant="standard"
+      style={{ width: '100%' }}
+      value={searchContact}
+      onChange={e => handleSearch(e.target.value)}
+      focused
+    />
+  </div>
+  )
+}
 
 const ChatSidenav = ({
   handleContactClick,
@@ -20,10 +62,18 @@ const ChatSidenav = ({
   const recentChats = useSelector(getRecentChats);
   const contacts = useSelector(({ chat }) => chat.contacts);
 
+  const [searchContact, setSearchContact] = useState('');
+
+  const filteredContacts = Object
+    .values(contacts)
+    .filter(contact => contact.name.toLowerCase().includes(searchContact.toLocaleLowerCase()));
+
   const WrapperContactList = React.forwardRef((props, ref) => (
     <div ref={ref} {...props}>
+      <SearchContact onSearch={setSearchContact} initialValue={searchContact} />
+      <Divider />
       <ContactList
-        contacts={contacts}
+        contacts={filteredContacts}
         handleContactClick={handleContactClick}
       />
     </div>
@@ -54,7 +104,8 @@ const ChatSidenav = ({
             >
               <WrapperContactList />
           </Slide>
-        : recentChats && recentChats.map((chat, index) => (     
+        : recentChats && recentChats
+          .map((chat, index) => (     
             <div key={index}>
               {chat && chat.contact &&
               <div
