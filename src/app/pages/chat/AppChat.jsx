@@ -37,7 +37,6 @@ const AppChat = props => {
   const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
-  const contacts = useSelector(({ chat }) => chat.contacts);
   const recentChats = useSelector(({ chat }) => chat.recentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
   const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
@@ -53,7 +52,6 @@ const AppChat = props => {
     chatSocket.registerMessageHandler(handleReceivedMessage);
     chatSocket.registerTransferUsers(handleReceiveTransferUsers);
     chatSocket.registerTransferContact(handleReceiveContact);
-    chatSocket.registerReceiveContactMessages(handleReceiveContactMessages);
     setClient(chatSocket);
     return () => {
       chatSocket.disconnect();
@@ -83,18 +81,10 @@ const AppChat = props => {
     console.log('mensagem recebida:', message);
     if (!message.message) return;
     dispatch(addMessage(message));
+    toggle();
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 99999999;
     if (message.key.fromMe) return;
-    toggle();
-  }
-
-  const handleReceiveContactMessages = ({ messages, contactId }) => {
-    if (!messages.length) return;
-    dispatch(setMessages(messages, contactId));
-    dispatch(setFetchedMessage(contactId));
-    if (!reference || !reference.current) return;
-    reference.current.scrollTop = 999999;
   }
 
   const handleContactClick = contactId => {
