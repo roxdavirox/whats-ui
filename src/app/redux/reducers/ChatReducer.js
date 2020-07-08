@@ -23,7 +23,9 @@ import {
   GET_MESSAGES_SUCCESS,
   GET_MESSAGES_BY_CONTACT_ID,
   OPEN_CONTACT_LIST,
-  LOAD_FIRST_MESSAGES
+  LOAD_FIRST_MESSAGES,
+  OPEN_ADD_CONTACT_DIALOG,
+  CLOSE_ADD_CONTACT_DIALOG
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -39,6 +41,7 @@ const initialState = {
   imageModalOpen: false,
   fileUrl: null,
   isFetching: false,
+  openAddContact: false,
 };
 
 const defaultPagination = {
@@ -61,6 +64,20 @@ const ChatReducer = function(state = initialState, action) {
       return {
         ...state,
         openSaveContact: true,
+      };
+    }
+
+    case OPEN_ADD_CONTACT_DIALOG: {
+      return {
+        ...state,
+        openAddContact: true,
+      };
+    }
+
+    case CLOSE_ADD_CONTACT_DIALOG: {
+      return {
+        ...state,
+        openAddContact: false,
       };
     }
 

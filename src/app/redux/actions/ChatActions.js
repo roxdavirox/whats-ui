@@ -26,10 +26,61 @@ export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 export const OPEN_CONTACT_LIST = 'OPEN_CONTACT_LIST';
 export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
+export const OPEN_ADD_CONTACT_DIALOG = 'OPEN_ADD_CONTACT_DIALOG';
+export const CLOSE_ADD_CONTACT_DIALOG = 'CLOSE_ADD_CONTACT_DIALOG';
+export const ADD_NEW_CONTACT = 'ADD_NEW_CONTACT';
 
 export const openContactList = () => ({
   type: OPEN_CONTACT_LIST
 });
+
+export const openAddContactDialog = () => ({
+  type: OPEN_ADD_CONTACT_DIALOG
+});
+
+export const closeAddContactDialog = () => ({
+  type: CLOSE_ADD_CONTACT_DIALOG
+});
+
+export const addNewContact = (name, phone) => async (dispatch, getState) => {
+  const { user } = getState();
+
+  try {
+    const response = await api.post('/contact', {
+      name,
+      phone,
+      ownerId: user.ownerId,
+      userId: user.id,
+    });
+
+    const { contact, chat } = await response.data;
+    console.log('contact response', contact);
+    const _contact = {
+      ...contact,
+      eurl: 'assets/faces/default-avatar.png',
+      status: 'Online',
+    };
+
+    const recentChat = {
+      id: chat.id, 
+      contactId: contact.id, 
+      ownerId: user.ownerId,
+      userId: user.id,
+      lastMessageTime: chat.lastMessageTime,
+      contact: _contact
+    };
+    dispatch(addRecentChat(recentChat));
+    dispatch(addContact({ 
+      ..._contact, 
+      chat: { messages: [] }
+    }));
+    dispatch(setContactId(contact.id));
+    dispatch(setCurrentChatRoom(1));
+  } catch(e) {
+    // handle error
+    console.error('error:', e);
+  }
+}
 
 export const loadFirstMessages = contactId => async (dispatch, getState) => {
   const { chat } = getState();
