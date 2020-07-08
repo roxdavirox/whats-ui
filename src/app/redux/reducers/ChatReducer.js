@@ -209,13 +209,17 @@ const ChatReducer = function(state = initialState, action) {
       const { contactId, message } = action.payload;
       const contact = contacts[contactId] || defaultContact;
       
-      const { chat: { messages } } = contact;
+      const { chat: { messages, pagination } } = contact;
       const newMessages = [...messages, message];
       const updatedContact = {
         ...contact,
         chat: {
           ...contact.chat,
-          messages: newMessages
+          messages: newMessages,
+          pagination: {
+            start: pagination.start + 1,
+            end: pagination.end + 1,
+          },
         }
       };
       return {
@@ -279,7 +283,10 @@ const ChatReducer = function(state = initialState, action) {
 
     case ADD_CONTACT: {
       const { contact } = action.payload;
-      const { id } = contact;
+      const { id, chat: {
+        messages
+      } } = contact;
+      const messageCount = messages.length;
       return {
         ...state,
         contacts: {
@@ -287,9 +294,12 @@ const ChatReducer = function(state = initialState, action) {
           [id]: { 
             ...contact,
             chat: {
-              pagination: defaultPagination,
               firstMessageLoad: true,
               messages: [...contact.chat.messages],
+              pagination: {
+                start: defaultPagination.start + messageCount,
+                end: defaultPagination.end + messageCount,
+              },
             }
           }
         }
