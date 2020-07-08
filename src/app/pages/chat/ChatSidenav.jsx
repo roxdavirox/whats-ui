@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { closeContactListDialog } from '../../redux/actions/ChatActions';
 import { useDebouncedCallback } from 'use-debounce';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
 const SearchContact = ({ onSearch, initialValue = '' }) => {
   const [searchContact, setSearchContact] = useState(initialValue);
@@ -85,12 +86,20 @@ const ChatSidenav = ({
         {currentUser 
           && <ChatAvatar status={'online'} />}
         <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
-          {currentUser && currentUser.name}
+          {currentUser 
+            && currentUser.name.length > 8 
+              ? `${currentUser.name.substring(0, 8)} ...` : currentUser.name
+          }
         </h5>
         <div style={{ width: '100%', flexDirection: 'row-reverse', display: 'flex' }}>
           <Tooltip title="Iniciar conversa">
             <IconButton onClick={onOpenContactList}>
               <ChatIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Adicionar contato">
+            <IconButton onClick={onOpenContactList}>
+              <PersonAddIcon />
             </IconButton>
           </Tooltip>
         </div>
