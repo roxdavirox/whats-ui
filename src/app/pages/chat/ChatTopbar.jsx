@@ -9,6 +9,9 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
     contacts,
     currentChatRoom,
   } = useSelector(({ chat }) => chat);
+  const currentUser = useSelector(({ user }) => user);
+
+
   const currentContact = contacts[contactId] || false ;
 
   return (
@@ -29,7 +32,9 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
           </>
         )}
       </div>
-      {currentChatRoom !== "" && (
+      {currentChatRoom !== "" 
+        && currentUser.id === currentContact.userId
+        && (
         <Menu 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={onImageUploadClick}
