@@ -172,7 +172,6 @@ const ChatReducer = function(state = initialState, action) {
       
       return { 
         ...state,
-        contactId: contact.id,
         contacts: { 
           ...contacts, 
           [contact.id]: {
