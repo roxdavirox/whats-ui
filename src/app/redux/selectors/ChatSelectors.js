@@ -4,10 +4,12 @@ export const getRecentChats = store => {
   const { recentChats, contacts } = chat;
   if (!recentChats) return [];
 
-  return recentChats.map(chat => ({ 
+  return recentChats
+    .map(chat => ({ 
       contact: contacts[chat.contactId], 
       ...chat 
     }))
+    .filter(c => c.contact && c.contact.active)
     .sort(function(a, b) {
       a = new Date(a.lastMessageTime);
       b = new Date(b.lastMessageTime);
