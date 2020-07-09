@@ -72,7 +72,12 @@ const ChatSidenav = ({
 
   const filteredContacts = Object
     .values(contacts)
-    .filter(contact => contact.name.toLowerCase().includes(searchContact.toLocaleLowerCase()));
+    .filter(
+      contact => 
+        contact.name
+          .toLowerCase()
+          .includes(searchContact.toLocaleLowerCase())
+    );
 
   const WrapperContactList = React.forwardRef((props, ref) => (
     <div ref={ref} {...props}>

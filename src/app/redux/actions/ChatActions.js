@@ -29,6 +29,7 @@ export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
 export const OPEN_ADD_CONTACT_DIALOG = 'OPEN_ADD_CONTACT_DIALOG';
 export const CLOSE_ADD_CONTACT_DIALOG = 'CLOSE_ADD_CONTACT_DIALOG';
 export const ADD_NEW_CONTACT = 'ADD_NEW_CONTACT';
+export const FINISH_CONTACT = 'FINISH_CONTACT';
 
 export const openContactList = () => ({
   type: OPEN_CONTACT_LIST
@@ -153,6 +154,26 @@ export const transferContact = (selectedUserId, socket) => (dispatch, getState) 
   dispatch({ type: TRANSFER_CONTACT, });
 }
 
+export const finishContact = () => async (dispatch, getState) => {
+  const { chat, user } = getState();
+  const { contactId } = chat;
+  try {
+    await api.post('/contact/finish', {
+      contactId,
+      ownerId: user.ownerId,
+    });
+    dispatch({
+      type: FINISH_CONTACT,
+      payload: { contactId }
+    });
+    dispatch(setContactId(''));
+    dispatch(setCurrentChatRoom(''));
+  } catch(e) {
+    // handle error
+    console.error(e);
+  }
+}
+
 export const saveContact = (name, socket) => (dispatch, getState) => {
   const { chat } = getState();
   const { contactId } = chat;
@@ -234,7 +255,8 @@ export const addMessage = (message) => (dispatch, getState) => {
         name: phone,
         userId,
         ownerId,
-        jid: key.remoteJid
+        jid: key.remoteJid,
+        active: true
       };
       const recentChat = {
         id: chatId, 
@@ -246,7 +268,7 @@ export const addMessage = (message) => (dispatch, getState) => {
       };
       dispatch(addRecentChat(recentChat));
       dispatch(addContact({ 
-        ..._contact, 
+        ..._contact,
         chat: { messages: [message] }
       }));
       return;

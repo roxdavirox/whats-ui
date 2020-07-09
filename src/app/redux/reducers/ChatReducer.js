@@ -25,7 +25,8 @@ import {
   OPEN_CONTACT_LIST,
   LOAD_FIRST_MESSAGES,
   OPEN_ADD_CONTACT_DIALOG,
-  CLOSE_ADD_CONTACT_DIALOG
+  CLOSE_ADD_CONTACT_DIALOG,
+  FINISH_CONTACT
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -211,7 +212,7 @@ const ChatReducer = function(state = initialState, action) {
       const { recentChats } = state;
       const updatedRecentChats = recentChats.reduce((allRecentChats, crrRecentChat) => {
         if (crrRecentChat.contactId === contactId) {
-          return [...allRecentChats, { ...crrRecentChat, lastMessageTime }]
+          return [...allRecentChats, { ...crrRecentChat, lastMessageTime, active: true }]
         }
         return [...allRecentChats, crrRecentChat];
       }, []);
@@ -230,6 +231,7 @@ const ChatReducer = function(state = initialState, action) {
       const newMessages = [...messages, message];
       const updatedContact = {
         ...contact,
+        active: true,
         chat: {
           ...contact.chat,
           messages: newMessages,
@@ -321,6 +323,24 @@ const ChatReducer = function(state = initialState, action) {
           }
         }
       };
+    }
+
+    case FINISH_CONTACT: {
+      const { contactId } = action.payload;
+      const { contacts } = state;
+
+      const contact = contacts[contactId];
+
+      return {
+        ...state,
+        contacts: {
+          ...contacts,
+          [contactId]: {
+            ...contact,
+            active: false,
+          },
+        }
+      }
     }
 
     case CLOSE_CONTACT_LIST_DIALOG: {
