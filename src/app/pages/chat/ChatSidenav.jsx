@@ -94,7 +94,7 @@ const ChatSidenav = ({
     <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         {currentUser 
-          && <ChatAvatar status={'online'} />}
+          && <ChatAvatar />}
         <Tooltip title={currentUser.name || ''}>
           <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
             {currentUser 
@@ -134,7 +134,7 @@ const ChatSidenav = ({
                 key={index}
                 className="flex items-center p-4 cursor-pointer  gray-on-hover"
               >
-                <ChatAvatar status={'online'} />
+                <ChatAvatar />
                 <div className="pl-4">
                   <p className="m-0">{chat.contact.name}</p>
                   <p className="m-0 text-muted">

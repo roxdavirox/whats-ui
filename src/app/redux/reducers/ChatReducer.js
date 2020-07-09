@@ -50,7 +50,6 @@ const defaultPagination = {
 };
 
 const defaultContact = {
-  status: 'Online',
   chat: { 
     messages: [],
     pagination: defaultPagination,
@@ -166,7 +165,6 @@ const ChatReducer = function(state = initialState, action) {
         contact: {
           ...contact,
           eurl: 'assets/faces/default-avatar.pngj',
-          status: 'Online',
         }
       };
       

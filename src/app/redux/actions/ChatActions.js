@@ -59,7 +59,6 @@ export const addNewContact = (name, phone) => async (dispatch, getState) => {
     const _contact = {
       ...contact,
       eurl: 'assets/faces/default-avatar.png',
-      status: 'Online',
     };
 
     const recentChat = {
@@ -251,7 +250,6 @@ export const addMessage = (message) => (dispatch, getState) => {
       const _contact = {
         id: contactId,
         eurl: 'assets/faces/default-avatar.png',
-        status: 'Online',
         name: phone,
         userId,
         ownerId,

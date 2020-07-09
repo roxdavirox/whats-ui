@@ -27,7 +27,6 @@ const MessageItem = ({ message }) => {
     >
       <ChatAvatar
         src={fromMe ? currentUser.eurl : currentContact.eurl}
-        status={'Online'}
       />
       <div className={fromMe ? 'mr-4' : 'ml-4' }>
         <p 
