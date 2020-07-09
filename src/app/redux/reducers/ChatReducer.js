@@ -158,7 +158,8 @@ const ChatReducer = function(state = initialState, action) {
       const { chat, contact } = action.payload;
       const { contacts, recentChats } = state;
       const receivedChat = {
-        id: chat.id, 
+        id: chat.id,
+        lastMessageTime: chat.lastMessageTime,
         contactId: contact.id, 
         userId: contact.userId, 
         ownerId: contact.ownerId,
@@ -176,7 +177,10 @@ const ChatReducer = function(state = initialState, action) {
           ...contacts, 
           [contact.id]: {
             ...contact, 
-            chat: { messages: [], pagination: defaultPagination }
+            chat: {
+              messages: [],
+              pagination: defaultPagination
+            }
           }
         },
         recentChats: [...recentChats, receivedChat]
@@ -412,7 +416,9 @@ const ChatReducer = function(state = initialState, action) {
         contacts: {
           ...contacts,
           [contactId]: {
-            ...contact, name, short: name
+            ...contact,
+            name,
+            short: name
           }
         },
       }
