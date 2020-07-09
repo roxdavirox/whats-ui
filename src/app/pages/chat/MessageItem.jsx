@@ -1,6 +1,5 @@
 import React from 'react';
 import ChatAvatar from "./ChatAvatar";
-import { getTimeDifference } from "utils";
 import shortid from "shortid";
 import Message from './Message';
 import { useSelector } from 'react-redux';
@@ -37,10 +36,13 @@ const MessageItem = ({ message }) => {
         >
           {fromMe ? currentUser.name : currentContact.name}
         </p>
-        <div
-          className={`px-4 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
-        >
-          <Message message={message} />
+        <div style={{ display: 'flex', justifyContent: `${fromMe ? 'flex-end' : 'flex-start' }` }}>
+          <div
+            className={`px-4 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
+            style={{display: 'inline-block'}}
+          >
+            <Message message={message} />
+          </div>
         </div>
         <small 
           className="text-muted mb-0" 
