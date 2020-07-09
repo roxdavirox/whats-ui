@@ -112,7 +112,9 @@ const ChatContainer = ({
           )}
         </Scrollbar>
         <Divider />
-        {currentChatRoom !== "" && <InputText onSend={handleMessageSend}/>}
+        {currentChatRoom !== "" 
+          && currentContact.userId === currentUser.id
+          && <InputText onSend={handleMessageSend}/>}
       </div>
     </>
   );
