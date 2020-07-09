@@ -107,7 +107,6 @@ const AppChat = props => {
     chatSocket.sendMessage(newMsg);
   };
   
-  const handleOpenTransferList = () => dispatch(openTransferListDialog());
   const handleCloseTransferList = () => dispatch(closeTransferListDialog());
   const handleSelectTransferContact = (selectedUserId) => {
     dispatch(transferContact(selectedUserId, chatSocket));
@@ -169,7 +168,6 @@ const AppChat = props => {
           <AddContactDialog />
           <MatxSidenavContent>
             <ChatContainer
-              handleOpenTransferList={handleOpenTransferList}
               onSaveDialogOpen={handleOpenSaveContact}
               currentChatRoom={currentChatRoom}
               setRef={setRef}

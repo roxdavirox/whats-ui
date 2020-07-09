@@ -10,7 +10,7 @@ import {
   Icon,
   MenuItem
 } from "@material-ui/core";
-import { finishContact } from '../../redux/actions/ChatActions';
+import { finishContact, openTransferListDialog } from '../../redux/actions/ChatActions';
 
 const style = {
   menuItem: {
@@ -21,9 +21,10 @@ const style = {
   }
 }
 
-const Menu = ({ onSaveDialogOpen, onImageUploadClick, onOpenTransferList }) => {
+const Menu = ({ onSaveDialogOpen, onImageUploadClick }) => {
   const dispatch = useDispatch();
   const handleFinishContact = () => dispatch(finishContact());
+  const handleOpenTransferList = () => dispatch(openTransferListDialog());
 
   return (
     <MatxMenu
@@ -43,7 +44,7 @@ const Menu = ({ onSaveDialogOpen, onImageUploadClick, onOpenTransferList }) => {
         </MenuItem>
         <MenuItem 
           className="flex items-center" 
-          onClick={onOpenTransferList} 
+          onClick={handleOpenTransferList} 
           style={style.menuItem}
         >
           Encaminhar<ArrowForwardIosIcon />

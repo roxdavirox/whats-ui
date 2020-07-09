@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Menu from './Menu';
 import ChatAvatar from "./ChatAvatar";
 
-const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen, onOpenTransferList }) => {
+const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
   const { 
     contactId,
     contacts,
@@ -33,7 +33,6 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen, onOpenTransferList }
         <Menu 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={onImageUploadClick}
-          onOpenTransferList={onOpenTransferList}
         />
       )}
     </div>

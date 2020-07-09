@@ -16,7 +16,6 @@ import { useDebouncedCallback } from 'use-debounce';
 const ChatContainer = ({
   setRef,
   handleMessageSend,
-  handleOpenTransferList,
   onSaveDialogOpen,
   parentScrollRef
 }) => {
@@ -78,7 +77,6 @@ const ChatContainer = ({
         <ChatTopbar 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={handleUploadImageClick}
-          onOpenTransferList={handleOpenTransferList}
         />
         <Scrollbar 
           className="p-8 h-full-screen scroll-y chat-message-list flex-grow position-relative"
