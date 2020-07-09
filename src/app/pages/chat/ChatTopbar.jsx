@@ -24,7 +24,7 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen, onOpenTransferList }
               status={currentContact.status}
             />
             <h5 className="position-relative ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
-              {currentContact.name}
+              {`${currentContact.name} (${currentContact.phone})`}
             </h5>
           </>
         )}
