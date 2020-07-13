@@ -21,20 +21,20 @@ const MessageItem = ({ message }) => {
   const { key: { fromMe } } = message;
   return (
     <div 
-      className="flex items-start px-4 py-3" 
+      className="flex items-start px-1 py-1" 
       style={fromMe ? style.messageItem : {}}
       key={shortid.generate()}
     >
-      <ChatAvatar
+      {/* <ChatAvatar
         src={fromMe ? currentUser.eurl : currentContact.eurl}
-      />
+      /> */}
       <div className={fromMe ? 'mr-4' : 'ml-4' }>
-        <p 
+        {/* <p 
           className="text-muted m-0 mb-2"
           style={fromMe ? style.messageItem: {}}
         >
           {fromMe ? currentUser.name : currentContact.name}
-        </p>
+        </p> */}
         <div style={{ display: 'flex', justifyContent: `${fromMe ? 'flex-end' : 'flex-start' }` }}>
           <div
             className={`px-4 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}

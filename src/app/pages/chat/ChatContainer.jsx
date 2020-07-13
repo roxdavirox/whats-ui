@@ -80,7 +80,7 @@ const ChatContainer = ({
           onImageUploadClick={handleUploadImageClick}
         />
         <Scrollbar 
-          className="p-8 h-full-screen scroll-y chat-message-list flex-grow position-relative"
+          className="p-2 h-full-screen scroll-y chat-message-list flex-grow position-relative"
           containerRef={ref => {
             setRef({current: ref});
           }}
