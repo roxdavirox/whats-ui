@@ -134,7 +134,7 @@ const ChatSidenav = ({
                 key={index}
                 className="flex items-center p-4 cursor-pointer  gray-on-hover"
               >
-                <ChatAvatar />
+                <ChatAvatar src={chat.contact.eurl || ''}/>
                 <div className="pl-4">
                   <p className="m-0">{chat.contact.name}</p>
                   <p className="m-0 text-muted">
