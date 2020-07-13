@@ -7,7 +7,7 @@ const EmptyMessage = () => {
       <div className="empty-message-circle bg-default flex justify-center items-center">
         <Icon color="primary">chat</Icon>
       </div>
-      <p>Selecioine uma conversa</p>
+      <p>Selecione uma conversa</p>
     </div>
   );
 };
