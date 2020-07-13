@@ -50,6 +50,7 @@ const ChatContainer = ({
       ownerId: currentUser.ownerId,
       userId: currentUser.id,
     }));
+    e.target.value = null;
   };
 
   const [handleLoadMessagesDebounce] = useDebouncedCallback(
