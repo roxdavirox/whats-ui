@@ -13,7 +13,7 @@ import { getRecentChats } from '../../redux/selectors/ChatSelectors';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { closeContactListDialog, openAddContactDialog } from '../../redux/actions/ChatActions';
+import { closeContactListDialog, openAddContactDialog } from '../../redux/actions/ContactActions';
 import { useDebouncedCallback } from 'use-debounce';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 

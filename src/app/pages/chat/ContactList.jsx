@@ -6,7 +6,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ChatAvatar from "./ChatAvatar";
 import Divider from '@material-ui/core/Divider';
-import { closeContactListDialog } from '../../redux/actions/ChatActions';
+import { closeContactListDialog } from '../../redux/actions/ContactActions';
 
 const ContactList = ({ contacts, handleContactClick }) => {
   const dispatch = useDispatch();

@@ -10,7 +10,8 @@ import {
   Icon,
   MenuItem
 } from "@material-ui/core";
-import { finishContact, openTransferListDialog } from '../../redux/actions/ChatActions';
+import { openTransferListDialog } from '../../redux/actions/ChatActions';
+import { finishContact } from '../../redux/actions/ContactActions';
 
 const style = {
   menuItem: {

@@ -4,7 +4,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { addNewContact, closeAddContactDialog } from '../../redux/actions/ChatActions';
+import { addNewContact, closeAddContactDialog } from '../../redux/actions/ContactActions';
 
 function AddContactDialog(props) {
   const [contactName, setContactName] = useState('');

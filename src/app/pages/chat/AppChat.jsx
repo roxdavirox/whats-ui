@@ -13,31 +13,34 @@ import SaveContactDialog from './SaveContactDialog';
 import { 
   setTransferUsers, 
   setRecentChats, 
-  setContacts,
-  addMessage,
+  closeTransferListDialog,
+  setCurrentChatRoom,
+} from '../../redux/actions/ChatActions';
+import { 
   openSaveContactDialog,
   closeSaveContactDialog,
-  openTransferListDialog,
-  closeTransferListDialog,
   setContactId,
-  setCurrentChatRoom,
+  setContacts,
   saveContact,
-  transferContact,
   setReceivedContact,
   openContactList,
-  loadFirstMessages
- } from '../../redux/actions/ChatActions';
+  transferContact
+} from '../../redux/actions/ContactActions';
+import { addMessage, loadFirstMessages } from '../../redux/actions/MessageActions';
+import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
 import AddContactDialog from "./AddContactDialog";
 
+const audioUrl = 'https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3';
+
 const AppChat = props => {
-  const [playing, toggle] = useAudio('https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3');
+  const [playing, toggle] = useAudio(audioUrl);
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
   const recentChats = useSelector(({ chat }) => chat.recentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
-  const currentContact = useSelector(({ chat: chatState }) => chatState.contacts[chatState.contactId] || {});
+  const currentContact = useSelector(selectCurrentContact);
 
   let reference = useRef();
   const [_reference, setReference] = useState(reference);
@@ -131,9 +134,9 @@ const AppChat = props => {
   const handleOpenSaveContact = () => dispatch(openSaveContactDialog());
   const handleCloseSaveContact = () => dispatch(closeSaveContactDialog());
 
-  const isContactListOpen = useSelector(({ chat }) => chat.isContactListOpen);
+  const isContactListOpen = useSelector(({ contact }) => contact.isContactListOpen);
+  const openSaveContact = useSelector(({ contact }) => contact.openSaveContact);
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
-  const openSaveContact = useSelector(({ chat }) => chat.openSaveContact);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
 
   return (
