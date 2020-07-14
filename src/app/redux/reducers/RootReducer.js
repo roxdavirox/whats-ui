@@ -2,23 +2,23 @@ import { combineReducers } from "redux";
 import LoginReducer from "./LoginReducer";
 import UserReducer from "./UserReducer";
 import LayoutReducer from "./LayoutReducer";
-import ScrumBoardReducer from "./ScrumBoardReducer";
 import NotificationReducer from "./NotificationReducer";
-import EcommerceReducer from "./EcommerceReducer";
 import NavigationReducer from "./NavigationReducer";
 import QrcodeReducer from './QrcodeReducer';
 import ChatReducer from './ChatReducer';
+import ContactReducer from "./ContactReducer";
+import MessageReducer from './MessageReducer';
 
 const RootReducer = combineReducers({
   login: LoginReducer,
   user: UserReducer,
   layout: LayoutReducer,
-  scrumboard: ScrumBoardReducer,
   notifications: NotificationReducer,
-  ecommerce: EcommerceReducer,
   navigations: NavigationReducer,
   qrcode: QrcodeReducer,
-  chat: ChatReducer
+  chat: ChatReducer,
+  message: MessageReducer,
+  contact: ContactReducer,
 });
 
 export default RootReducer;
