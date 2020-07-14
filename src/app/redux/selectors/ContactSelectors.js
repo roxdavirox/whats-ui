@@ -1,0 +1,1 @@
+export const selectCurrentContact = ({ contact }) => contact.contacts[contact.contactId] || {};

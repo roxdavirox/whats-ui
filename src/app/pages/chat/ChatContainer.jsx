@@ -10,7 +10,7 @@ import { CircularProgress } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroller";
 import EmptyMessage from "./EmptyMessage";
 import MessageList from './MessageList';
-import { getMessagesByContactId } from '../../redux/actions/ChatActions';
+import { getMessagesByContactId } from '../../redux/actions/MessageActions';
 import { useDebouncedCallback } from 'use-debounce';
 
 const ChatContainer = ({
