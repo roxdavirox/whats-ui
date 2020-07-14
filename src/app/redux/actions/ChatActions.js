@@ -1,136 +1,12 @@
 import api from '../../services/api';
-import localStorageService from '../../services/localStorageService';
 
-export const SET_TRANSFER_USERS = 'SET_TRANSFER_USERS';
-export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
-export const SET_CONTACTS = 'SET_CONTACTS';
 export const ADD_RECENT_CHAT = 'ADD_RECENT_CHAT';
-export const ADD_CONTACT = 'ADD_CONTACT';
-export const ADD_MESSAGE = 'ADD_MESSAGE';
-export const CLOSE_CONTACT_LIST_DIALOG = 'CLOSE_CONTACT_LIST_DIALOG';
-export const OPEN_SAVE_CONTACT_DIALOG = 'OPEN_SAVE_CONTACT_DIALOG';
-export const CLOSE_SAVE_CONTACT_DIALOG = 'CLOSE_SAVE_CONTACT_DIALOG';
-export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
-export const CLOSE_TRANSFER_LIST_DIALOG = 'CLOSE_TRANSFER_LIST_DIALOG';
-export const SET_FETCHED_MESSAGE = 'SET_FETCHED_MESSAGE';
-export const SET_MESSAGES = 'SET_MESSAGES';
-export const SET_CONTACT_ID = 'SET_CONTACT_ID';
+export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
+
 export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
-export const SAVE_CONTACT = 'SAVE_CONTACT';
-export const TRANSFER_CONTACT = 'TRANSFER_CONTACT';
-export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
-export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
-export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
-export const OPEN_CONTACT_LIST = 'OPEN_CONTACT_LIST';
-export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
-export const OPEN_ADD_CONTACT_DIALOG = 'OPEN_ADD_CONTACT_DIALOG';
-export const CLOSE_ADD_CONTACT_DIALOG = 'CLOSE_ADD_CONTACT_DIALOG';
-export const ADD_NEW_CONTACT = 'ADD_NEW_CONTACT';
-export const FINISH_CONTACT = 'FINISH_CONTACT';
-
-export const openContactList = () => ({
-  type: OPEN_CONTACT_LIST
-});
-
-export const openAddContactDialog = () => ({
-  type: OPEN_ADD_CONTACT_DIALOG
-});
-
-export const closeAddContactDialog = () => ({
-  type: CLOSE_ADD_CONTACT_DIALOG
-});
-
-export const addNewContact = (name, phone) => async (dispatch, getState) => {
-  const { user } = getState();
-
-  try {
-    const response = await api.post('/contact', {
-      name,
-      phone,
-      ownerId: user.ownerId,
-      userId: user.id,
-    });
-
-    const { contact, chat } = await response.data;
-    console.log('contact response', contact);
-    const _contact = {
-      ...contact,
-      eurl: 'assets/faces/default-avatar.png',
-    };
-
-    const recentChat = {
-      id: chat.id, 
-      contactId: contact.id, 
-      ownerId: user.ownerId,
-      userId: user.id,
-      lastMessageTime: chat.lastMessageTime,
-      contact: _contact
-    };
-    dispatch(addRecentChat(recentChat));
-    dispatch(addContact({ 
-      ..._contact, 
-      chat: { messages: [] }
-    }));
-    dispatch(setContactId(contact.id));
-    dispatch(setCurrentChatRoom(1));
-  } catch(e) {
-    // handle error
-    console.error('error:', e);
-  }
-}
-
-export const loadFirstMessages = contactId => async (dispatch, getState) => {
-  const { chat } = getState();
-  const { contacts, isFetching } = chat;
-  if (isFetching) return;
-  const contact = contacts[contactId];
-  if (!contact) return;
-
-  const { chat: contactChat } = contact;
-  const { firstMessageLoad } = contactChat;
-  console.log('firstMessageLoad', firstMessageLoad)
-  if (firstMessageLoad) return;
-  dispatch({
-    type: LOAD_FIRST_MESSAGES,
-    payload: { contactId }
-  });
-  await dispatch(getMessagesByContactId(contactId));
-}
-
-export const getMessagesByContactId = contactId => async (dispatch, getState) => {
-  const { chat } = getState();
-  const { contacts, isFetching } = chat;
-  if (isFetching) return;
-  const contact = contacts[contactId];
-  if (!contact) return;
-
-  const { chat: contactChat } = contact;
-  const { pagination: { start = 0, end= 15 } } = contactChat;
-  const token = localStorageService.getToken();
-
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-
-  const url = `/messages/${contactId}?start=${start}&end=${end}`;
-  const response = await api.get(url, config);
-  const { data } = response;
-  const { messages, nextPagination, messageCount, hasMoreMessage } = data;
-
-  dispatch({
-    type: GET_MESSAGES_SUCCESS,
-    payload: {
-      messages,
-      nextPagination,
-      hasMoreMessage,
-      messageCount,
-      contactId
-    },
-  });
-}
 
 export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
@@ -141,61 +17,9 @@ export const closeImageModal = () => ({
   type: CLOSE_IMAGE_MODAL
 });
 
-export const setReceivedContact = (chat, contact) => ({
-  type: SET_RECEIVED_CONTACT,
-  payload: { chat, contact }
-});
-
-export const transferContact = (selectedUserId, socket) => (dispatch, getState) => {
-  const { chat } = getState();
-  const { contactId } = chat;
-  socket.transferContact({ contactId, userId: selectedUserId });
-  dispatch({ type: TRANSFER_CONTACT, });
-}
-
-export const finishContact = () => async (dispatch, getState) => {
-  const { chat, user } = getState();
-  const { contactId } = chat;
-  try {
-    await api.post('/contact/finish', {
-      contactId,
-      ownerId: user.ownerId,
-    });
-    dispatch({
-      type: FINISH_CONTACT,
-      payload: { contactId }
-    });
-    dispatch(setContactId(''));
-    dispatch(setCurrentChatRoom(''));
-  } catch(e) {
-    // handle error
-    console.error(e);
-  }
-}
-
-export const saveContact = (name, socket) => (dispatch, getState) => {
-  const { chat } = getState();
-  const { contactId } = chat;
-  socket.saveContact({ contactId, name });
-  dispatch({
-    type: SAVE_CONTACT,
-    payload: { name }
-  });
-}
-
-export const setTransferUsers = transferUsers => ({
-  type: SET_TRANSFER_USERS,
-  payload: { transferUsers }
-});
-
 export const setRecentChats = recentChats => ({
   type: SET_RECENT_CHATS,
   payload: { recentChats }
-});
-
-export const setContacts = contacts => ({
-  type: SET_CONTACTS,
-  payload: { contacts }
 });
 
 export const addRecentChat = recentChat => ({
@@ -203,96 +27,41 @@ export const addRecentChat = recentChat => ({
   payload: { recentChat }
 });
 
-export const addContact = contact => ({
-  type: ADD_CONTACT,
-  payload: { contact }
-});
-
-export const setMessages = (messages, contactId) => ({
-  type: SET_MESSAGES,
-  payload: { messages, contactId }
-});
-
-export const setFetchedMessage = contactId => ({
-  type: SET_FETCHED_MESSAGE,
-  payload: { contactId }
-});
-
-export const setContactId = contactId => ({
-  type: SET_CONTACT_ID,
-  payload: { contactId }
-});
-
 export const setCurrentChatRoom = currentChatRoom => ({
   type: SET_CURRENT_CHAT_ROOM,
   payload: { currentChatRoom }
+});
+
+export const updateRecentChat = (contactId, lastMessageTime) => ({
+  type: UPDATE_RECENT_CHAT,
+  payload: { contactId, lastMessageTime }
+});
+
+export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
+export const CLOSE_TRANSFER_LIST_DIALOG = 'CLOSE_TRANSFER_LIST_DIALOG';
+export const SET_TRANSFER_USERS = 'SET_TRANSFER_USERS';
+
+export const setTransferUsers = transferUsers => ({
+  type: SET_TRANSFER_USERS,
+  payload: { transferUsers }
 });
 
 export const openTransferListDialog = () => ({ type: OPEN_TRANSFER_LIST_DIALOG });
 
 export const closeTransferListDialog = () => ({ type: CLOSE_TRANSFER_LIST_DIALOG });
 
-export const closeContactListDialog = () => ({ type: CLOSE_CONTACT_LIST_DIALOG });
-
-export const openSaveContactDialog = () => ({ type: OPEN_SAVE_CONTACT_DIALOG });
-
-export const closeSaveContactDialog = () => ({ type: CLOSE_SAVE_CONTACT_DIALOG });
-
-export const addMessage = (message) => (dispatch, getState) => {
-  const { chat: { contacts } } = getState();
-    const { contactId, userId, ownerId, chatId, key } = message;
-
-    const contactNotExists = !contacts[contactId];
-    if (contactNotExists) {
-      console.log('contactNotExists', contactNotExists);
-      const phone = key.remoteJid.split('@')[0];
-
-      const _contact = {
-        id: contactId,
-        eurl: 'assets/faces/default-avatar.png',
-        name: phone,
-        userId,
-        ownerId,
-        jid: key.remoteJid,
-        active: true
-      };
-      const recentChat = {
-        id: chatId, 
-        contactId, 
-        userId, 
-        ownerId,
-        lastMessageTime: message.createdAt,
-        contact: _contact
-      };
-      dispatch(addRecentChat(recentChat));
-      dispatch(addContact({ 
-        ..._contact,
-        chat: { messages: [message] }
-      }));
-      return;
-    }
-    dispatch({
-      type: ADD_MESSAGE,
-      payload: { contactId, message }
-    });
-    dispatch({
-      type: UPDATE_RECENT_CHAT,
-      payload: { contactId, lastMessageTime: message.createdAt }
-    });
-}
-
 export const uploadImage = 
-  ({
-    imageFile,
-    contactId,
-    ownerId,
-    userId,
-  }) => async (dispatch) => {
-    const fd = new FormData();
-    fd.append('image', imageFile);
-    fd.append('contactId', contactId);
-    fd.append('ownerId', ownerId);
-    fd.append('userId', userId);
-    const response = await api.post('chat/image', fd);
-    console.log('response', response);
+({
+  imageFile,
+  contactId,
+  ownerId,
+  userId,
+}) => async (dispatch) => {
+  const fd = new FormData();
+  fd.append('image', imageFile);
+  fd.append('contactId', contactId);
+  fd.append('ownerId', ownerId);
+  fd.append('userId', userId);
+  const response = await api.post('chat/image', fd);
+  console.log('response', response);
 }
