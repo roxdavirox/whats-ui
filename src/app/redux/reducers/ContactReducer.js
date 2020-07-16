@@ -9,22 +9,17 @@ import {
   SAVE_CONTACT,
   TRANSFER_CONTACT,
   SET_RECEIVED_CONTACT,
-  GET_MESSAGES_BY_CONTACT_ID,
   OPEN_CONTACT_LIST,
   OPEN_ADD_CONTACT_DIALOG,
   CLOSE_ADD_CONTACT_DIALOG,
   FINISH_CONTACT
 } from '../actions/ContactActions';
 
-import { normalize } from 'normalizr';
-import { contactSchema } from '../schema';
-
 const initialState = {
   isContactListOpen: false,
   openTransferListDialog: false,
   openSaveContact: false,
   transferUsers: [],
-  contacts: {},
   recentChats: [],
   contactId: '',
   fetchedMessages: {},
@@ -33,19 +28,12 @@ const initialState = {
   fileUrl: null,
   isFetching: false,
   openAddContact: false,
+  byId: {},
+  allIds: []
 };
 
 const defaultPagination = {
   start: 0, end: 15
-};
-
-const defaultContact = {
-  chat: { 
-    messages: [],
-    pagination: defaultPagination,
-    hasMoreMessage: false,
-    firstMessageLoad: false,
-  }
 };
 
 const ContactReducer = function(state = initialState, action) {
@@ -83,13 +71,6 @@ const ContactReducer = function(state = initialState, action) {
         ...state,
         openSaveContact: false
       };
-    }
-
-    case GET_MESSAGES_BY_CONTACT_ID: {
-      return {
-        ...state,
-        isFetching: true,
-      }
     }
 
     case SET_RECEIVED_CONTACT: {
@@ -140,20 +121,14 @@ const ContactReducer = function(state = initialState, action) {
     }
     
     case SET_CONTACTS: {
-      const { contacts } = action.payload;
-
-      // const reduceToObject = (obj, contact) => ({
-      //   ...obj,
-      //   [contact.id]: {
-      //     ...contact,
-      //     ...defaultContact
-      //   }
-      // });
-      const normalizedContacts = normalize(contacts, [contactSchema]);
-
+      const { byId, allIds } = action.payload;
       return {
         ...state,
-        contacts: normalizedContacts.entities.contacts
+        byId: {
+          ...state.byId,
+          ...byId
+        },
+        allIds: [...state.allIds, ...allIds]
       };
     }
 
