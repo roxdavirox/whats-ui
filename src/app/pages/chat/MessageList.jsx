@@ -1,7 +1,11 @@
 import React from 'react';
 import MessageItem from './MessageItem';
+import { useSelector } from 'react-redux';
+import { selectMessages } from '../../redux/selectors/MessageSelectors';
 
-const MessageList = ({ messages }) => {
+const MessageList = () => {
+  const messages = useSelector(selectMessages);
+
   const renderMessageItem = message => <MessageItem message={message} />;
   return (
     <>
