@@ -13,7 +13,7 @@ import MessageList from './MessageList';
 import { getMessagesByContactId } from '../../redux/actions/MessageActions';
 import { useDebouncedCallback } from 'use-debounce';
 import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
-import { selectMessages } from '../../redux/selectors/MessageSelectors';
+import { selectCurrentChat } from '../../redux/selectors/ChatSelectors';
 
 const ChatContainer = ({
   setRef,
@@ -27,6 +27,7 @@ const ChatContainer = ({
   } = useSelector(({ chat }) => chat);
   const { contactId } = useSelector(({ contact }) => contact.contactId);
   const currentContact = useSelector(selectCurrentContact);
+  const currentChat = useSelector(selectCurrentChat);
   const currentUser = useSelector(({ user }) => user);
   const inputRef = useRef();
   const dispatch = useDispatch();
@@ -88,19 +89,19 @@ const ChatContainer = ({
           onScrollUp={e => {
             if (!currentContact) return;
             const position = e.scrollTop;
-            if (position <= 50 && currentContact.chat.hasMoreMessage) {
-              handleLoadMessages(currentContact.id, currentContact.chat.hasMoreMessage);
+            if (position <= 50 && currentChat.hasMoreMessage) {
+              handleLoadMessages(currentContact.id, currentChat.hasMoreMessage);
               parentScrollRef.current.scrollTop = parentScrollRef.current.scrollHeight / 4;
             }
           }}
         >
           {currentChatRoom === "" && <EmptyMessage />}
-          {parentScrollRef && parentScrollRef.current && currentContact.chat && (
+          {parentScrollRef && parentScrollRef.current && (
           <InfiniteScroll
             style={{ height: '100%' }}
             pageStart={0}
             isReverse
-            hasMore={currentContact.chat && currentContact.chat.hasMoreMessage}
+            hasMore={currentChat && currentChat.hasMoreMessage}
             loader={loader}
             getScrollParent={() => parentScrollRef}
             useWindow={true}
