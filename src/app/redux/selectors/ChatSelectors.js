@@ -1,7 +1,8 @@
-export const getRecentChats = store => {
-  const { chat } = store;
-  if (!chat) return [];
-  const { recentChats, contacts } = chat;
+export const selectRecentChats = store => {
+  const { contact, chat } = store;
+  if (!contact) return [];
+  const { contacts } = contact;
+  const { recentChats } = chat;
   if (!recentChats) return [];
 
   return recentChats

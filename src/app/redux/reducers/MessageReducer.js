@@ -1,3 +1,5 @@
+
+
 import {
   ADD_MESSAGE,
   SET_FETCHED_MESSAGE,
@@ -7,19 +9,9 @@ import {
 } from '../actions/MessageActions';
 
 const initialState = {
-  isContactListOpen: false,
-  openTransferListDialog: false,
-  openSaveContact: false,
-  transferUsers: [],
-  contacts: {},
-  recentChats: [],
-  contactId: '',
-  fetchedMessages: {},
-  currentChatRoom: '',
-  imageModalOpen: false,
-  fileUrl: null,
   isFetching: false,
-  openAddContact: false,
+  byId: {},
+  allIds: []
 };
 
 const defaultPagination = {
@@ -39,36 +31,21 @@ const MessageReducer = function(state = initialState, action) {
   switch(action.type) {
     case GET_MESSAGES_SUCCESS: {
       const {
-        messages: previousMessages,
-        nextPagination,
-        hasMoreMessage,
-        messageCount,
-        contactId } = action.payload;
+        byId,
+        allIds, } = action.payload;
 
-        const { contacts } = state;
-
-        const contact = contacts[contactId];
-
-        const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
-        const newMessages = [...previousMessages, ...contact.chat.messages];
-        const newSortedMessages = newMessages.sort(sortByLastDate);
+        // TODO: colocar no selector
+        // const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
+        // const newMessages = [...previousMessages, ...contact.chat.messages];
+        // const newSortedMessages = newMessages.sort(sortByLastDate);
         
         return {
           ...state,
-          contacts: {
-            ...contacts,
-            [contactId]: {
-              ...contact,
-              chat: {
-                ...contact.chat,
-                messages: newSortedMessages,
-                pagination: nextPagination,
-                hasMoreMessage,
-                messageCount,
-              }
-            }
+          byId: {
+            ...state.byId,
+            ...byId
           },
-          isFetching: false
+          allIds: [...state.allIds, ...allIds]
         }
     }
 
