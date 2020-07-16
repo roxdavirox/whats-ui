@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Slide from '@material-ui/core/Slide';
 import ContactList from './ContactList';
-import { getRecentChats } from '../../redux/selectors/ChatSelectors';
+import { selectRecentChats } from '../../redux/selectors/ChatSelectors';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -60,8 +60,8 @@ const ChatSidenav = ({
   isContactListOpen
 }) => {
   const currentUser = useSelector(({ user }) => user);
-  const recentChats = useSelector(getRecentChats);
-  const contacts = useSelector(({ chat }) => chat.contacts);
+  const recentChats = useSelector(selectRecentChats);
+  const contacts = useSelector(({ contact }) => contact.contacts);
   const dispatch = useDispatch();
 
   const handleOpenAddDialog = () => {

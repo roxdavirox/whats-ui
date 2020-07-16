@@ -12,6 +12,8 @@ import EmptyMessage from "./EmptyMessage";
 import MessageList from './MessageList';
 import { getMessagesByContactId } from '../../redux/actions/MessageActions';
 import { useDebouncedCallback } from 'use-debounce';
+import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
+import { selectMessages } from '../../redux/selectors/MessageSelectors';
 
 const ChatContainer = ({
   setRef,
@@ -20,12 +22,11 @@ const ChatContainer = ({
   parentScrollRef
 }) => {
   const { 
-    contactId,
     currentChatRoom,
     imageModalOpen,
-    contacts
   } = useSelector(({ chat }) => chat);
-  const currentContact = contacts[contactId] || false ;
+  const { contactId } = useSelector(({ contact }) => contact.contactId);
+  const currentContact = useSelector(selectCurrentContact);
   const currentUser = useSelector(({ user }) => user);
   const inputRef = useRef();
   const dispatch = useDispatch();
@@ -105,10 +106,7 @@ const ChatContainer = ({
             useWindow={true}
             threshold={100}
           >
-            {currentContact.chat
-              && currentContact.chat.messages
-              && <MessageList messages={currentContact.chat.messages} />
-            }
+            <MessageList />
           </InfiniteScroll>
           )}
         </Scrollbar>
