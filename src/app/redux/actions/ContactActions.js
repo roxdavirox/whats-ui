@@ -96,17 +96,40 @@ export const addNewContact = (name, phone) => async (dispatch, getState) => {
   }
 }
 
-
-export const setReceivedContact = (chat, contact) => ({
-  type: SET_RECEIVED_CONTACT,
-  payload: { chat, contact }
-});
+export const setReceivedContact = (chat, contact) => dispatch => {
+  const defaultPagination = {
+    start: 0, end: 15
+  };
+  
+  const defaultChat = {
+    messages: [],
+    pagination: defaultPagination,
+    hasMoreMessage: false,
+    firstMessageLoad: false,
+  };
+  const receivedChat = {
+    id: chat.id,
+    lastMessageTime: chat.lastMessageTime,
+    contactId: contact.id, 
+    userId: contact.userId, 
+    ownerId: contact.ownerId,
+    ...defaultChat,
+    ...chat
+  };
+  dispatch({
+    type: SET_RECEIVED_CONTACT,
+    payload: { chat: receivedChat, contact }
+  });
+}
 
 export const transferContact = (selectedUserId, socket) => (dispatch, getState) => {
-  const { chat } = getState();
-  const { contactId } = chat;
+  const { contact } = getState();
+  const { contactId } = contact;
   socket.transferContact({ contactId, userId: selectedUserId });
-  dispatch({ type: TRANSFER_CONTACT, });
+  dispatch({
+    type: TRANSFER_CONTACT,
+    payload: { contactId } 
+  });
 }
 
 export const finishContact = () => async (dispatch, getState) => {
