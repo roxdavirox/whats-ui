@@ -130,8 +130,8 @@ export const finishContact = () => async (dispatch, getState) => {
 }
 
 export const saveContact = (name, socket) => (dispatch, getState) => {
-  const { chat } = getState();
-  const { contactId } = chat;
+  const { contact } = getState();
+  const { contactId } = contact;
   socket.saveContact({ contactId, name });
   dispatch({
     type: SAVE_CONTACT,
