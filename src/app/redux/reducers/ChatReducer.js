@@ -1,4 +1,7 @@
 
+import { normalize } from 'normalizr';
+import { chatSchema } from '../schema';
+
 import { 
   ADD_RECENT_CHAT,
   SET_TRANSFER_USERS,
@@ -9,6 +12,7 @@ import {
   UPDATE_RECENT_CHAT,
   OPEN_IMAGE_MODAL,
   CLOSE_IMAGE_MODAL,
+  SET_CHAT_PAGINATION
 } from '../actions/ChatActions';
 
 const initialState = {
@@ -69,6 +73,29 @@ const ChatReducer = function(state = initialState, action) {
       }
     }
 
+    case SET_CHAT_PAGINATION: {
+      const { 
+        nextPagination,
+        hasMoreMessage,
+        messageCount,
+        contactId } = action.payload;
+        
+        const chat = state.byId[contactId];
+        const updatedChat = {
+          ...chat,
+          nextPagination,
+          hasMoreMessage,
+          messageCount,
+        }
+        return {
+          ...state,
+          byId: {
+            ...state.byId,
+            [contactId]: updatedChat
+          }
+        };
+    }
+
     case SET_TRANSFER_USERS: {
       const { transferUsers } = action.payload;
       return {
@@ -79,9 +106,12 @@ const ChatReducer = function(state = initialState, action) {
 
     case SET_RECENT_CHATS: {
       const { recentChats } = action.payload;
+      const normalizedRecentChats = normalize(recentChats, [chatSchema]);
+      const { entities, result } = normalizedRecentChats;
       return {
         ...state,
-        recentChats
+        byId: entities.chats,
+        allIds: [...result]
       };
     }
 
