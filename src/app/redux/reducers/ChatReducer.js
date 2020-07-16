@@ -50,10 +50,30 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case ADD_RECENT_CHAT: {
-      const { recentChat } = action.payload;
+      const { recentChat, messageId, contactId } = action.payload;
+      const defaultPagination = {
+        start: 0, end: 15
+      };
+      
+      const defaultChat = {
+        messages: [messageId],
+        pagination: {
+          start: defaultPagination.start + 1,
+          end: defaultPagination.end + 1
+        },
+        hasMoreMessage: false,
+        firstMessageLoad: false,
+      };
       return {
         ...state,
-        recentChats: [...state.recentChats, recentChat]
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...recentChat,
+            ...defaultChat
+          }
+        },
+        allIds: [...state.allIds, contactId]
       };
     }
 
@@ -101,7 +121,7 @@ const ChatReducer = function(state = initialState, action) {
         const chat = state.byId[contactId];
         const updatedChat = {
           ...chat,
-          nextPagination,
+          pagination: nextPagination,
           hasMoreMessage,
           messageCount,
           messages: [...chat.messages, ...messages]

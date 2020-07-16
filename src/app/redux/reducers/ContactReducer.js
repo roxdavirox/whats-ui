@@ -134,26 +134,14 @@ const ContactReducer = function(state = initialState, action) {
 
     case ADD_CONTACT: {
       const { contact } = action.payload;
-      const { id, chat: {
-        messages
-      } } = contact;
-      const messageCount = messages.length;
+
       return {
         ...state,
-        contacts: {
-          ...state.contacts,
-          [id]: { 
-            ...contact,
-            chat: {
-              firstMessageLoad: true,
-              messages: [...contact.chat.messages],
-              pagination: {
-                start: defaultPagination.start + messageCount,
-                end: defaultPagination.end + messageCount,
-              },
-            }
-          }
-        }
+        byId: {
+          ...state.byId,
+          [contact.id]: contact
+        },
+        allIds: [...state.allIds, contact.id]
       };
     }
 

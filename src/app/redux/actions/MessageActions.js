@@ -89,10 +89,13 @@ export const addMessage = (message) => (dispatch, getState) => {
       console.log('contactNotExists', contactNotExists);
       const phone = key.remoteJid.split('@')[0];
 
-      const _contact = {
+      const newContact = {
         id: contactId,
         eurl: 'assets/faces/default-avatar.png',
         name: phone,
+        phone,
+        notify: phone,
+        short: phone,
         userId,
         ownerId,
         jid: key.remoteJid,
@@ -104,13 +107,13 @@ export const addMessage = (message) => (dispatch, getState) => {
         userId, 
         ownerId,
         lastMessageTime: message.createdAt,
-        contact: _contact
       };
-      dispatch(addRecentChat(recentChat));
-      dispatch(addContact({ 
-        ..._contact,
-        chat: { messages: [message] }
-      }));
+      dispatch({
+        type: ADD_MESSAGE,
+        payload: { message }
+      });
+      dispatch(addRecentChat(recentChat, message.id, contactId));
+      dispatch(addContact(newContact));
       return;
     }
     dispatch({

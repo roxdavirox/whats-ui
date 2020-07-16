@@ -63,9 +63,9 @@ export const setChat = (
     }
 });
 
-export const addRecentChat = recentChat => ({
+export const addRecentChat = (recentChat, messageId, contactId) => ({
   type: ADD_RECENT_CHAT,
-  payload: { recentChat }
+  payload: { recentChat, messageId, contactId }
 });
 
 export const setCurrentChatRoom = currentChatRoom => ({
