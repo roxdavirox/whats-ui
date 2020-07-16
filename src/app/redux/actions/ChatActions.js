@@ -1,4 +1,17 @@
 import api from '../../services/api';
+import { normalize } from 'normalizr';
+import { chatSchema } from '../schema';
+
+const defaultPagination = {
+  start: 0, end: 15
+};
+
+const defaultChat = {
+  messages: [],
+  pagination: defaultPagination,
+  hasMoreMessage: false,
+  firstMessageLoad: false,
+};
 
 export const ADD_RECENT_CHAT = 'ADD_RECENT_CHAT';
 export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
@@ -7,7 +20,8 @@ export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
-export const SET_CHAT_PAGINATION = 'SET_CHAT_PAGINATION';
+export const SET_CHAT = 'SET_CHAT';
+export const UPDATE_CHAT_PAGINATION = 'UPDATE_CHAT_PAGINATION';
 
 export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
@@ -18,23 +32,34 @@ export const closeImageModal = () => ({
   type: CLOSE_IMAGE_MODAL
 });
 
-export const setRecentChats = recentChats => ({
-  type: SET_RECENT_CHATS,
-  payload: { recentChats }
-});
+export const setRecentChats = recentChats =>  dispatch => {
+  const defaultChats = recentChats.map(chat => ({
+    ...chat, ...defaultChat
+  }));
+  const normalizedRecentChats = normalize(defaultChats, [chatSchema]);
+  const { entities, result } = normalizedRecentChats;
+  const byId = entities.chats;
+  const allIds = result;
+  dispatch({
+    type: SET_RECENT_CHATS,
+    payload: { byId, allIds }
+  });
+};
 
-export const setChatPagination = (
+export const setChat = (
     nextPagination,
     hasMoreMessage,
     messageCount,
-    contactId
+    contactId,
+    messages
   ) => ({
-    type: SET_CHAT_PAGINATION,
+    type: SET_CHAT,
     payload: {
       nextPagination,
       hasMoreMessage,
       messageCount,
-      contactId
+      contactId,
+      messages
     }
 });
 
@@ -48,9 +73,9 @@ export const setCurrentChatRoom = currentChatRoom => ({
   payload: { currentChatRoom }
 });
 
-export const updateRecentChat = (contactId, lastMessageTime) => ({
+export const updateRecentChat = (contactId, lastMessageTime, messageId) => ({
   type: UPDATE_RECENT_CHAT,
-  payload: { contactId, lastMessageTime }
+  payload: { contactId, lastMessageTime, messageId }
 });
 
 export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
