@@ -74,49 +74,27 @@ const ContactReducer = function(state = initialState, action) {
     }
 
     case SET_RECEIVED_CONTACT: {
-      const { chat, contact } = action.payload;
-      const { contacts, recentChats } = state;
-      const receivedChat = {
-        id: chat.id,
-        lastMessageTime: chat.lastMessageTime,
-        contactId: contact.id, 
-        userId: contact.userId, 
-        ownerId: contact.ownerId,
-        contact: {
-          ...contact,
-          eurl: 'assets/faces/default-avatar.pngj',
-        }
-      };
-      
+      const { contact } = action.payload;
       return { 
         ...state,
-        contacts: { 
-          ...contacts, 
-          [contact.id]: {
-            ...contact, 
-            chat: {
-              messages: [],
-              pagination: defaultPagination
-            }
-          }
+        byId: {
+          ...state.byId,
+          [contact.id]: contact
         },
-        recentChats: [...recentChats, receivedChat]
+        allIds: [...state.allIds, contact.id]
       }
     }
 
     case TRANSFER_CONTACT: {
-      const { recentChats, contacts, contactId, fetchedMessages } = state;
-      const filteredRecentChats = recentChats
-        .filter(recentChat => recentChat.contactId !== contactId);
-
-      delete contacts[contactId];
-      delete fetchedMessages[contactId];
+      const { contactId } = action.payload;
+      const { byId, allIds } = state;
+      const filteredAllIds = allIds.filter(id => id !== contactId) 
+      delete byId[contactId];
 
       return {
         ...state,
-        contacts,
-        recentChats: filteredRecentChats,
-        fetchedMessages
+        byId,
+        allIds: filteredAllIds
       }
     }
     

@@ -13,6 +13,7 @@ import {
   UPDATE_CHAT_PAGINATION
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
+import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT } from '../actions/ContactActions';
 
 const initialState = {
   isContactListOpen: false,
@@ -32,6 +33,17 @@ const initialState = {
 
 const ChatReducer = function(state = initialState, action) {
   switch(action.type) {
+    case SET_RECEIVED_CONTACT: {
+      const { chat, contact } = action.payload;
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contact.id]: chat
+        },
+        allIds: [...state.allIds, contact.id]
+      }
+    }
 
     case OPEN_IMAGE_MODAL: {
       return {
@@ -160,6 +172,19 @@ const ChatReducer = function(state = initialState, action) {
         ...state,
         transferUsers
       };
+    }
+
+    case TRANSFER_CONTACT: {
+      const { contactId } = action.payload;
+      const { byId, allIds } = state;
+      const filteredAllIds = allIds.filter(id => id !== contactId) 
+      delete byId[contactId];
+
+      return {
+        ...state,
+        byId,
+        allIds: filteredAllIds
+      }
     }
 
     case SET_RECENT_CHATS: {
