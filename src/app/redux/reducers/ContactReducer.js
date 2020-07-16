@@ -14,6 +14,7 @@ import {
   CLOSE_ADD_CONTACT_DIALOG,
   FINISH_CONTACT
 } from '../actions/ContactActions';
+import { UPDATE_RECENT_CHAT } from '../actions/ChatActions';
 
 const initialState = {
   isContactListOpen: false,
@@ -88,7 +89,7 @@ const ContactReducer = function(state = initialState, action) {
     case TRANSFER_CONTACT: {
       const { contactId } = action.payload;
       const { byId, allIds } = state;
-      const filteredAllIds = allIds.filter(id => id !== contactId) 
+      const filteredAllIds = allIds.filter(id => id !== contactId);
       delete byId[contactId];
 
       return {
@@ -103,10 +104,9 @@ const ContactReducer = function(state = initialState, action) {
       return {
         ...state,
         byId: {
-          ...state.byId,
           ...byId
         },
-        allIds: [...state.allIds, ...allIds]
+        allIds: [...allIds]
       };
     }
 
@@ -125,18 +125,36 @@ const ContactReducer = function(state = initialState, action) {
 
     case FINISH_CONTACT: {
       const { contactId } = action.payload;
-      const { contacts } = state;
+      const { byId, allIds } = state;
 
-      const contact = contacts[contactId];
+      const contact = byId[contactId];
+      // const filteredAllIds = allIds.filter(id => id !== contactId);
 
       return {
         ...state,
-        contacts: {
-          ...contacts,
+        byId: {
+          ...state.byId,
           [contactId]: {
             ...contact,
             active: false,
-          },
+          }
+        },
+        // allIds: [...filteredAllIds]
+      }
+    }
+
+    case UPDATE_RECENT_CHAT: {
+      const { contactId } = action.payload;
+      const { byId } = state;
+      const contact = byId[contactId];
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...contact,
+            active: true,
+          }
         }
       }
     }
@@ -149,8 +167,24 @@ const ContactReducer = function(state = initialState, action) {
     }
 
     case SET_CONTACT_ID: {
+      const { contactId } = action.payload;
+      const { byId } = state;
+      const contact = byId[contactId];
+
+      if (!contactId) {
+        return { ...state, contactId };
+      }
+
       return {
-        ...state, contactId: action.payload.contactId
+        ...state, 
+        contactId,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...contact,
+            active: true,
+          }
+        }
       };
     }
 

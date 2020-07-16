@@ -133,19 +133,19 @@ export const transferContact = (selectedUserId, socket) => (dispatch, getState) 
 }
 
 export const finishContact = () => async (dispatch, getState) => {
-  const { chat, user } = getState();
-  const { contactId } = chat;
+  const { contact, user } = getState();
+  const { contactId } = contact;
   try {
     await api.post('/contact/finish', {
       contactId,
       ownerId: user.ownerId,
     });
+    dispatch(setContactId(''));
+    dispatch(setCurrentChatRoom(''));
     dispatch({
       type: FINISH_CONTACT,
       payload: { contactId }
     });
-    dispatch(setContactId(''));
-    dispatch(setCurrentChatRoom(''));
   } catch(e) {
     // handle error
     console.error(e);
