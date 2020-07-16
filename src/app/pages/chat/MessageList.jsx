@@ -5,7 +5,6 @@ import { selectMessages } from '../../redux/selectors/MessageSelectors';
 
 const MessageList = () => {
   const messages = useSelector(selectMessages);
-
   const renderMessageItem = message => <MessageItem message={message} />;
   return (
     <>
