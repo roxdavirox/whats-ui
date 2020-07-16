@@ -7,6 +7,7 @@ export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
+export const SET_CHAT_PAGINATION = 'SET_CHAT_PAGINATION';
 
 export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
@@ -20,6 +21,21 @@ export const closeImageModal = () => ({
 export const setRecentChats = recentChats => ({
   type: SET_RECENT_CHATS,
   payload: { recentChats }
+});
+
+export const setChatPagination = (
+    nextPagination,
+    hasMoreMessage,
+    messageCount,
+    contactId
+  ) => ({
+    type: SET_CHAT_PAGINATION,
+    payload: {
+      nextPagination,
+      hasMoreMessage,
+      messageCount,
+      contactId
+    }
 });
 
 export const addRecentChat = recentChat => ({
