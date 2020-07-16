@@ -1,3 +1,5 @@
+import { normalize } from 'normalizr';
+import { messageSchema } from '../schema';
 import localStorageService from '../../services/localStorageService';
 import api from '../../services/api';
 import {
@@ -5,7 +7,8 @@ import {
 } from '../actions/ContactActions';
 import {
   addRecentChat,
-  updateRecentChat
+  updateRecentChat,
+  setChatPagination
 } from '../actions/ChatActions';
 
 export const ADD_MESSAGE = 'ADD_MESSAGE';
@@ -32,15 +35,19 @@ export const loadFirstMessages = contactId => async (dispatch, getState) => {
   await dispatch(getMessagesByContactId(contactId));
 }
 
+export const fetchMessagesSuccess = (byId, allIds) => ({
+  type: GET_MESSAGES_SUCCESS,
+  payload: {
+    byId, allIds,
+  }
+})
+
 export const getMessagesByContactId = contactId => async (dispatch, getState) => {
   const { chat } = getState();
-  const { contacts, isFetching } = chat;
-  if (isFetching) return;
-  const contact = contacts[contactId];
-  if (!contact) return;
+  const currentChat = chat[contactId];
+  if (!currentChat) return;
 
-  const { chat: contactChat } = contact;
-  const { pagination: { start = 0, end= 15 } } = contactChat;
+  const { pagination: { start = 0, end= 15 } } = currentChat;
   const token = localStorageService.getToken();
 
   const config = {
@@ -52,16 +59,16 @@ export const getMessagesByContactId = contactId => async (dispatch, getState) =>
   const { data } = response;
   const { messages, nextPagination, messageCount, hasMoreMessage } = data;
 
-  dispatch({
-    type: GET_MESSAGES_SUCCESS,
-    payload: {
-      messages,
-      nextPagination,
-      hasMoreMessage,
-      messageCount,
-      contactId
-    },
-  });
+  const normalizedMessages = normalize(messages, [messageSchema]);
+  const { entities: byId, result: allIds } = normalizedMessages;
+  dispatch(fetchMessagesSuccess(byId, allIds));
+
+  dispatch(setChatPagination(
+    nextPagination,
+    hasMoreMessage,
+    messageCount,
+    contactId
+  ));
 }
 
 export const setMessages = (messages, contactId) => ({
