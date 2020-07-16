@@ -1,7 +1,4 @@
 
-import { normalize } from 'normalizr';
-import { chatSchema } from '../schema';
-
 import { 
   ADD_RECENT_CHAT,
   SET_TRANSFER_USERS,
@@ -12,16 +9,16 @@ import {
   UPDATE_RECENT_CHAT,
   OPEN_IMAGE_MODAL,
   CLOSE_IMAGE_MODAL,
-  SET_CHAT_PAGINATION
+  SET_CHAT,
+  UPDATE_CHAT_PAGINATION
 } from '../actions/ChatActions';
+import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
 
 const initialState = {
   isContactListOpen: false,
   openTransferListDialog: false,
   openSaveContact: false,
   transferUsers: [],
-  contacts: {},
-  recentChats: [],
   contactId: '',
   fetchedMessages: {},
   currentChatRoom: '',
@@ -29,6 +26,8 @@ const initialState = {
   fileUrl: null,
   isFetching: false,
   openAddContact: false,
+  byId: {},
+  allIds: []
 };
 
 const ChatReducer = function(state = initialState, action) {
@@ -59,26 +58,45 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case UPDATE_RECENT_CHAT: {
-      const { contactId, lastMessageTime } = action.payload;
-      const { recentChats } = state;
-      const updatedRecentChats = recentChats.reduce((allRecentChats, crrRecentChat) => {
-        if (crrRecentChat.contactId === contactId) {
-          return [...allRecentChats, { ...crrRecentChat, lastMessageTime, active: true }]
-        }
-        return [...allRecentChats, crrRecentChat];
-      }, []);
+      const { contactId, lastMessageTime, messageId } = action.payload;
+      const { byId } = state;
+      const chat = byId[contactId];
       return {
         ...state,
-        recentChats: updatedRecentChats
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...chat,
+            lastMessageTime,
+            active: true,
+            messages: [...chat.messages, messageId]
+          }
+        }
       }
     }
 
-    case SET_CHAT_PAGINATION: {
+    case LOAD_FIRST_MESSAGES: {
+      const { contactId } = action.payload;
+      const chat = state.byId[contactId];
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...chat,
+            firstMessageLoad: true,
+          }
+        }
+      }
+    }
+
+    case SET_CHAT: {
       const { 
         nextPagination,
         hasMoreMessage,
         messageCount,
-        contactId } = action.payload;
+        contactId,
+        messages } = action.payload;
         
         const chat = state.byId[contactId];
         const updatedChat = {
@@ -86,6 +104,7 @@ const ChatReducer = function(state = initialState, action) {
           nextPagination,
           hasMoreMessage,
           messageCount,
+          messages: [...chat.messages, ...messages]
         }
         return {
           ...state,
@@ -94,6 +113,25 @@ const ChatReducer = function(state = initialState, action) {
             [contactId]: updatedChat
           }
         };
+    }
+
+    case UPDATE_CHAT_PAGINATION: {
+      const { contactId } = action.payload;
+      const { byId } = state;
+      const chat = byId[contactId];
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...chat,
+            pagination: {
+              start: chat.pagination.start +1,
+              end: chat.pagination.end + 1,
+            }
+          }
+        }
+      }
     }
 
     case SET_TRANSFER_USERS: {
@@ -105,13 +143,14 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case SET_RECENT_CHATS: {
-      const { recentChats } = action.payload;
-      const normalizedRecentChats = normalize(recentChats, [chatSchema]);
-      const { entities, result } = normalizedRecentChats;
+      const { byId, allIds } = action.payload;
       return {
         ...state,
-        byId: entities.chats,
-        allIds: [...result]
+        byId: {
+          ...state.byId,
+          ...byId
+        },
+        allIds: [...state.allIds, ...allIds]
       };
     }
 
