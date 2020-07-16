@@ -1,13 +1,13 @@
 export const selectRecentChats = store => {
   const { contact, chat } = store;
   if (!contact) return [];
-  const { contacts } = contact;
-  const { recentChats } = chat;
-  if (!recentChats) return [];
+  
+  if (!chat.allIds) return [];
 
+  const recentChats = chat.allIds.map(id => chat.byId[id]);
   return recentChats
     .map(chat => ({ 
-      contact: contacts[chat.contactId], 
+      contact: contact.byId[chat.contactId], 
       ...chat 
     }))
     .filter(c => c.contact && c.contact.active)
@@ -17,3 +17,5 @@ export const selectRecentChats = store => {
       return a > b ? -1 : a < b ? 1 : 0;
     });
 }
+
+export const selectCurrentChat = ({ chat, contact }) => chat.byId[contact.contactId] || {};
