@@ -2,17 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Menu from './Menu';
 import ChatAvatar from "./ChatAvatar";
+import { selectCurrentContact } from '../../redux/selectors/ContactSelectors';
 
 const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
   const { 
-    contactId,
-    contacts,
     currentChatRoom,
   } = useSelector(({ chat }) => chat);
   const currentUser = useSelector(({ user }) => user);
 
-
-  const currentContact = contacts[contactId] || false ;
+  const currentContact = useSelector(selectCurrentContact);
 
   return (
     <div className="chat-container__topbar flex items-center justify-between p-1 bg-primary">
