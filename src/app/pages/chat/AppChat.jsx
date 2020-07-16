@@ -31,6 +31,7 @@ import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
 import socket from './socket';
 import useAudio from 'app/components/customHooks/Audio';
 import AddContactDialog from "./AddContactDialog";
+import { selectRecentChats } from "app/redux/selectors/ChatSelectors";
 
 const audioUrl = 'https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3';
 
@@ -38,7 +39,7 @@ const AppChat = props => {
   const [playing, toggle] = useAudio(audioUrl);
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
-  const recentChats = useSelector(({ chat }) => chat.recentChats);
+  const recentChats = useSelector(selectRecentChats);
   const transferUsers = useSelector(({ chat }) => chat.transferUsers)
   const currentContact = useSelector(selectCurrentContact);
 
@@ -79,7 +80,6 @@ const AppChat = props => {
   };
 
   const handleReceivedMessage = message => {
-    console.log('mensagem recebida:', message);
     if (!message.message) return;
     dispatch(addMessage(message));
     if (!reference || !reference.current) return;
@@ -106,7 +106,6 @@ const AppChat = props => {
       text: message,
       chatId: chat.id
     };
-    console.log('mensagem enviada', newMsg);
     chatSocket.sendMessage(newMsg);
   };
   
