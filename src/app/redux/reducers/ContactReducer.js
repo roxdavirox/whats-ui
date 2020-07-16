@@ -178,20 +178,20 @@ const ContactReducer = function(state = initialState, action) {
 
     case SAVE_CONTACT: {
       const { name } = action.payload;
-      const { contactId, contacts } = state;
+      const { contactId, byId } = state;
    
-      const contact = contacts[contactId];
+      const contact = byId[contactId];
 
       return {
         ...state,
-        contacts: {
-          ...contacts,
+        byId: {
+          ...state.byId,
           [contactId]: {
             ...contact,
             name,
             short: name
           }
-        },
+        }
       }
     }
 
