@@ -33,11 +33,6 @@ const MessageReducer = function(state = initialState, action) {
       const {
         byId,
         allIds, } = action.payload;
-
-        // TODO: colocar no selector
-        // const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
-        // const newMessages = [...previousMessages, ...contact.chat.messages];
-        // const newSortedMessages = newMessages.sort(sortByLastDate);
         
         return {
           ...state,
@@ -50,48 +45,15 @@ const MessageReducer = function(state = initialState, action) {
     }
 
     case ADD_MESSAGE: {
-      const { contacts } = state;
-      const { contactId, message } = action.payload;
-      const contact = contacts[contactId] || defaultContact;
-      
-      const { chat: { messages, pagination } } = contact;
-      const newMessages = [...messages, message];
-      const updatedContact = {
-        ...contact,
-        active: true,
-        chat: {
-          ...contact.chat,
-          messages: newMessages,
-          pagination: {
-            start: pagination.start + 1,
-            end: pagination.end + 1,
-          },
-        }
-      };
+      const { message } = action.payload;
       return {
         ...state,
-        contacts: {
-          ...contacts, [contactId]: updatedContact
-        }
+        byId: {
+          ...state.byId,
+          [message.id]: message
+        },
+        allIds: [...state.allIds, message.id]
       };
-    }
-
-    case LOAD_FIRST_MESSAGES: {
-      const { contactId } = action.payload;
-      const contact = state.contacts[contactId];
-      return {
-        ...state,
-        contacts: {
-          ...state.contacts,
-          [contactId]: {
-            ...contact,
-            chat: {
-              ...contact.chat,
-              firstMessageLoad: true,
-            }
-          }
-        }
-      }
     }
 
     case SET_FETCHED_MESSAGE: {
