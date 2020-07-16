@@ -4,6 +4,9 @@ import {
   setCurrentChatRoom
 } from '../actions/ChatActions';
 
+import { normalize } from 'normalizr';
+import { contactSchema } from '../schema';
+
 export const SET_CONTACTS = 'SET_CONTACTS';
 export const ADD_CONTACT = 'ADD_CONTACT';
 export const CLOSE_CONTACT_LIST_DIALOG = 'CLOSE_CONTACT_LIST_DIALOG';
@@ -13,7 +16,6 @@ export const SET_CONTACT_ID = 'SET_CONTACT_ID';
 export const SAVE_CONTACT = 'SAVE_CONTACT';
 export const TRANSFER_CONTACT = 'TRANSFER_CONTACT';
 export const SET_RECEIVED_CONTACT = 'SET_RECEIVED_CONTACT';
-export const GET_MESSAGES_BY_CONTACT_ID = 'GET_MESSAGES_BY_CONTACT_ID';
 export const OPEN_CONTACT_LIST = 'OPEN_CONTACT_LIST';
 export const OPEN_ADD_CONTACT_DIALOG = 'OPEN_ADD_CONTACT_DIALOG';
 export const CLOSE_ADD_CONTACT_DIALOG = 'CLOSE_ADD_CONTACT_DIALOG';
@@ -31,10 +33,17 @@ export const addContact = contact => ({
   payload: { contact }
 });
 
-export const setContacts = contacts => ({
-  type: SET_CONTACTS,
-  payload: { contacts }
-});
+export const setContacts = contacts => dispatch => {
+  const normalizedContacts = normalize(contacts, [contactSchema]);
+  const { entities, result: allIds } = normalizedContacts;
+  dispatch({
+    type: SET_CONTACTS,
+    payload: { 
+      byId: entities.contacts, 
+      allIds
+    }
+  });
+}
 
 export const openContactList = () => ({
   type: OPEN_CONTACT_LIST
