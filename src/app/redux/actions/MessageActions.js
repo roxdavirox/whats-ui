@@ -8,7 +8,8 @@ import {
 import {
   addRecentChat,
   updateRecentChat,
-  setChatPagination
+  setChat,
+  UPDATE_CHAT_PAGINATION
 } from '../actions/ChatActions';
 
 export const ADD_MESSAGE = 'ADD_MESSAGE';
@@ -19,14 +20,10 @@ export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
 
 export const loadFirstMessages = contactId => async (dispatch, getState) => {
   const { chat } = getState();
-  const { contacts, isFetching } = chat;
-  if (isFetching) return;
-  const contact = contacts[contactId];
-  if (!contact) return;
+  const currentChat = chat.byId[contactId];
 
-  const { chat: contactChat } = contact;
-  const { firstMessageLoad } = contactChat;
-  console.log('firstMessageLoad', firstMessageLoad)
+  const { firstMessageLoad } = currentChat;
+  
   if (firstMessageLoad) return;
   dispatch({
     type: LOAD_FIRST_MESSAGES,
@@ -44,7 +41,7 @@ export const fetchMessagesSuccess = (byId, allIds) => ({
 
 export const getMessagesByContactId = contactId => async (dispatch, getState) => {
   const { chat } = getState();
-  const currentChat = chat[contactId];
+  const currentChat = chat.byId[contactId];
   if (!currentChat) return;
 
   const { pagination: { start = 0, end= 15 } } = currentChat;
@@ -60,14 +57,16 @@ export const getMessagesByContactId = contactId => async (dispatch, getState) =>
   const { messages, nextPagination, messageCount, hasMoreMessage } = data;
 
   const normalizedMessages = normalize(messages, [messageSchema]);
-  const { entities: byId, result: allIds } = normalizedMessages;
+  const { entities, result: allIds } = normalizedMessages;
+  const byId = entities.messages;
   dispatch(fetchMessagesSuccess(byId, allIds));
 
-  dispatch(setChatPagination(
+  dispatch(setChat(
     nextPagination,
     hasMoreMessage,
     messageCount,
-    contactId
+    contactId,
+    allIds
   ));
 }
 
@@ -82,10 +81,10 @@ export const setFetchedMessage = contactId => ({
 });
 
 export const addMessage = (message) => (dispatch, getState) => {
-  const { chat: { contacts } } = getState();
+  const { contact } = getState();
     const { contactId, userId, ownerId, chatId, key } = message;
 
-    const contactNotExists = !contacts[contactId];
+    const contactNotExists = !contact.byId[contactId];
     if (contactNotExists) {
       console.log('contactNotExists', contactNotExists);
       const phone = key.remoteJid.split('@')[0];
@@ -116,7 +115,15 @@ export const addMessage = (message) => (dispatch, getState) => {
     }
     dispatch({
       type: ADD_MESSAGE,
-      payload: { contactId, message }
+      payload: { message }
     });
-    dispatch(updateRecentChat(contactId, message.createdAt));
+    dispatch({
+      type: UPDATE_CHAT_PAGINATION,
+      payload: { contactId }
+    });
+    dispatch(updateRecentChat(
+      contactId,
+      message.createdAt,
+      message.id
+    ));
 }
