@@ -13,7 +13,7 @@ import {
   UPDATE_CHAT_PAGINATION
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
-import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT } from '../actions/ContactActions';
+import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT, FINISH_CONTACT } from '../actions/ContactActions';
 
 const initialState = {
   isContactListOpen: false,
@@ -44,6 +44,22 @@ const ChatReducer = function(state = initialState, action) {
         allIds: [...state.allIds, contact.id]
       }
     }
+
+    // case FINISH_CONTACT: {
+    //   const { contactId } = action.payload;
+    //   const { byId, allIds } = state;
+
+    //   // const filteredAllIds = allIds.filter(id => id !== contactId);
+    //   // delete byId[contactId];
+
+    //   return {
+    //     ...state,
+    //     byId: {
+    //       ...byId,
+    //     },
+    //     // allIds: filteredAllIds
+    //   }
+    // }
 
     case OPEN_IMAGE_MODAL: {
       return {
@@ -191,11 +207,8 @@ const ChatReducer = function(state = initialState, action) {
       const { byId, allIds } = action.payload;
       return {
         ...state,
-        byId: {
-          ...state.byId,
-          ...byId
-        },
-        allIds: [...state.allIds, ...allIds]
+        byId,
+        allIds
       };
     }
 

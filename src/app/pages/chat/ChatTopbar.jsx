@@ -18,7 +18,7 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
         <div className="hide-on-mobile">
           <div className="pl-3"></div>
         </div>
-        {currentContact && (
+        {currentContact && currentContact.active && (
           <>
             <ChatAvatar
               src={currentContact.eurl}
