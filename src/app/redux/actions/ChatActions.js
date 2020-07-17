@@ -15,13 +15,21 @@ const defaultChat = {
 
 export const ADD_RECENT_CHAT = 'ADD_RECENT_CHAT';
 export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
-
+export const ADD_NEW_CHAT = 'ADD_NEW_CHAT';
 export const SET_CURRENT_CHAT_ROOM = 'SET_CURRENT_CHAT_ROOM';
 export const UPDATE_RECENT_CHAT = 'UPDATE_RECENT_CHAT';
 export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 export const SET_CHAT = 'SET_CHAT';
 export const UPDATE_CHAT_PAGINATION = 'UPDATE_CHAT_PAGINATION';
+
+export const addNewChat = (recentChat, contactId) => ({
+  type: ADD_NEW_CHAT,
+  payload: {
+    recentChat,
+    contactId
+  }
+});
 
 export const openImageModal = fileUrl => ({
   type: OPEN_IMAGE_MODAL,
