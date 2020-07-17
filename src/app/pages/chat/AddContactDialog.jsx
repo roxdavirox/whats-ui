@@ -27,7 +27,7 @@ function AddContactDialog(props) {
   const handleNameChange = e => setContactName(e.target.value);
   const handlePhoneChange = e => setPhone(e.target.value);
   
-  const openAddContact = useSelector(({ chat }) => chat.openAddContact);
+  const openAddContact = useSelector(({ contact }) => contact.openAddContact);
 
   return (
     <>
