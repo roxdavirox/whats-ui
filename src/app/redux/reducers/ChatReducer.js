@@ -45,22 +45,6 @@ const ChatReducer = function(state = initialState, action) {
       }
     }
 
-    // case FINISH_CONTACT: {
-    //   const { contactId } = action.payload;
-    //   const { byId, allIds } = state;
-
-    //   // const filteredAllIds = allIds.filter(id => id !== contactId);
-    //   // delete byId[contactId];
-
-    //   return {
-    //     ...state,
-    //     byId: {
-    //       ...byId,
-    //     },
-    //     // allIds: filteredAllIds
-    //   }
-    // }
-
     case OPEN_IMAGE_MODAL: {
       return {
         ...state,

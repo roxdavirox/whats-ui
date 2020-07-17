@@ -21,6 +21,7 @@ export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
 export const loadFirstMessages = contactId => async (dispatch, getState) => {
   const { chat } = getState();
   const currentChat = chat.byId[contactId];
+  if (!currentChat) return;
 
   const { firstMessageLoad } = currentChat;
   

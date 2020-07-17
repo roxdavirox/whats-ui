@@ -21,6 +21,7 @@ export const OPEN_ADD_CONTACT_DIALOG = 'OPEN_ADD_CONTACT_DIALOG';
 export const CLOSE_ADD_CONTACT_DIALOG = 'CLOSE_ADD_CONTACT_DIALOG';
 export const ADD_NEW_CONTACT = 'ADD_NEW_CONTACT';
 export const FINISH_CONTACT = 'FINISH_CONTACT';
+export const SET_ACTIVE_CONTACT = 'SET_ACTIVE_CONTACT';
 
 export const closeContactListDialog = () => ({ type: CLOSE_CONTACT_LIST_DIALOG });
 
@@ -31,6 +32,11 @@ export const closeSaveContactDialog = () => ({ type: CLOSE_SAVE_CONTACT_DIALOG }
 export const addContact = contact => ({
   type: ADD_CONTACT,
   payload: { contact }
+});
+
+export const setActiveContact = (contactId) => ({
+  type: SET_ACTIVE_CONTACT,
+  payload: { contactId }
 });
 
 export const setContacts = contacts => dispatch => {
@@ -140,8 +146,8 @@ export const finishContact = () => async (dispatch, getState) => {
       contactId,
       ownerId: user.ownerId,
     });
-    dispatch(setContactId(''));
-    dispatch(setCurrentChatRoom(''));
+    // dispatch(setContactId(''));
+    // dispatch(setCurrentChatRoom(''));
     dispatch({
       type: FINISH_CONTACT,
       payload: { contactId }

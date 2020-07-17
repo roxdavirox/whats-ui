@@ -24,7 +24,8 @@ import {
   saveContact,
   setReceivedContact,
   openContactList,
-  transferContact
+  transferContact,
+  setActiveContact
 } from '../../redux/actions/ContactActions';
 import { addMessage, loadFirstMessages } from '../../redux/actions/MessageActions';
 import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
@@ -92,13 +93,18 @@ const AppChat = props => {
     dispatch(setContactId(contactId));
     dispatch(setCurrentChatRoom(1));
     dispatch(loadFirstMessages(contactId))
+    dispatch(setActiveContact(contactId));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 999999;
     setReference(reference);
   };
 
   const handleMessageSend = message => {
+    console.log('enviando msg', message);
     const chat = recentChats.find(c => c.contactId === currentContact.id);
+    console.log('chats', recentChats);
+    console.log('chat', chat);
+    console.log('currentContact', currentContact);
     if(!chat) return;
     const newMsg = {
       contactId: currentContact.id,
