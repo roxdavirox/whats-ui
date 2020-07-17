@@ -12,7 +12,8 @@ import {
   OPEN_CONTACT_LIST,
   OPEN_ADD_CONTACT_DIALOG,
   CLOSE_ADD_CONTACT_DIALOG,
-  FINISH_CONTACT
+  FINISH_CONTACT,
+  SET_ACTIVE_CONTACT
 } from '../actions/ContactActions';
 import { UPDATE_RECENT_CHAT } from '../actions/ChatActions';
 
@@ -31,10 +32,6 @@ const initialState = {
   openAddContact: false,
   byId: {},
   allIds: []
-};
-
-const defaultPagination = {
-  start: 0, end: 15
 };
 
 const ContactReducer = function(state = initialState, action) {
@@ -166,18 +163,12 @@ const ContactReducer = function(state = initialState, action) {
       };
     }
 
-    case SET_CONTACT_ID: {
+    case SET_ACTIVE_CONTACT: {
       const { contactId } = action.payload;
       const { byId } = state;
       const contact = byId[contactId];
-
-      if (!contactId) {
-        return { ...state, contactId };
-      }
-
       return {
-        ...state, 
-        contactId,
+        ...state,
         byId: {
           ...state.byId,
           [contactId]: {
@@ -185,7 +176,15 @@ const ContactReducer = function(state = initialState, action) {
             active: true,
           }
         }
-      };
+      }
+    }
+
+    case SET_CONTACT_ID: {
+      const { contactId } = action.payload;
+      return {
+        ...state, 
+        contactId
+      }
     }
 
     case SAVE_CONTACT: {
