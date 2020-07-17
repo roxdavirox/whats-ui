@@ -1,6 +1,6 @@
 import api from '../../services/api';
 import {
-  addRecentChat,
+  addNewChat,
   setCurrentChatRoom
 } from '../actions/ChatActions';
 
@@ -87,15 +87,12 @@ export const addNewContact = (name, phone) => async (dispatch, getState) => {
       ownerId: user.ownerId,
       userId: user.id,
       lastMessageTime: chat.lastMessageTime,
-      contact: _contact
+      ...chat
     };
-    dispatch(addRecentChat(recentChat));
-    dispatch(addContact({ 
-      ..._contact, 
-      chat: { messages: [] }
-    }));
+    dispatch(addContact(_contact));
     dispatch(setContactId(contact.id));
     dispatch(setCurrentChatRoom(1));
+    dispatch(addNewChat(recentChat, contact.id));
   } catch(e) {
     // handle error
     console.error('error:', e);

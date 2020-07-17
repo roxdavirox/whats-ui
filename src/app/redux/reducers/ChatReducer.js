@@ -10,7 +10,8 @@ import {
   OPEN_IMAGE_MODAL,
   CLOSE_IMAGE_MODAL,
   SET_CHAT,
-  UPDATE_CHAT_PAGINATION
+  UPDATE_CHAT_PAGINATION,
+  ADD_NEW_CHAT
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
 import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT, FINISH_CONTACT } from '../actions/ContactActions';
@@ -66,13 +67,36 @@ const ChatReducer = function(state = initialState, action) {
       const defaultPagination = {
         start: 0, end: 15
       };
-      
       const defaultChat = {
         messages: [messageId],
         pagination: {
           start: defaultPagination.start + 1,
           end: defaultPagination.end + 1
         },
+        hasMoreMessage: false,
+        firstMessageLoad: false,
+      };
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...recentChat,
+            ...defaultChat
+          }
+        },
+        allIds: [...state.allIds, contactId]
+      };
+    }
+
+    case ADD_NEW_CHAT: {
+      const { recentChat, contactId } = action.payload;
+      const defaultPagination = {
+        start: 0, end: 15
+      };
+      const defaultChat = {
+        messages: [],
+        pagination: defaultPagination,
         hasMoreMessage: false,
         firstMessageLoad: false,
       };
