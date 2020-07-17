@@ -146,8 +146,8 @@ export const finishContact = () => async (dispatch, getState) => {
       contactId,
       ownerId: user.ownerId,
     });
-    // dispatch(setContactId(''));
-    // dispatch(setCurrentChatRoom(''));
+    dispatch(setContactId(''));
+    dispatch(setCurrentChatRoom(''));
     dispatch({
       type: FINISH_CONTACT,
       payload: { contactId }
