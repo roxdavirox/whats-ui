@@ -102,10 +102,11 @@ export const closeTransferListDialog = () => ({ type: CLOSE_TRANSFER_LIST_DIALOG
 export const uploadImage = 
 ({
   imageFile,
-  contactId,
   ownerId,
   userId,
-}) => async (dispatch) => {
+}) => async (dispatch, getState) => {
+  const { contact } = getState();
+  const { contactId } = contact;
   const fd = new FormData();
   fd.append('image', imageFile);
   fd.append('contactId', contactId);

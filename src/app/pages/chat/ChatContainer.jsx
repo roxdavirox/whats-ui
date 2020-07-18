@@ -25,7 +25,6 @@ const ChatContainer = ({
     currentChatRoom,
     imageModalOpen,
   } = useSelector(({ chat }) => chat);
-  const { contactId } = useSelector(({ contact }) => contact.contactId);
   const currentContact = useSelector(selectCurrentContact);
   const currentChat = useSelector(selectCurrentChat);
   const currentUser = useSelector(({ user }) => user);
@@ -48,7 +47,6 @@ const ChatContainer = ({
     if (!file) return;
     dispatch(uploadImage({ 
       imageFile: file,
-      contactId,
       ownerId: currentUser.ownerId,
       userId: currentUser.id,
     }));
