@@ -55,19 +55,8 @@ const SearchContact = ({ onSearch, initialValue = '' }) => {
   )
 }
 
-const ChatSidenav = ({
-  handleContactClick,
-  onOpenContactList,
-  isContactListOpen
-}) => {
-  const currentUser = useSelector(({ user }) => user);
-  const recentChats = useSelector(selectRecentChats);
+const ContactListSlide = ({ onContactClick, open }) => {
   const contacts = useSelector(selectContacts);
-  const dispatch = useDispatch();
-
-  const handleOpenAddDialog = () => {
-    dispatch(openAddContactDialog());
-  }
 
   const [searchContact, setSearchContact] = useState('');
 
@@ -77,19 +66,45 @@ const ChatSidenav = ({
         contact.name
           .toLowerCase()
           .includes(searchContact.toLocaleLowerCase())
-    );
+  );
 
   const WrapperContactList = React.forwardRef((props, ref) => (
     <div ref={ref} {...props}>
-      <SearchContact onSearch={setSearchContact} initialValue={searchContact} />
       <Divider />
       <ContactList
         contacts={filteredContacts}
-        handleContactClick={handleContactClick}
+        handleContactClick={onContactClick}
       />
     </div>
   ));
   
+  return (
+    <>
+      <SearchContact onSearch={setSearchContact} initialValue={searchContact} />
+      <Slide
+        direction="right"
+        in={open}
+        mountOnEnter unmountOnExit
+      >
+        <WrapperContactList />
+      </Slide>
+    </>
+  )
+}
+
+const ChatSidenav = ({
+  handleContactClick,
+  onOpenContactList,
+  isContactListOpen
+}) => {
+  const currentUser = useSelector(({ user }) => user);
+  const recentChats = useSelector(selectRecentChats);
+  const dispatch = useDispatch();
+
+  const handleOpenAddDialog = () => {
+    dispatch(openAddContactDialog());
+  }
+
   return (
     <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
@@ -117,40 +132,34 @@ const ChatSidenav = ({
         </div>
       </div>
       <Scrollbar className="chat-contact-list position-relative h-700" style={{ height: '100%' }}>
-        {isContactListOpen 
-          ? <Slide
-              direction="right"
-              in={isContactListOpen}
-              mountOnEnter unmountOnExit
-            >
-              <WrapperContactList />
-          </Slide>
-        : recentChats && recentChats
-          .map((chat, index) => (     
-            <div key={index}>
-              {chat && 
-              <div
-                onClick={() => handleContactClick(chat.contactId)}
-                key={index}
-                className="flex items-center p-4 cursor-pointer  gray-on-hover"
-              >
-                <ChatAvatar src={chat.contact.eurl || ''}/>
-                <div className="pl-4">
-                  <p className="m-0">{chat.contact.name}</p>
-                  <p className="m-0 text-muted">
-                    {new Date(chat.lastMessageTime)
-                      .toLocaleString(
-                          'pt-BR', {
-                            year: 'numeric',
-                            month: '2-digit',
-                            day: '2-digit',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                    })}
-                  </p>
-                </div>
-              </div>}
-            </div>
+        {isContactListOpen
+          ? <ContactListSlide onContactClick={handleContactClick} open={isContactListOpen} />
+          : recentChats && recentChats
+            .map((chat, index) => (     
+              <div key={index}>
+                {chat && 
+                <div
+                  onClick={() => handleContactClick(chat.contactId)}
+                  key={index}
+                  className="flex items-center p-4 cursor-pointer  gray-on-hover"
+                >
+                  <ChatAvatar src={chat.contact.eurl || ''}/>
+                  <div className="pl-4">
+                    <p className="m-0">{chat.contact.name}</p>
+                    <p className="m-0 text-muted">
+                      {new Date(chat.lastMessageTime)
+                        .toLocaleString(
+                            'pt-BR', {
+                              year: 'numeric',
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                </div>}
+              </div>
           ))}
       </Scrollbar>
     </div>
