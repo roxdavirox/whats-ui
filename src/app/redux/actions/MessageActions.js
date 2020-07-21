@@ -57,9 +57,16 @@ export const getMessagesByContactId = contactId => async (dispatch, getState) =>
   const { data } = response;
   const { messages, nextPagination, messageCount, hasMoreMessage } = data;
 
-  const normalizedMessages = normalize(messages, [messageSchema]);
-  const { entities, result: allIds } = normalizedMessages;
-  const byId = entities.messages;
+  if (!messages) return;
+  const messagesWithKeyId = messages.filter(m => m.key.id);
+
+  if (!messagesWithKeyId)return;
+
+  const byId = messagesWithKeyId.reduce((all, crr) => ({
+    ...all, [crr.key.id]: crr
+  }), {});
+
+  const allIds = messagesWithKeyId.map(m => m.key.id);
   dispatch(fetchMessagesSuccess(byId, allIds));
 
   dispatch(setChat(
