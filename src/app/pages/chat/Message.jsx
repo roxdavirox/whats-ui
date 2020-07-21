@@ -1,9 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Divider from '@material-ui/core/Divider';
 import {
   openImageModal,
 } from '../../redux/actions/ChatActions';
 import AudioPlayer from 'react-audio-player';
+import { selectCurrentContact } from '../../redux/selectors/ContactSelectors';
 
 const isImage = message => message.message
   && message.message.imageMessage
@@ -18,6 +20,8 @@ const isQuote = message => message.message
 
 const Message = ({ message }) => {
   const dispatch = useDispatch();
+  const currentContact = useSelector(selectCurrentContact);
+
   if (isImage(message)) {
     const { message: _message } = message;
     const { imageMessage: { fileUrl, caption = '' } } = _message;
@@ -55,11 +59,34 @@ const Message = ({ message }) => {
     );
   }
 
-  const textMessage = isQuote(message) 
-    ? message.message.extendedTextMessage.text
-    : message.message.conversation;
+  if (isQuote(message)){
+    return (
+      <div>
+        <div 
+          className="whitespace-pre-wrap"
+          style={{ 
+            backgroundColor: 'rgb(0 0 0 / 7%)',
+            fontStyle: 'italic',
+            borderRadius: '5px'
+          }}
+        >
+          <div 
+            style={{ fontWeight: 'bold' }}
+          >
+            {message
+              .message
+              .extendedTextMessage
+              .contextInfo.participant === currentContact.jid ? currentContact.name : 'Você'}
+          </div>
+          {message.message.extendedTextMessage.contextInfo.quotedMessage.conversation}
+        </div>
+        <Divider />
+        <div className="whitespace-pre-wrap">{message.message.extendedTextMessage.text}</div>
+      </div>
+    )
+  }
 
-  return <span className="whitespace-pre-wrap">{textMessage}</span>;
+  return <div className="whitespace-pre-wrap">{message.message.conversation}</div>;
 }
 
 export default Message;
