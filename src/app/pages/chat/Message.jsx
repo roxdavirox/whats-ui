@@ -15,7 +15,8 @@ const isAudio = message => message.message
   && message.message.audioMessage.fileUrl;
 
 const isQuote = message => message.message
-  && message.message.extendedTextMessage;
+  && message.message.extendedTextMessage
+  && message.message.extendedTextMessage.contextInfo;
 
 const Message = ({ message }) => {
   const dispatch = useDispatch();
