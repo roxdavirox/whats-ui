@@ -59,35 +59,39 @@ const Message = ({ message }) => {
     );
   }
 
-  if (isQuote(message)){
+  if (isQuote(message)) {
+    const { extendedTextMessage } = message.message;
+    const { contextInfo, text } = extendedTextMessage;
+    const { participant, quotedMessage } = contextInfo;
+    const { conversation } = quotedMessage;
+    const style ={
+      quoteContainer: {
+        backgroundColor: 'rgb(0 0 0 / 7%)',
+        fontStyle: 'italic',
+        borderRadius: '5px',
+        padding: '0 5px',
+        borderLeft: 'inset',
+        borderColor: 'rgb(0 137 255)'
+      },
+      quoteParticipant: {
+        fontWeight: 'bold',
+        margin: '0 2px 2px',
+        fontSize: 'smaller' 
+      },
+      text: {
+        paddingTop: '5px'
+      }
+    }
     return (
       <div>
-        <div 
-          className="whitespace-pre-wrap"
-          style={{ 
-            backgroundColor: 'rgb(0 0 0 / 7%)',
-            fontStyle: 'italic',
-            borderRadius: '5px',
-            padding: '0 5px',
-            borderLeft: 'inset',
-            borderColor: 'rgb(0 137 255)'
-          }}
-        >
-          <div 
-            style={{ fontWeight: 'bold', margin: '0 2px 2px', fontSize: 'smaller' }}
-          >
-            {message
-              .message
-              .extendedTextMessage
-              .contextInfo.participant === currentContact.jid ? currentContact.name : 'Você'}
+        <div className="whitespace-pre-wrap" style={style.quoteContainer}>
+          <div style={style.quoteParticipant}>
+            {participant === currentContact.jid ? currentContact.name : 'Você'}
           </div>
-          {message.message.extendedTextMessage.contextInfo.quotedMessage.conversation}
+          {conversation}
         </div>
-        <div
-          className="whitespace-pre-wrap"
-          style={{ paddingTop: '5px' }}
-        >
-          {message.message.extendedTextMessage.text}
+        <div className="whitespace-pre-wrap" style={style.text}>
+          {text}
         </div>
       </div>
     )
