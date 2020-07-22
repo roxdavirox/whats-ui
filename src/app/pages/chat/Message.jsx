@@ -69,7 +69,8 @@ const Message = ({ message }) => {
             fontStyle: 'italic',
             borderRadius: '5px',
             padding: '0 5px',
-            borderLeft: 'inset'
+            borderLeft: 'inset',
+            borderColor: 'rgb(0 137 255)'
           }}
         >
           <div 
