@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Divider from '@material-ui/core/Divider';
 import {
   openImageModal,
 } from '../../redux/actions/ChatActions';
@@ -74,7 +73,7 @@ const Message = ({ message }) => {
           }}
         >
           <div 
-            style={{ fontWeight: 'bold', margin: '0 2px', fontSize: 'smaller' }}
+            style={{ fontWeight: 'bold', margin: '0 2px 2px', fontSize: 'smaller' }}
           >
             {message
               .message
@@ -83,8 +82,12 @@ const Message = ({ message }) => {
           </div>
           {message.message.extendedTextMessage.contextInfo.quotedMessage.conversation}
         </div>
-        <Divider />
-        <div className="whitespace-pre-wrap">{message.message.extendedTextMessage.text}</div>
+        <div
+          className="whitespace-pre-wrap"
+          style={{ paddingTop: '5px' }}
+        >
+          {message.message.extendedTextMessage.text}
+        </div>
       </div>
     )
   }
