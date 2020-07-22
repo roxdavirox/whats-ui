@@ -67,11 +67,13 @@ const Message = ({ message }) => {
           style={{ 
             backgroundColor: 'rgb(0 0 0 / 7%)',
             fontStyle: 'italic',
-            borderRadius: '5px'
+            borderRadius: '5px',
+            padding: '0 5px',
+            borderLeft: 'inset'
           }}
         >
           <div 
-            style={{ fontWeight: 'bold' }}
+            style={{ fontWeight: 'bold', margin: '0 2px', fontSize: 'smaller' }}
           >
             {message
               .message
