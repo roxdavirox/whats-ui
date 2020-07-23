@@ -96,9 +96,15 @@ const Message = ({ message }) => {
           <div style={style.quoteParticipant}>
             {participant === currentContact.jid ? currentContact.name : 'Você'}
           </div>
-          {isImage(selectedMessage)
-            ? <img src={selectedMessage.message.imageMessage.fileUrl} />
-            : conversation}
+          {isImage(selectedMessage) && <img src={selectedMessage.message.imageMessage.fileUrl} />}
+          {isAudio(selectedMessage) 
+            && <AudioPlayer
+              src={selectedMessage.message.audioMessage.fileUrl}
+              autoPlay={false}
+              controls
+            />
+          }
+          {conversation && conversation}
         </div>
         <div className="whitespace-pre-wrap" style={style.text}>
           {text}
