@@ -99,8 +99,7 @@ export const openTransferListDialog = () => ({ type: OPEN_TRANSFER_LIST_DIALOG }
 
 export const closeTransferListDialog = () => ({ type: CLOSE_TRANSFER_LIST_DIALOG });
 
-export const uploadImage = 
-({
+export const uploadImage = ({
   imageFile,
   ownerId,
   userId,
@@ -113,5 +112,22 @@ export const uploadImage =
   fd.append('ownerId', ownerId);
   fd.append('userId', userId);
   const response = await api.post('chat/image', fd);
+  console.log('response', response);
+}
+
+export const uploadDocument = ({
+  file,
+  ownerId,
+  userId
+}) => async (dispatch, getState) => {
+  const { contact } = getState();
+  const { contactId } = contact;
+
+  const formData = new FormData();
+  formData.append('document', file);
+  formData.append('contactId', contactId);
+  formData.append('ownerId', ownerId);
+  formData.append('userId', userId);
+  const response = await api.post('chat/document', formData);
   console.log('response', response);
 }

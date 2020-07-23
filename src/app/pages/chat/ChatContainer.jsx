@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Divider } from "@material-ui/core";
 import InputText from './InputText';
 import ImagePreviewDialog from './ImagePreviewDialog';
-import { uploadImage } from '../../redux/actions/ChatActions';
+import { uploadImage, uploadDocument } from '../../redux/actions/ChatActions';
 import ChatTopbar from "./ChatTopbar";
 import Scrollbar from 'react-perfect-scrollbar';
 import { CircularProgress } from "@material-ui/core";
@@ -28,7 +28,8 @@ const ChatContainer = ({
   const currentContact = useSelector(selectCurrentContact);
   const currentChat = useSelector(selectCurrentChat);
   const currentUser = useSelector(({ user }) => user);
-  const inputRef = useRef();
+  const inputImageRef = useRef();
+  const inputFileRef = useRef();
   const dispatch = useDispatch();
   
   const loader = (
@@ -38,7 +39,7 @@ const ChatContainer = ({
   );
 
   const handleUploadImageClick = () => {
-    inputRef.current.click();
+    inputImageRef.current.click();
   }
 
   const handleImageChange = e => {
@@ -52,6 +53,22 @@ const ChatContainer = ({
     }));
     e.target.value = null;
   };
+
+  const handleFileUploadClick = () => {
+    inputFileRef.current.click();
+  }
+
+  const handleFileChange = e => {
+    e.preventDefault();
+    const [file] = e.target.files;
+    if (!file) return;
+    dispatch(uploadDocument({
+      file,
+      ownerId: currentUser.ownerId,
+      userId: currentUser.id
+    }));
+    e.target.value = null;
+  }
 
   const [handleLoadMessagesDebounce] = useDebouncedCallback(
     (contactId) => {
@@ -72,12 +89,18 @@ const ChatContainer = ({
         type="file"
         accept="image/png, image/jpeg"
         onChange={handleImageChange}
-        ref={inputRef} />
+        ref={inputImageRef} />
+      <input
+        hidden
+        type="file"
+        onChange={handleFileChange}
+        ref={inputFileRef} />
       {imageModalOpen && <ImagePreviewDialog />}
       <div className="chat-container flex-column position-relative" style={{ height: '100%' }}>
         <ChatTopbar 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={handleUploadImageClick}
+          onFileUploadClick={handleFileUploadClick}
         />
         <Scrollbar 
           className="p-2 h-full-screen scroll-y chat-message-list flex-grow position-relative"

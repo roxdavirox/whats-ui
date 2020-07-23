@@ -4,7 +4,7 @@ import Menu from './Menu';
 import ChatAvatar from "./ChatAvatar";
 import { selectCurrentContact } from '../../redux/selectors/ContactSelectors';
 
-const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
+const ChatTopbar = (props) => {
   const { 
     currentChatRoom,
   } = useSelector(({ chat }) => chat);
@@ -33,10 +33,7 @@ const ChatTopbar = ({ onImageUploadClick, onSaveDialogOpen }) => {
       {currentChatRoom !== "" 
         && currentUser.id === currentContact.userId
         && (
-        <Menu 
-          onSaveDialogOpen={onSaveDialogOpen}
-          onImageUploadClick={onImageUploadClick}
-        />
+        <Menu {...props} />
       )}
     </div>
   );

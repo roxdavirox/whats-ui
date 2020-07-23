@@ -11,10 +11,10 @@ import {
   CLOSE_IMAGE_MODAL,
   SET_CHAT,
   UPDATE_CHAT_PAGINATION,
-  ADD_NEW_CHAT
+  ADD_NEW_CHAT,
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
-import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT, FINISH_CONTACT } from '../actions/ContactActions';
+import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT } from '../actions/ContactActions';
 
 const initialState = {
   isContactListOpen: false,
@@ -29,7 +29,7 @@ const initialState = {
   isFetching: false,
   openAddContact: false,
   byId: {},
-  allIds: []
+  allIds: [],
 };
 
 const ChatReducer = function(state = initialState, action) {
