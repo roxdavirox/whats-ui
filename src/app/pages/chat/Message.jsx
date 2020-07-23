@@ -21,6 +21,14 @@ const isQuote = message => message.message
 const Message = ({ message }) => {
   const dispatch = useDispatch();
   const currentContact = useSelector(selectCurrentContact);
+  const selectedMessage = useSelector(({ message:_message }) => {
+    if (!isQuote(message)) return {};
+
+    const selectedMsg = _message.byId[message.message.extendedTextMessage.contextInfo.stanzaId];
+    if (!selectedMsg) return {};
+
+    return selectedMsg;
+  });
 
   if (isImage(message)) {
     const { message: _message } = message;
@@ -88,7 +96,9 @@ const Message = ({ message }) => {
           <div style={style.quoteParticipant}>
             {participant === currentContact.jid ? currentContact.name : 'Você'}
           </div>
-          {conversation}
+          {isImage(selectedMessage)
+            ? <img src={selectedMessage.message.imageMessage.fileUrl} />
+            : conversation}
         </div>
         <div className="whitespace-pre-wrap" style={style.text}>
           {text}
