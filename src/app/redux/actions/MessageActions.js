@@ -58,15 +58,20 @@ export const getMessagesByContactId = contactId => async (dispatch, getState) =>
   const { messages, nextPagination, messageCount, hasMoreMessage } = data;
 
   if (!messages) return;
+  const deleteMessages = messages.filter(m => m.message.protocolMessage);
   const messagesWithKeyId = messages.filter(m => m.key.id);
+  if (!messagesWithKeyId) return;
+  const mappedMessages = messagesWithKeyId.map(m => ({
+    ...m,
+    deleted: deleteMessages.some(deletedMessage =>
+      deletedMessage.message.protocolMessage.key.id === m.key.id)
+  }))
 
-  if (!messagesWithKeyId)return;
-
-  const byId = messagesWithKeyId.reduce((all, crr) => ({
+  const byId = mappedMessages.reduce((all, crr) => ({
     ...all, [crr.key.id]: crr
   }), {});
 
-  const allIds = messagesWithKeyId.map(m => m.key.id);
+  const allIds = mappedMessages.map(m => m.key.id);
   dispatch(fetchMessagesSuccess(byId, allIds));
 
   dispatch(setChat(
