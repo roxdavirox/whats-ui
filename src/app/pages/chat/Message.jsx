@@ -26,6 +26,39 @@ const isDocument = message => message.message
   && message.message.documentMessage
   && message.message.documentMessage.fileUrl;
 
+const Document = ({ documentMessage }) => {
+  const { fileName, fileUrl } = documentMessage;
+  return (
+    <div style={{
+      display: 'flex',
+      backgroundColor: '#c0c0c029',
+      borderRadius: '4px',
+      padding: '5px 5px'
+    }}>
+      <div>
+        <Tooltip title="Documento">
+          <InsertDriveFileIcon />
+        </Tooltip>
+      </div>
+      <div style={{
+        padding: '0 10px',
+        fontStyle: 'italic'
+      }}>
+        {fileName}
+      </div>
+      <div style={{
+        padding: '0 5px',
+        backgroundColor: '#aaaeb326',
+        borderRadius: '50%'
+      }}>
+        <Tooltip title="Download">
+          <a href={fileUrl}><GetAppIcon style={{ padding: '2px 2px'}}/></a>
+        </Tooltip>
+      </div>
+    </div>
+  )
+};
+
 const Message = ({ message }) => {
   const dispatch = useDispatch();
   const currentContact = useSelector(selectCurrentContact);
@@ -77,36 +110,7 @@ const Message = ({ message }) => {
 
   if (isDocument(message)) {
     const { documentMessage } = message.message;
-    const { fileName, fileUrl } = documentMessage;
-    return (
-      <div style={{
-        display: 'flex',
-        backgroundColor: '#c0c0c029',
-        borderRadius: '4px',
-        padding: '5px 5px'
-      }}>
-        <div>
-          <Tooltip title="Documento">
-            <InsertDriveFileIcon />
-          </Tooltip>
-        </div>
-        <div style={{
-          padding: '0 10px',
-          fontStyle: 'italic'
-        }}>
-          {fileName}
-        </div>
-        <div style={{
-          padding: '0 5px',
-          backgroundColor: '#aaaeb326',
-          borderRadius: '50%'
-        }}>
-          <Tooltip title="Download">
-            <a href={fileUrl}><GetAppIcon style={{ padding: '2px 2px'}}/></a>
-          </Tooltip>
-        </div>
-      </div>
-    )
+    return <Document documentMessage={documentMessage} />;
   }
 
   if (isQuote(message)) {
@@ -145,6 +149,9 @@ const Message = ({ message }) => {
               autoPlay={false}
               controls
             />
+          }
+          {isDocument(selectedMessage)
+            && <Document documentMessage={selectedMessage.message.documentMessage} />
           }
           {conversation && conversation}
         </div>
