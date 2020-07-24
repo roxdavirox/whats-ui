@@ -5,7 +5,11 @@ import {
 } from '../../redux/actions/ChatActions';
 import AudioPlayer from 'react-audio-player';
 import { selectCurrentContact } from '../../redux/selectors/ContactSelectors';
-
+import GetAppIcon from '@material-ui/icons/GetApp';
+import {
+  Tooltip
+} from "@material-ui/core";
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 const isImage = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.fileUrl;
@@ -17,6 +21,10 @@ const isAudio = message => message.message
 const isQuote = message => message.message
   && message.message.extendedTextMessage
   && message.message.extendedTextMessage.contextInfo;
+
+const isDocument = message => message.message
+  && message.message.documentMessage
+  && message.message.documentMessage.fileUrl;
 
 const Message = ({ message }) => {
   const dispatch = useDispatch();
@@ -65,6 +73,40 @@ const Message = ({ message }) => {
         controls
       />
     );
+  }
+
+  if (isDocument(message)) {
+    const { documentMessage } = message.message;
+    const { fileName, fileUrl } = documentMessage;
+    return (
+      <div style={{
+        display: 'flex',
+        backgroundColor: '#c0c0c029',
+        borderRadius: '4px',
+        padding: '5px 5px'
+      }}>
+        <div>
+          <Tooltip title="Documento">
+            <InsertDriveFileIcon />
+          </Tooltip>
+        </div>
+        <div style={{
+          padding: '0 10px',
+          fontStyle: 'italic'
+        }}>
+          {fileName}
+        </div>
+        <div style={{
+          padding: '0 5px',
+          backgroundColor: '#aaaeb326',
+          borderRadius: '50%'
+        }}>
+          <Tooltip title="Download">
+            <a href={fileUrl}><GetAppIcon style={{ padding: '2px 2px'}}/></a>
+          </Tooltip>
+        </div>
+      </div>
+    )
   }
 
   if (isQuote(message)) {

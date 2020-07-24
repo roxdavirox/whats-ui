@@ -20,7 +20,7 @@ const MessageItem = ({ message }) => {
       <div className={fromMe ? 'mr-4' : 'ml-4' }>
         <div style={{ display: 'flex', justifyContent: `${fromMe ? 'flex-end' : 'flex-start' }` }}>
           <div
-            className={`px-4 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
+            className={`px-2 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
             style={{display: 'inline-block'}}
           >
             <Message message={message} />
