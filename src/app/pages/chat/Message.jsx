@@ -175,7 +175,7 @@ const Message = ({ message }) => {
               <NotInterestedIcon 
                 style={{ height: '0.5em', width: '0.5em'}}
                 />
-              Essa mensagem foi apagada
+              Essa mensagem foi apagada do whatsapp.
             </div>
           </Tooltip>
         </div>
