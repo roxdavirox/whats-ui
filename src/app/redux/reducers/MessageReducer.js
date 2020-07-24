@@ -6,6 +6,7 @@ import {
   SET_MESSAGES,
   GET_MESSAGES_SUCCESS,
   LOAD_FIRST_MESSAGES,
+  UPDATE_DELETED_MESSAGE
 } from '../actions/MessageActions';
 
 const initialState = {
@@ -50,10 +51,26 @@ const MessageReducer = function(state = initialState, action) {
         ...state,
         byId: {
           ...state.byId,
-          [message.id]: message
+          [message.key.id]: message
         },
-        allIds: [...state.allIds, message.id]
+        allIds: [...state.allIds, message.key.id]
       };
+    }
+
+    case UPDATE_DELETED_MESSAGE: {
+      const { messageId } = action.payload;
+      const selectedMessage = state.byId[messageId];
+      const updatedMessage = {
+        ...selectedMessage,
+        deleted: true,
+      };
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [messageId]: updatedMessage
+        }
+      }
     }
 
     case SET_FETCHED_MESSAGE: {

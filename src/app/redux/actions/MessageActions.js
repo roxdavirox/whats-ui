@@ -17,6 +17,7 @@ export const SET_FETCHED_MESSAGE = 'SET_FETCHED_MESSAGE';
 export const SET_MESSAGES = 'SET_MESSAGES';
 export const GET_MESSAGES_SUCCESS = 'GET_MESSAGES_SUCCESS';
 export const LOAD_FIRST_MESSAGES = 'LOAD_FIRST_MESSAGES';
+export const UPDATE_DELETED_MESSAGE = 'UPDATE_DELETED_MESSAGE';
 
 export const loadFirstMessages = contactId => async (dispatch, getState) => {
   const { chat } = getState();
@@ -93,6 +94,18 @@ export const setFetchedMessage = contactId => ({
   payload: { contactId }
 });
 
+const isDeletedMessage = message => message.message
+  && message.message.protocolMessage;
+
+export const updateDeletedMessage = message => (dispatch, getState) => {
+  dispatch({
+    type: UPDATE_DELETED_MESSAGE,
+    payload: {
+      messageId: message.message.protocolMessage.key.id
+    }
+  })
+}
+
 export const addMessage = (message) => (dispatch, getState) => {
   const { contact } = getState();
     const { contactId, userId, ownerId, chatId, key } = message;
@@ -129,10 +142,16 @@ export const addMessage = (message) => (dispatch, getState) => {
       dispatch(addContact(newContact));
       return;
     }
+
     dispatch({
       type: ADD_MESSAGE,
       payload: { message }
     });
+    
+    if (isDeletedMessage(message)) {
+      dispatch(updateDeletedMessage(message));
+    }
+    
     dispatch({
       type: UPDATE_CHAT_PAGINATION,
       payload: { contactId }
@@ -140,6 +159,6 @@ export const addMessage = (message) => (dispatch, getState) => {
     dispatch(updateRecentChat(
       contactId,
       message.createdAt,
-      message.id
+      message.key.id
     ));
 }
