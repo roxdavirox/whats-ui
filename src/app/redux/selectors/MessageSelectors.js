@@ -6,7 +6,8 @@ export const selectMessages = store => {
   if (!currentChat) return [];
   const { messages: messagesIds } = currentChat;
   const selectedMessages = messagesIds.map(id => message.byId[id]);
+  const filteredDeletedMessages = selectedMessages.filter(m => !m.message.protocolMessage);
   const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
-  const sortedMessages = selectedMessages.sort(sortByLastDate);
+  const sortedMessages = filteredDeletedMessages.sort(sortByLastDate);
   return sortedMessages || [];
 }
