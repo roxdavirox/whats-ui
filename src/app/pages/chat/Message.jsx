@@ -10,6 +10,7 @@ import {
   Tooltip
 } from "@material-ui/core";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import NotInterestedIcon from '@material-ui/icons/NotInterested';
 const isImage = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.fileUrl;
@@ -25,6 +26,9 @@ const isQuote = message => message.message
 const isDocument = message => message.message
   && message.message.documentMessage
   && message.message.documentMessage.fileUrl;
+
+const isDeleted = message => message.message
+  && message.deleted;
 
 const Document = ({ documentMessage }) => {
   const { fileName, fileUrl } = documentMessage;
@@ -158,6 +162,26 @@ const Message = ({ message }) => {
         <div className="whitespace-pre-wrap" style={style.text}>
           {text}
         </div>
+      </div>
+    )
+  }
+
+  if (isDeleted(message)) {
+    return (
+      <div>
+        <div>
+          <Tooltip title="Mensagem removida">
+            <div style={{ fontStyle: 'italic', backgroundColor: '#dcdcdc52', color: '#827c7c' }}>
+              <NotInterestedIcon 
+                style={{ height: '0.5em', width: '0.5em'}}
+                />
+              Essa mensagem foi apagada
+            </div>
+          </Tooltip>
+        </div>
+        <div className="whitespace-pre-wrap" style={{
+          paddingTop: '5px'
+        }}>{message.message.conversation}</div>
       </div>
     )
   }
