@@ -138,7 +138,7 @@ export const addMessage = (message) => (dispatch, getState) => {
         type: ADD_MESSAGE,
         payload: { message }
       });
-      dispatch(addRecentChat(recentChat, message.id, contactId));
+      dispatch(addRecentChat(recentChat, message.key.id, contactId));
       dispatch(addContact(newContact));
       return;
     }
