@@ -95,6 +95,7 @@ class JwtAuthService {
   // Remove user from localstorage
   removeUser = () => {
     localStorage.removeItem("auth_user");
+    localStorage.removeItem("jwt_token");
   }
 }
 

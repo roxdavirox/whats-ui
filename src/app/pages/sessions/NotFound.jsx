@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
+import jwtService from '../../services/jwtAuthService';
 
 const styles = theme => ({
   flexCenter: {
@@ -20,7 +21,10 @@ const styles = theme => ({
 
 class NotFound extends Component {
   state = {};
-
+  handleBack = () => {
+    jwtService.removeUser();
+    this.props.history.push("/session/signin");
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -35,7 +39,7 @@ class NotFound extends Component {
             className="capitalize"
             variant="contained"
             color="primary"
-            onClick={() => this.props.history.push("/")}
+            onClick={this.handleBack}
           >
             Back to Dashboard
           </Button>
