@@ -14,6 +14,7 @@ import { getMessagesByContactId } from '../../redux/actions/MessageActions';
 import { useDebouncedCallback } from 'use-debounce';
 import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
 import { selectCurrentChat } from '../../redux/selectors/ChatSelectors';
+import QrcodeContainer from '../qrcode/QrcodeContainer';
 
 const ChatContainer = ({
   setRef,
@@ -31,6 +32,7 @@ const ChatContainer = ({
   const inputImageRef = useRef();
   const inputFileRef = useRef();
   const dispatch = useDispatch();
+	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
   const loader = (
     <div className="w-full text-center p-6" key="loader">
@@ -116,7 +118,8 @@ const ChatContainer = ({
             }
           }}
         >
-          {currentChatRoom === "" && <EmptyMessage />}
+          {!qrcodeIsConnected && <QrcodeContainer />}
+          {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}
           {parentScrollRef && parentScrollRef.current && (
           <InfiniteScroll
             style={{ height: '100%' }}
