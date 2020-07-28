@@ -46,6 +46,7 @@ const AppChat = props => {
 
   let reference = useRef();
   const [_reference, setReference] = useState(reference);
+  const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
 
   useEffect(() => {
     let chatSocket = socket();
@@ -60,7 +61,7 @@ const AppChat = props => {
       chatSocket.disconnect();
       clearChat();
     }
-  }, []);
+  }, [qrcodeIsConnected]);
   
   const clearChat = () => {
     dispatch(setCurrentChatRoom(''));
@@ -145,7 +146,7 @@ const AppChat = props => {
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
 
   return (
-    <div className="m-sm-30" style={{ height: '72vh', minHeight: '72vh' }}>
+    <div className="m-sm-30" style={{ height: '92vh', minHeight: '92vh' }}>
       <Card elevation={6} style={{ width: '100%', height: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
