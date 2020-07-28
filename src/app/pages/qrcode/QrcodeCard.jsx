@@ -6,10 +6,9 @@ import Skeleton from 'react-loading-skeleton';
 const QrcodeCard = ({ qrcode, isConnected }) => (
   <div className="pricing m-sm-30 position-relative">
     <div>
-      <Grid container spacing={4} style={{ justifyContent: 'space-evenly' }}>
-
-        <Grid item lg={4} md={6} sm={6} xs={12}>
-          <Card elevation={6} className="pricing__card text-center p-sm-24">
+      <Grid container spacing={6} style={{ justifyContent: 'space-evenly' }}>
+        <Grid item lg={6} md={8} sm={12} xs={12}>
+          <Card elevation={6} className="pricing__card text-center p-sm-24" style={{ width: '100%' }}>
             <div className="mb-4">
               <h4 className="text-muted">QR Code</h4>
             </div>
