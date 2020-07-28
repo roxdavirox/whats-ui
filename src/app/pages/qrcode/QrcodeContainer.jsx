@@ -10,7 +10,8 @@ const QrcodeContainer = props => {
 	const dispatch = useDispatch();
 	const code = useSelector(({ qrcode }) => qrcode.code);
 	const isConnected = useSelector(({ qrcode }) => qrcode.isConnected);
-	
+	const currentUser = useSelector(({ user }) => user);
+
 	useEffect(() => {
 		dispatch(setPerfectScrollbar(true));
 		const client = socket();
@@ -24,14 +25,17 @@ const QrcodeContainer = props => {
 
 	const handleConnection = isConnected => {
 		dispatch(setConnectionStatus(isConnected));
+		if (!isConnected) return;
 		dispatch(setQrcode(null));
 	}
 
 	const handleQrcode = qrcode => dispatch(setQrcode(qrcode));
 
+	if (!currentUser || currentUser.role !== 'ADMIN') return;
+
 	return (
 		<Container >
-			<QrcodeCard qrcode={code} isConnected={isConnected}/>
+			{code && <QrcodeCard qrcode={code} isConnected={isConnected}/>}
 		</Container>
   );
 }
