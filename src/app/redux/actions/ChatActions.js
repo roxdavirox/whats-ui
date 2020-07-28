@@ -41,6 +41,7 @@ export const closeImageModal = () => ({
 });
 
 export const setRecentChats = recentChats =>  dispatch => {
+  if (!recentChats) return;
   const defaultChats = recentChats.map(chat => ({
     ...chat, ...defaultChat
   }));

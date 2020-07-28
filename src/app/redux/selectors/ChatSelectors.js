@@ -18,4 +18,8 @@ export const selectRecentChats = store => {
     });
 }
 
-export const selectCurrentChat = ({ chat, contact }) => chat.byId[contact.contactId] || {};
+export const selectCurrentChat = ({ chat, contact }) => {
+  if (!contact.contactId) return {};
+  if (!chat.byId) return {};
+  return chat.byId[contact.contactId] || {};
+}
