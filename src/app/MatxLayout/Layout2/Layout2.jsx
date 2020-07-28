@@ -58,6 +58,7 @@ const Layout2 = props => {
   return (
     <Fragment>
       <div className={classList(layoutClasses)}>
+      <div style={{ backgroundColor: 'lightskyblue', width: '100%', height: '200px', position: 'relative' }}></div>
         {layout2Settings.topbar.show && (
           <ThemeProvider theme={topbarTheme}>
             <Layout2Topbar />
@@ -87,7 +88,7 @@ const Layout2 = props => {
         {!settings.perfectScrollbar && (
             <div
               options={{ suppressScrollX: true }}
-              style={{ overflow: 'hidden' }}
+              style={{ overflow: 'hidden'  }}
               className="scrollable-content p-0"
             >
               <div className="container p-0" style={{ flex: '1 0 auto' }}>{renderRoutes(routes)}</div>
