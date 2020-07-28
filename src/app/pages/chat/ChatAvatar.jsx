@@ -5,7 +5,8 @@ import { withStyles } from "@material-ui/styles";
 const styles = {
   avatar: {
     height: "40px",
-    width: "40px"
+    width: "40px",
+    cursor: 'pointer'
   },
   status_circle: {
     position: "absolute",
