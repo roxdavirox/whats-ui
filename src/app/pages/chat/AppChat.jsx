@@ -49,6 +49,7 @@ const AppChat = props => {
   const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
 
   useEffect(() => {
+    window.addEventListener("resize", handleSize);
     let chatSocket = socket();
 
     chatSocket.registerChatHandler(handleReceiveChats);
@@ -145,9 +146,24 @@ const AppChat = props => {
   const openTransferList = useSelector(({ chat }) => chat.openTransferList);
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
 
+  const [windowWidth, setContainerWidth] = useState(window.innerWidth);
+
+  const handleSize = () => {
+    setContainerWidth(window.innerWidth);
+  }
+
   return (
-    <div className="m-sm-30" style={{ height: '94vh', minHeight: '94vh' }}>
-      <Card elevation={6} style={{ width: '100%', height: '100%' }}>
+    <div className="m-sm-30" style={{
+      height: windowWidth > 1440 ? '94vh' : '100%',
+      minHeight: '94vh',
+      position: 'absolute',
+      width: windowWidth > 1440 ? '88vw' : '100%',
+      // minWidth: '70vw', 
+      top: 0,
+      left: windowWidth > 1440 ? 80 : 0,
+      margin: windowWidth > 1440 ? '30px' : 0
+    }}>
+      <Card elevation={6} style={{ width: '100%', height: '100%', borderRadius: '0px' }}>
         <MatxSidenavContainer>
           <MatxSidenav
             width="270px"
