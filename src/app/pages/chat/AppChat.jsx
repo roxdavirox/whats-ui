@@ -146,7 +146,7 @@ const AppChat = props => {
   const currentChatRoom = useSelector(({ chat }) => chat.currentChatRoom);
 
   return (
-    <div className="m-sm-30" style={{ height: '92vh', minHeight: '92vh' }}>
+    <div className="m-sm-30" style={{ height: '94vh', minHeight: '94vh' }}>
       <Card elevation={6} style={{ width: '100%', height: '100%' }}>
         <MatxSidenavContainer>
           <MatxSidenav
