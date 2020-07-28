@@ -17,6 +17,10 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { closeContactListDialog, openAddContactDialog } from '../../redux/actions/ContactActions';
 import { useDebouncedCallback } from 'use-debounce';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import { logoutUser } from "app/redux/actions/UserActions";
+
+import { Icon, MenuItem } from "@material-ui/core";
+import { MatxMenu } from "matx";
 
 const SearchContact = ({ onSearch, initialValue = '' }) => {
   const [searchContact, setSearchContact] = useState(initialValue);
@@ -105,11 +109,27 @@ const ChatSidenav = ({
     dispatch(openAddContactDialog());
   }
 
+  const handleLogout = () => dispatch(logoutUser());
+
   return (
-    <div className="chat-sidenav bg-default" style={{ height: '66vh' }}>
+    <div className="chat-sidenav bg-default" style={{ height: '96vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
         {currentUser 
-          && <ChatAvatar src={currentUser.eurl || ''}/>}
+          && (<> 
+            <MatxMenu
+                menuButton={
+                  <ChatAvatar src={currentUser.eurl || ''} />
+                }
+              >
+                <MenuItem
+                  onClick={handleLogout}
+                  style={{ minWidth: 185 }}
+                >
+                  <Icon> power_settings_new </Icon>
+                  <span className="pl-4"> Logout </span>
+                </MenuItem>
+              </MatxMenu>
+          </>)}
         <Tooltip title={currentUser.name || ''}>
           <h5 className="ml-4 whitespace-pre mb-0 font-medium text-18 text-white">
             {currentUser 
