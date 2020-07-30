@@ -15,6 +15,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { selectCurrentContact, } from '../../redux/selectors/ContactSelectors';
 import { selectCurrentChat } from '../../redux/selectors/ChatSelectors';
 import QrcodeContainer from '../qrcode/QrcodeContainer';
+import { useEffect } from "react";
 
 const ChatContainer = ({
   setRef,
@@ -34,6 +35,11 @@ const ChatContainer = ({
   const dispatch = useDispatch();
 	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
+  useEffect(() => {
+    if (!parentScrollRef || !parentScrollRef.current) return;
+    parentScrollRef.current.scrollTop = 999999;
+  },);
+
   const loader = (
     <div className="w-full text-center p-6" key="loader">
       <CircularProgress variant="indeterminate"></CircularProgress>

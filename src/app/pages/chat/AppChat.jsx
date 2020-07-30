@@ -80,15 +80,27 @@ const AppChat = props => {
   const setRef = ref => {
     reference = ref;
     setReference(ref);
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
   };
+
+  const messages = useSelector(({ message }) => message.allIds);
+  useEffect(() => {
+    if (!_reference || !_reference.current) return;
+    _reference.current.scrollTop = 99999999;
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 999999;
+    console.log('ref', _reference);
+  }, [messages, _reference])
 
   const handleReceivedMessage = message => {
     if (!message.message) return;
     dispatch(addMessage(message));
-    if (message.key.fromMe) return;
-    toggle();
-    if (!reference || !reference.current) return;
-    reference.current.scrollTop = 99999999;
+    if (!message.key.fromMe) {
+      toggle();
+    }
+    if (!_reference || !_reference.current) return;
+    _reference.current.scrollTop = 99999999;
   }
 
   const handleContactClick = contactId => {
@@ -102,11 +114,7 @@ const AppChat = props => {
   };
 
   const handleMessageSend = message => {
-    console.log('enviando msg', message);
     const chat = recentChats.find(c => c.contactId === currentContact.id);
-    console.log('chats', recentChats);
-    console.log('chat', chat);
-    console.log('currentContact', currentContact);
     if(!chat) return;
     const newMsg = {
       contactId: currentContact.id,
@@ -115,6 +123,8 @@ const AppChat = props => {
       chatId: chat.id
     };
     chatSocket.sendMessage(newMsg);
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
   };
   
   const handleCloseTransferList = () => dispatch(closeTransferListDialog());
