@@ -44,6 +44,7 @@ const isDocument = message => message.message
   && message.message.documentMessage.fileUrl;
 
 const isDocumentForwarded = message => isDocument(message)
+  && message.message.documentMessage.contextInfo
   && message.message.documentMessage.contextInfo.isForwarded;
 
 const isDeleted = message => message.message
