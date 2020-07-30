@@ -1,5 +1,5 @@
 export const selectRecentChats = store => {
-  const { contact, chat } = store;
+  const { contact, chat, user } = store;
   if (!contact) return [];
   
   if (!chat.allIds) return [];
@@ -10,7 +10,7 @@ export const selectRecentChats = store => {
       contact: contact.byId[chat.contactId], 
       ...chat 
     }))
-    .filter(c => c.contact && c.contact.active)
+    .filter(c => c.contact && c.contact.active && c.userId === user.id)
     .sort(function(a, b) {
       a = new Date(a.lastMessageTime);
       b = new Date(b.lastMessageTime);
