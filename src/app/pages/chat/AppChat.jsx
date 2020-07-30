@@ -85,10 +85,10 @@ const AppChat = props => {
   const handleReceivedMessage = message => {
     if (!message.message) return;
     dispatch(addMessage(message));
-    if (!reference || !reference.current) return;
-    reference.current.scrollTop = 99999999;
     if (message.key.fromMe) return;
     toggle();
+    if (!reference || !reference.current) return;
+    reference.current.scrollTop = 99999999;
   }
 
   const handleContactClick = contactId => {
