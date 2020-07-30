@@ -276,19 +276,6 @@ const Message = ({ message }) => {
             </div>
           </Tooltip>
         </div>
-        {/* <div className="whitespace-pre-wrap" style={style.quoteContainer}>
-          {isImage(selectedMessage) && <img src={selectedMessage.message.imageMessage.fileUrl} />}
-          {isAudio(selectedMessage) 
-            && <AudioPlayer
-              src={selectedMessage.message.audioMessage.fileUrl}
-              autoPlay={false}
-              controls
-            />
-          }
-          {isDocument(selectedMessage)
-            && <Document documentMessage={selectedMessage.message.documentMessage} />
-          }
-        </div> */}
         <div className="whitespace-pre-wrap" style={style.text}>
           {text}
         </div>
