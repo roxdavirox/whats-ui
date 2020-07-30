@@ -26,7 +26,8 @@ const isAudio = message => message.message
   && message.message.audioMessage
   && message.message.audioMessage.fileUrl;
 
-const isAudioForewarded = message => isAudio(message)
+const isAudioForwarded = message => isAudio(message)
+  && message.message.audioMessage.contextInfo
   && message.message.audioMessage.contextInfo.isForwarded;
 
 const isQuote = message => message.message
@@ -152,7 +153,7 @@ const Message = ({ message }) => {
 
     return (
       <>
-        {isAudioForewarded(message) && (
+        {isAudioForwarded(message) && (
           <div>
             <Tooltip title="Mensagem encaminhada">
               <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
