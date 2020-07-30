@@ -152,16 +152,18 @@ const Message = ({ message }) => {
 
     return (
       <>
-        <div>
-          <Tooltip title="Imagem encaminhada">
-            <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
-              <ForwardIcon 
-                style={{ height: '0.5em', width: '0.5em'}}
-                />
-              Encaminhada.
-            </div>
-          </Tooltip>
-        </div>
+        {isAudioForewarded(message) && (
+          <div>
+            <Tooltip title="Mensagem encaminhada">
+              <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
+                <ForwardIcon 
+                  style={{ height: '0.5em', width: '0.5em'}}
+                  />
+                Encaminhada.
+              </div>
+            </Tooltip>
+          </div>
+        )}
         <AudioPlayer
           src={fileUrl}
           autoPlay={false}
