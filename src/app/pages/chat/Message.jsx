@@ -26,6 +26,9 @@ const isAudio = message => message.message
   && message.message.audioMessage
   && message.message.audioMessage.fileUrl;
 
+const isAudioForewarded = message => isAudio(message)
+  && message.message.audioMessage.contextInfo.isForwarded;
+
 const isQuote = message => message.message
   && message.message.extendedTextMessage
   && message.message.extendedTextMessage.contextInfo
@@ -40,39 +43,57 @@ const isDocument = message => message.message
   && message.message.documentMessage
   && message.message.documentMessage.fileUrl;
 
+const isDocumentForwarded = message => isDocument(message)
+  && message.message.documentMessage.contextInfo.isForwarded;
+
 const isDeleted = message => message.message
   && message.deleted;
 
-const Document = ({ documentMessage }) => {
+const Document = ({ message }) => {
+  const { documentMessage } = message.message;
   const { fileName, fileUrl } = documentMessage;
   return (
-    <div style={{
-      display: 'flex',
-      backgroundColor: '#c0c0c029',
-      borderRadius: '4px',
-      padding: '5px 5px'
-    }}>
-      <div>
-        <Tooltip title="Documento">
-          <InsertDriveFileIcon />
-        </Tooltip>
-      </div>
+    <>
+      {isDocumentForwarded(message) && (
+        <div>
+          <Tooltip title="Mensagem encaminhada">
+            <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
+              <ForwardIcon 
+                style={{ height: '0.5em', width: '0.5em'}}
+                />
+              Encaminhada.
+            </div>
+          </Tooltip>
+        </div>
+      )}
       <div style={{
-        padding: '0 10px',
-        fontStyle: 'italic'
+        display: 'flex',
+        backgroundColor: '#c0c0c029',
+        borderRadius: '4px',
+        padding: '5px 5px'
       }}>
-        {fileName}
+        <div>
+          <Tooltip title="Documento">
+            <InsertDriveFileIcon />
+          </Tooltip>
+        </div>
+        <div style={{
+          padding: '0 10px',
+          fontStyle: 'italic'
+        }}>
+          {fileName}
+        </div>
+        <div style={{
+          padding: '0 5px',
+          backgroundColor: '#aaaeb326',
+          borderRadius: '50%'
+        }}>
+          <Tooltip title="Download">
+            <a href={fileUrl}><GetAppIcon style={{ padding: '2px 2px'}}/></a>
+          </Tooltip>
+        </div>
       </div>
-      <div style={{
-        padding: '0 5px',
-        backgroundColor: '#aaaeb326',
-        borderRadius: '50%'
-      }}>
-        <Tooltip title="Download">
-          <a href={fileUrl}><GetAppIcon style={{ padding: '2px 2px'}}/></a>
-        </Tooltip>
-      </div>
-    </div>
+    </>
   )
 };
 
@@ -104,8 +125,7 @@ const Message = ({ message }) => {
               </div>
             </Tooltip>
           </div>
-          )
-        }
+        )}
         {caption && <p><b>{caption}</b></p>}
         <img
           onClick={() => dispatch(openImageModal(fileUrl))}
@@ -130,17 +150,28 @@ const Message = ({ message }) => {
     const { audioMessage: { fileUrl } } = _message;
 
     return (
-      <AudioPlayer
-        src={fileUrl}
-        autoPlay={false}
-        controls
-      />
+      <>
+        <div>
+          <Tooltip title="Imagem encaminhada">
+            <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
+              <ForwardIcon 
+                style={{ height: '0.5em', width: '0.5em'}}
+                />
+              Encaminhada.
+            </div>
+          </Tooltip>
+        </div>
+        <AudioPlayer
+          src={fileUrl}
+          autoPlay={false}
+          controls
+        />
+      </>
     );
   }
 
   if (isDocument(message)) {
-    const { documentMessage } = message.message;
-    return <Document documentMessage={documentMessage} />;
+    return <Document message={message} />;
   }
 
   if (isQuote(message)) {
@@ -181,7 +212,7 @@ const Message = ({ message }) => {
             />
           }
           {isDocument(selectedMessage)
-            && <Document documentMessage={selectedMessage.message.documentMessage} />
+            && <Document message={selectedMessage} />
           }
           {conversation && conversation}
         </div>
