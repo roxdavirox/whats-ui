@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import ForwardIcon from '@material-ui/icons/Forward';
+
 const isImage = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.fileUrl;
@@ -21,7 +23,13 @@ const isAudio = message => message.message
 
 const isQuote = message => message.message
   && message.message.extendedTextMessage
-  && message.message.extendedTextMessage.contextInfo;
+  && message.message.extendedTextMessage.contextInfo
+  && message.message.extendedTextMessage.contextInfo.quotedMessage;
+
+const isForwarded = message => message.message
+  && message.message.extendedTextMessage
+  && message.message.extendedTextMessage.contextInfo
+  && message.message.extendedTextMessage.contextInfo.isForwarded;
 
 const isDocument = message => message.message
   && message.message.documentMessage
@@ -182,6 +190,59 @@ const Message = ({ message }) => {
         <div className="whitespace-pre-wrap" style={{
           paddingTop: '5px'
         }}>{message.message.conversation}</div>
+      </div>
+    )
+  }
+
+  if (isForwarded(message)) {
+    const { extendedTextMessage } = message.message;
+    const { text } = extendedTextMessage;
+    const style ={
+      quoteContainer: {
+        backgroundColor: 'rgb(0 0 0 / 7%)',
+        fontStyle: 'italic',
+        borderRadius: '5px',
+        padding: '0 5px',
+        borderLeft: 'inset',
+        borderColor: 'rgb(0 137 255)'
+      },
+      quoteParticipant: {
+        fontWeight: 'bold',
+        margin: '0 2px 2px',
+        fontSize: 'smaller' 
+      },
+      text: {
+        paddingTop: '5px'
+      }
+    }
+    return (
+      <div>
+        <div>
+          <Tooltip title="Mensagem encaminhada">
+            <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
+              <ForwardIcon 
+                style={{ height: '0.5em', width: '0.5em'}}
+                />
+              Encaminhada.
+            </div>
+          </Tooltip>
+        </div>
+        {/* <div className="whitespace-pre-wrap" style={style.quoteContainer}>
+          {isImage(selectedMessage) && <img src={selectedMessage.message.imageMessage.fileUrl} />}
+          {isAudio(selectedMessage) 
+            && <AudioPlayer
+              src={selectedMessage.message.audioMessage.fileUrl}
+              autoPlay={false}
+              controls
+            />
+          }
+          {isDocument(selectedMessage)
+            && <Document documentMessage={selectedMessage.message.documentMessage} />
+          }
+        </div> */}
+        <div className="whitespace-pre-wrap" style={style.text}>
+          {text}
+        </div>
       </div>
     )
   }
