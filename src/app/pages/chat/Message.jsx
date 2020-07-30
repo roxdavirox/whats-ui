@@ -17,6 +17,11 @@ const isImage = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.fileUrl;
 
+const isImageForwarded = message => message.message
+  && message.message.imageMessage
+  && message.message.imageMessage.contextInfo
+  && message.message.imageMessage.contextInfo.isForwarded;
+
 const isAudio = message => message.message
   && message.message.audioMessage
   && message.message.audioMessage.fileUrl;
@@ -88,6 +93,19 @@ const Message = ({ message }) => {
     const { imageMessage: { fileUrl, caption = '' } } = _message;
     return (
       <>
+        {isImageForwarded(message) && (
+          <div>
+            <Tooltip title="Imagem encaminhada">
+              <div style={{ fontStyle: 'italic', color: '#827c7c' }}>
+                <ForwardIcon 
+                  style={{ height: '0.5em', width: '0.5em'}}
+                  />
+                Encaminhada.
+              </div>
+            </Tooltip>
+          </div>
+          )
+        }
         {caption && <p><b>{caption}</b></p>}
         <img
           onClick={() => dispatch(openImageModal(fileUrl))}
