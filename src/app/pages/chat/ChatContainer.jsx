@@ -55,7 +55,7 @@ const ChatContainer = ({
     const { files } = e.target;
     if (!files) return;
     dispatch(uploadImage({ 
-      files: e.target.files,
+      files,
       ownerId: currentUser.ownerId,
       userId: currentUser.id,
     }));
@@ -68,10 +68,10 @@ const ChatContainer = ({
 
   const handleFileChange = e => {
     e.preventDefault();
-    const [file] = e.target.files;
-    if (!file) return;
+    const { files } = e.target;
+    if (!files) return;
     dispatch(uploadDocument({
-      file,
+      files,
       ownerId: currentUser.ownerId,
       userId: currentUser.id
     }));
@@ -102,6 +102,7 @@ const ChatContainer = ({
       <input
         hidden
         type="file"
+        multiple
         onChange={handleFileChange}
         ref={inputFileRef} />
       {imageModalOpen && <ImagePreviewDialog />}
