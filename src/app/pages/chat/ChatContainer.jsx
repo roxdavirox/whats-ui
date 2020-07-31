@@ -110,6 +110,8 @@ const ChatContainer = ({
           onImageUploadClick={handleUploadImageClick}
           onFileUploadClick={handleFileUploadClick}
         />
+          {!qrcodeIsConnected && <QrcodeContainer />}
+        {currentChatRoom !== "" && (
         <Scrollbar 
           className="p-2 h-full-screen scroll-y chat-message-list flex-grow position-relative"
           containerRef={ref => {
@@ -124,7 +126,6 @@ const ChatContainer = ({
             }
           }}
         >
-          {!qrcodeIsConnected && <QrcodeContainer />}
           {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}
           {parentScrollRef && parentScrollRef.current && (
           <InfiniteScroll
@@ -141,6 +142,7 @@ const ChatContainer = ({
           </InfiniteScroll>
           )}
         </Scrollbar>
+        )}
         <Divider />
         {currentChatRoom !== "" 
           && currentContact.userId === currentUser.id
