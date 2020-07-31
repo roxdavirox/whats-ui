@@ -168,7 +168,7 @@ const ChatSidenav = ({
                         return { 
                           transition: 'background 250ms ease',
                           background: 'rgba(0, 0, 0, 0.084)',
-                          color: 'blue',
+                          color: '#1976d2',
                           fontWeight: 'bold',
                         }
                       if (!chat.read) {
