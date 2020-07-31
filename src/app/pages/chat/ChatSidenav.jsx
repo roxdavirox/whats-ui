@@ -102,6 +102,7 @@ const ChatSidenav = ({
   isContactListOpen
 }) => {
   const currentUser = useSelector(({ user }) => user);
+  const selectedContactId = useSelector(({ contact }) => contact.contactId);
   const recentChats = useSelector(selectRecentChats);
   const dispatch = useDispatch();
 
@@ -157,28 +158,35 @@ const ChatSidenav = ({
           : recentChats && recentChats
             .map((chat, index) => (     
               <div key={index}>
-                {chat && 
-                <div
-                  onClick={() => handleContactClick(chat.contactId)}
-                  key={index}
-                  className="flex items-center p-4 cursor-pointer  gray-on-hover"
-                >
-                  <ChatAvatar src={chat.contact.eurl || ''}/>
-                  <div className="pl-4">
-                    <p className="m-0">{chat.contact.name}</p>
-                    <p className="m-0 text-muted">
-                      {new Date(chat.lastMessageTime)
-                        .toLocaleString(
-                            'pt-BR', {
-                              year: 'numeric',
-                              month: '2-digit',
-                              day: '2-digit',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                      })}
-                    </p>
+                {chat && (
+                  <div
+                    onClick={() => handleContactClick(chat.contactId)}
+                    key={index}
+                    className="flex items-center p-4 cursor-pointer  gray-on-hover"
+                    style={chat.contactId === selectedContactId 
+                      ? { transition: 'background 250ms ease',
+                          background: 'rgba(0, 0, 0, 0.084)',
+                          color: 'blue' }
+                      : {}
+                    }
+                  >
+                    <ChatAvatar src={chat.contact.eurl || ''}/>
+                    <div className="pl-4">
+                      <p className="m-0">{chat.contact.name}</p>
+                      <p className="m-0 text-muted">
+                        {new Date(chat.lastMessageTime)
+                          .toLocaleString(
+                              'pt-BR', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
                   </div>
-                </div>}
+                )}
               </div>
           ))}
       </Scrollbar>
