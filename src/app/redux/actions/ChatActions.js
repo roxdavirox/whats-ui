@@ -100,20 +100,26 @@ export const openTransferListDialog = () => ({ type: OPEN_TRANSFER_LIST_DIALOG }
 
 export const closeTransferListDialog = () => ({ type: CLOSE_TRANSFER_LIST_DIALOG });
 
+
 export const uploadImage = ({
-  imageFile,
+  files,
   ownerId,
   userId,
 }) => async (dispatch, getState) => {
   const { contact } = getState();
   const { contactId } = contact;
-  const fd = new FormData();
-  fd.append('image', imageFile);
-  fd.append('contactId', contactId);
-  fd.append('ownerId', ownerId);
-  fd.append('userId', userId);
-  const response = await api.post('chat/image', fd);
-  console.log('response', response);
+
+  const imageFiles = Array.from(files);
+
+  await imageFiles.map(async (imageFile) => {
+    console.log('imageFile', imageFile);
+    const fd = new FormData();
+    fd.append('image', imageFile);
+    fd.append('contactId', contactId);
+    fd.append('ownerId', ownerId);
+    fd.append('userId', userId);
+    await api.post('chat/image', fd);
+  });
 }
 
 export const uploadDocument = ({

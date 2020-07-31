@@ -52,10 +52,10 @@ const ChatContainer = ({
 
   const handleImageChange = e => {
     e.preventDefault();
-    let [file] = e.target.files;
-    if (!file) return;
+    const { files } = e.target;
+    if (!files) return;
     dispatch(uploadImage({ 
-      imageFile: file,
+      files: e.target.files,
       ownerId: currentUser.ownerId,
       userId: currentUser.id,
     }));
@@ -96,6 +96,7 @@ const ChatContainer = ({
         hidden
         type="file"
         accept="image/png, image/jpeg"
+        multiple
         onChange={handleImageChange}
         ref={inputImageRef} />
       <input
