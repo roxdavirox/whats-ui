@@ -163,11 +163,22 @@ const ChatSidenav = ({
                     onClick={() => handleContactClick(chat.contactId)}
                     key={index}
                     className="flex items-center p-4 cursor-pointer  gray-on-hover"
-                    style={chat.contactId === selectedContactId 
-                      ? { transition: 'background 250ms ease',
+                    style={(() => { 
+                      if (chat.contactId === selectedContactId) 
+                        return { 
+                          transition: 'background 250ms ease',
                           background: 'rgba(0, 0, 0, 0.084)',
-                          color: 'blue' }
-                      : {}
+                          color: 'blue',
+                          fontWeight: 'bold',
+                        }
+                      if (!chat.read) {
+                        return {
+                          color: 'black',
+                          background: 'rgb(0 0 0 / 2%)',
+                          fontWeight: 'bold',
+                        }
+                      }
+                    })()
                     }
                   >
                     <ChatAvatar src={chat.contact.eurl || ''}/>
@@ -188,7 +199,8 @@ const ChatSidenav = ({
                   </div>
                 )}
               </div>
-          ))}
+            ))
+          }
       </Scrollbar>
     </div>
   );

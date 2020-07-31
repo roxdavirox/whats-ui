@@ -12,6 +12,7 @@ import {
   SET_CHAT,
   UPDATE_CHAT_PAGINATION,
   ADD_NEW_CHAT,
+  READ_CHAT
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
 import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT } from '../actions/ContactActions';
@@ -75,6 +76,7 @@ const ChatReducer = function(state = initialState, action) {
         },
         hasMoreMessage: false,
         firstMessageLoad: false,
+        read: true,
       };
       return {
         ...state,
@@ -125,6 +127,7 @@ const ChatReducer = function(state = initialState, action) {
             ...chat,
             lastMessageTime,
             active: true,
+            read: false,
             messages: [...chat.messages, messageId]
           }
         }
@@ -141,6 +144,23 @@ const ChatReducer = function(state = initialState, action) {
           [contactId]: {
             ...chat,
             firstMessageLoad: true,
+          }
+        }
+      }
+    }
+
+    case READ_CHAT: {
+      const { contactId } = action.payload;
+
+      const { byId } = state;
+      const chat = byId[contactId];
+      return {
+        ...state,
+        byId: {
+          ...byId,
+          [contactId]: {
+            ...chat,
+            read: true,
           }
         }
       }

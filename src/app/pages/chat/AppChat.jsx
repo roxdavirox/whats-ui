@@ -15,6 +15,7 @@ import {
   setRecentChats, 
   closeTransferListDialog,
   setCurrentChatRoom,
+  readChat
 } from '../../redux/actions/ChatActions';
 import { 
   openSaveContactDialog,
@@ -108,6 +109,7 @@ const AppChat = props => {
     dispatch(setCurrentChatRoom(1));
     dispatch(loadFirstMessages(contactId))
     dispatch(setActiveContact(contactId));
+    dispatch(readChat(contactId));
     if (!reference || !reference.current) return;
     reference.current.scrollTop = 999999;
     setReference(reference);

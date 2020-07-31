@@ -11,6 +11,7 @@ const defaultChat = {
   pagination: defaultPagination,
   hasMoreMessage: false,
   firstMessageLoad: false,
+  read: true,
 };
 
 export const ADD_RECENT_CHAT = 'ADD_RECENT_CHAT';
@@ -22,6 +23,7 @@ export const OPEN_IMAGE_MODAL = 'OPEN_IMAGE_MODAL';
 export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 export const SET_CHAT = 'SET_CHAT';
 export const UPDATE_CHAT_PAGINATION = 'UPDATE_CHAT_PAGINATION';
+export const READ_CHAT = 'READ_CHAT';
 
 export const addNewChat = (recentChat, contactId) => ({
   type: ADD_NEW_CHAT,
@@ -52,6 +54,17 @@ export const setRecentChats = recentChats =>  dispatch => {
   dispatch({
     type: SET_RECENT_CHATS,
     payload: { byId, allIds }
+  });
+};
+
+export const readChat = contactId => (dispatch, getState) => {
+  const { chat } = getState();
+  const currentChat = chat.byId[contactId];
+  if (!currentChat) return;
+
+  dispatch({
+    type: READ_CHAT,
+    payload: { contactId }
   });
 };
 
