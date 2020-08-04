@@ -156,9 +156,10 @@ export const addMessage = (message) => (dispatch, getState) => {
       type: UPDATE_CHAT_PAGINATION,
       payload: { contactId }
     });
-    dispatch(updateRecentChat(
+    dispatch(updateRecentChat({
       contactId,
-      message.createdAt,
-      message.key.id
-    ));
+      lastMessageTime: message.createdAt,
+      messageId: message.key.id,
+      read: contact.contactId === contactId
+    }));
 }

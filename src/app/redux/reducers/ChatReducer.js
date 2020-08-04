@@ -116,7 +116,7 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case UPDATE_RECENT_CHAT: {
-      const { contactId, lastMessageTime, messageId } = action.payload;
+      const { contactId, lastMessageTime, messageId, read } = action.payload;
       const { byId } = state;
       const chat = byId[contactId];
       return {
@@ -127,7 +127,7 @@ const ChatReducer = function(state = initialState, action) {
             ...chat,
             lastMessageTime,
             active: true,
-            read: false,
+            read,
             messages: [...chat.messages, messageId]
           }
         }

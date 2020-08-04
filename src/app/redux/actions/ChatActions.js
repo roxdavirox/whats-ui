@@ -59,6 +59,7 @@ export const setRecentChats = recentChats =>  dispatch => {
 
 export const readChat = contactId => (dispatch, getState) => {
   const { chat } = getState();
+  
   const currentChat = chat.byId[contactId];
   if (!currentChat) return;
 
@@ -95,9 +96,9 @@ export const setCurrentChatRoom = currentChatRoom => ({
   payload: { currentChatRoom }
 });
 
-export const updateRecentChat = (contactId, lastMessageTime, messageId) => ({
+export const updateRecentChat = ({ contactId, lastMessageTime, messageId, read }) => ({
   type: UPDATE_RECENT_CHAT,
-  payload: { contactId, lastMessageTime, messageId }
+  payload: { contactId, lastMessageTime, messageId, read }
 });
 
 export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
