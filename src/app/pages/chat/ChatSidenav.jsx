@@ -207,7 +207,7 @@ const ChatSidenav = ({
                         </p>
                       </div>
                       <div>
-                        <ChatMessage text="mensagem aqui" />
+                        <ChatMessage text={chat.lastTextMessage || 'Nova mensagem...'}/>
                       </div>
                     </div>
                   </div>
