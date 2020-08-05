@@ -23,8 +23,11 @@ import { Icon, MenuItem } from "@material-ui/core";
 import { MatxMenu } from "matx";
 
 const ChatMessage = ({ text }) => (
-  <p style={{ fontSize: 'small' }}>
-    {text}
+  <p style={{ fontSize: 'smaller' }}>
+    {text.length > 26
+      ? `${text.substring(0, 26)} ...`
+      : text
+    }
   </p>
 );
 
@@ -193,8 +196,8 @@ const ChatSidenav = ({
                       style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <p className="m-0">{chat.contact.name}</p>
-                        <p className="m-0 text-muted" style={{ fontSize: 'smaller' }}>
+                        <p className="m-0" style={{ fontSize: 'initial' }}>{chat.contact.name}</p>
+                        <p className="m-0 text-muted" style={{ fontSize: '10px' }}>
                           {new Date(chat.lastMessageTime)
                             .toLocaleString(
                                 'pt-BR', {
@@ -206,9 +209,13 @@ const ChatSidenav = ({
                           })}
                         </p>
                       </div>
-                      <div>
-                        <ChatMessage text={chat.lastTextMessage || 'Nova mensagem...'}/>
-                      </div>
+                      {
+                        chat.lastTextMessage && (
+                          <div>
+                            <ChatMessage text={chat.lastTextMessage}/>
+                          </div>
+                        )
+                      }
                     </div>
                   </div>
                 )}
