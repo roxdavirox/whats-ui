@@ -42,7 +42,6 @@ const AppChat = props => {
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
   const recentChats = useSelector(selectRecentChats);
-  const transferUsers = useSelector(({ chat }) => chat.transferUsers)
   const currentContact = useSelector(selectCurrentContact);
 
   let reference = useRef();
@@ -189,7 +188,6 @@ const AppChat = props => {
           </MatxSidenav>
           {openTransferList && 
             <TransferListDialog 
-                users={transferUsers}
                 onSelect={handleSelectTransferContact}
                 open={openTransferList}
                 onClose={handleCloseTransferList} 
