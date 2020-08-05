@@ -23,3 +23,13 @@ export const selectCurrentChat = ({ chat, contact }) => {
   if (!chat.byId) return {};
   return chat.byId[contact.contactId] || {};
 }
+
+export const selectTransferUsers = ({ chat }) => {
+  if (!chat.byId) return [];
+
+  if (!chat.transferUsers.byId) return []
+
+  return chat
+    .transferUsers
+    .allIds.map(userId => chat.transferUsers.byId[userId]);
+}
