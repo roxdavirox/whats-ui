@@ -31,7 +31,12 @@ const MessageItem = ({ message }) => {
           style={fromMe ? style.messageItem : {}}
         >
           {new Date(message.createdAt)
-            .toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit'})
+            .toLocaleString('pt-BR', { 
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit'
+            })
           }
         </small>
       </div>
