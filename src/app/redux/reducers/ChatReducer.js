@@ -212,10 +212,9 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case SET_TRANSFER_USERS: {
-      const { transferUsers } = action.payload;
       return {
         ...state,
-        transferUsers
+        transferUsers: { ...action.payload }
       };
     }
 

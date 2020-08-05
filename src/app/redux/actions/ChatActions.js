@@ -1,6 +1,6 @@
 import api from '../../services/api';
 import { normalize } from 'normalizr';
-import { chatSchema } from '../schema';
+import { chatSchema, transferUserSchema } from '../schema';
 
 const defaultPagination = {
   start: 0, end: 15
@@ -105,10 +105,15 @@ export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
 export const CLOSE_TRANSFER_LIST_DIALOG = 'CLOSE_TRANSFER_LIST_DIALOG';
 export const SET_TRANSFER_USERS = 'SET_TRANSFER_USERS';
 
-export const setTransferUsers = transferUsers => ({
-  type: SET_TRANSFER_USERS,
-  payload: { transferUsers }
-});
+export const setTransferUsers = transferUsers => dispatch => {
+  const { entities, result } = normalize(transferUsers, [transferUserSchema]);
+  const byId = entities.transferUsers;
+  const allIds = result;
+  dispatch({
+    type: SET_TRANSFER_USERS,
+    payload: { byId, allIds }
+  })
+};
 
 export const openTransferListDialog = () => ({ type: OPEN_TRANSFER_LIST_DIALOG });
 
