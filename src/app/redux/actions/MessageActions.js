@@ -160,6 +160,7 @@ export const addMessage = (message) => (dispatch, getState) => {
       contactId,
       lastMessageTime: message.createdAt,
       messageId: message.key.id,
-      read: contact.contactId === contactId
+      read: contact.contactId === contactId,
+      lastTextMessage: message.message.conversation || ''
     }));
 }

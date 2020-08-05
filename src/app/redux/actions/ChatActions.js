@@ -96,9 +96,9 @@ export const setCurrentChatRoom = currentChatRoom => ({
   payload: { currentChatRoom }
 });
 
-export const updateRecentChat = ({ contactId, lastMessageTime, messageId, read }) => ({
+export const updateRecentChat = ({ contactId, lastMessageTime, messageId, read, lastTextMessage }) => ({
   type: UPDATE_RECENT_CHAT,
-  payload: { contactId, lastMessageTime, messageId, read }
+  payload: { contactId, lastMessageTime, messageId, read, lastTextMessage }
 });
 
 export const OPEN_TRANSFER_LIST_DIALOG = 'OPEN_TRANSFER_LIST_DIALOG';
