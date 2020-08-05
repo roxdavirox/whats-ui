@@ -22,6 +22,12 @@ import { logoutUser } from "app/redux/actions/UserActions";
 import { Icon, MenuItem } from "@material-ui/core";
 import { MatxMenu } from "matx";
 
+const ChatMessage = ({ text }) => (
+  <p style={{ fontSize: 'small' }}>
+    {text}
+  </p>
+);
+
 const SearchContact = ({ onSearch, initialValue = '' }) => {
   const [searchContact, setSearchContact] = useState(initialValue);
   const dispatch = useDispatch();
@@ -162,7 +168,7 @@ const ChatSidenav = ({
                   <div
                     onClick={() => handleContactClick(chat.contactId)}
                     key={index}
-                    className="flex items-center p-4 cursor-pointer  gray-on-hover"
+                    className="flex items-center p-4 cursor-pointer h-72 gray-on-hover"
                     style={(() => { 
                       if (chat.contactId === selectedContactId) 
                         return { 
@@ -182,19 +188,27 @@ const ChatSidenav = ({
                     }
                   >
                     <ChatAvatar src={chat.contact.eurl || ''}/>
-                    <div className="pl-4">
-                      <p className="m-0">{chat.contact.name}</p>
-                      <p className="m-0 text-muted">
-                        {new Date(chat.lastMessageTime)
-                          .toLocaleString(
-                              'pt-BR', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                        })}
-                      </p>
+                    <div 
+                      className="pl-4"
+                      style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <p className="m-0">{chat.contact.name}</p>
+                        <p className="m-0 text-muted" style={{ fontSize: 'smaller' }}>
+                          {new Date(chat.lastMessageTime)
+                            .toLocaleString(
+                                'pt-BR', {
+                                  year: 'numeric',
+                                  month: '2-digit',
+                                  day: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                      <div>
+                        <ChatMessage text="mensagem aqui" />
+                      </div>
                     </div>
                   </div>
                 )}
