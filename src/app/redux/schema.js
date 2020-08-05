@@ -16,8 +16,11 @@ const contactSchema = new schema.Entity(
   id
 );
 
+const transferUserSchema = new schema.Entity('transferUsers', {});
+
 export {
   chatSchema,
   contactSchema,
-  messageSchema
+  messageSchema,
+  transferUserSchema
 };

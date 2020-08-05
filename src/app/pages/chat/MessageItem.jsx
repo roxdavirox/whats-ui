@@ -30,6 +30,7 @@ const MessageItem = ({ message }) => {
           className="text-muted mb-0" 
           style={fromMe ? style.messageItem : {}}
         >
+          {message.userName && fromMe && `${message.userName} - `}
           {new Date(message.createdAt)
             .toLocaleString('pt-BR', { 
               month: '2-digit',
