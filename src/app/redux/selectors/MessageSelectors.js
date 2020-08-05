@@ -10,5 +10,9 @@ export const selectMessages = store => {
   const filteredDeletedMessages = selectedMessages.filter(m => !m.message.protocolMessage);
   const sortByLastDate = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
   const sortedMessages = filteredDeletedMessages.sort(sortByLastDate);
-  return sortedMessages || [];
+  const sortedMessageWithUserName = sortedMessages.map(_message => ({
+    ..._message,
+    userName: chat.transferUsers.byId[_message.userId].name
+  }));
+  return sortedMessageWithUserName || [];
 }
