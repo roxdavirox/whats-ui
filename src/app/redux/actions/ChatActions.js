@@ -24,6 +24,33 @@ export const CLOSE_IMAGE_MODAL = 'CLOSE_IMAGE_MODAL';
 export const SET_CHAT = 'SET_CHAT';
 export const UPDATE_CHAT_PAGINATION = 'UPDATE_CHAT_PAGINATION';
 export const READ_CHAT = 'READ_CHAT';
+export const GET_PROFILE_PICTURE = 'GET_PROFILE_PICTURE';
+
+export const getProfilePicture = contactId => async (dispatch, getState) => {
+  const { contact } = getState();
+  
+  const selectedContact = contact.byId[contactId];
+  if (!selectedContact) return;
+
+  try {
+    const response = await api.post('/contact/picture', {
+      jid: selectedContact.jid,
+      contactId,
+      ownerId: selectedContact.ownerId,
+    });
+  
+    const { eurl } = response.data;
+
+    dispatch({
+      type: GET_PROFILE_PICTURE,
+      payload: { eurl, contactId }
+    });
+
+  } catch(e) {
+    console.error('error when get profile picture', e);
+  }
+}
+
 
 export const addNewChat = (recentChat, contactId) => ({
   type: ADD_NEW_CHAT,

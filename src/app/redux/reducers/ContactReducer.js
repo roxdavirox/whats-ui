@@ -15,7 +15,7 @@ import {
   FINISH_CONTACT,
   SET_ACTIVE_CONTACT
 } from '../actions/ContactActions';
-import { UPDATE_RECENT_CHAT } from '../actions/ChatActions';
+import { UPDATE_RECENT_CHAT, GET_PROFILE_PICTURE } from '../actions/ChatActions';
 
 const initialState = {
   isContactListOpen: false,
@@ -151,6 +151,22 @@ const ContactReducer = function(state = initialState, action) {
           [contactId]: {
             ...contact,
             active: true,
+          }
+        }
+      }
+    }
+
+    case GET_PROFILE_PICTURE: {
+      const { eurl, contactId } = action.payload;
+      const contact = state.byId[contactId];
+
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [contactId]: {
+            ...contact,
+            eurl
           }
         }
       }
