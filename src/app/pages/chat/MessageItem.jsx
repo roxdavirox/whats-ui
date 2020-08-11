@@ -21,7 +21,7 @@ const MessageItem = ({ message }) => {
         <div style={{ display: 'flex', justifyContent: `${fromMe ? 'flex-end' : 'flex-start' }` }}>
           <div
             className={`px-2 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
-            style={{display: 'inline-block'}}
+            style={{display: 'inline-block', maxWidth: '60%' }}
           >
             <Message message={message} />
           </div>
