@@ -8,7 +8,13 @@ export default function () {
     console.log('no token provided to socket connection');
     return;
   }
-  const socket = io.connect(`${host}chat`, { query: `auth_token=${token}`})
+  const socket = io.connect(`${host}chat`, { 
+    query: `auth_token=${token}`,
+    reconnection: true,             // whether to reconnect automatically
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,        // how long to initially wait before attempting a new reconnection
+    reconnectionDelayMax: 5000,
+  });
 
   function registerMessageHandler(onMessageReceived) {
     socket.on('message', onMessageReceived)
