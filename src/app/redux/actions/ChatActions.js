@@ -85,15 +85,17 @@ export const setRecentChats = recentChats =>  dispatch => {
   });
 };
 
-export const readChat = contactId => (dispatch, getState) => {
+export const readChat = contactId => async (dispatch, getState) => {
   const { chat } = getState();
   
   const currentChat = chat.byId[contactId];
   if (!currentChat) return;
-
+  const response = await api.post(`/chat/read/${contactId}`);
+  const { updated } = response.data;
+  console.log('response updated chat read', updated);
   dispatch({
     type: READ_CHAT,
-    payload: { contactId }
+    payload: { contactId, read: updated }
   });
 };
 
