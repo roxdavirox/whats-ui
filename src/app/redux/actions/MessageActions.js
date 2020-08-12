@@ -106,7 +106,7 @@ export const updateDeletedMessage = message => (dispatch, getState) => {
   })
 }
 
-export const addMessage = (message) => (dispatch, getState) => {
+export const addMessage = (message) => async (dispatch, getState) => {
   const { contact } = getState();
     const { contactId, userId, ownerId, chatId, key } = message;
 
@@ -156,6 +156,13 @@ export const addMessage = (message) => (dispatch, getState) => {
       type: UPDATE_CHAT_PAGINATION,
       payload: { contactId }
     });
+
+    if (contact.contactId === contactId) {
+      const response = await api.post(`/chat/read/${contactId}`);
+      const { updated } = response.data;
+      console.log('response updated chat read open', updated);
+    }
+
     dispatch(updateRecentChat({
       contactId,
       lastMessageTime: message.createdAt,
