@@ -151,7 +151,7 @@ const ChatReducer = function(state = initialState, action) {
     }
 
     case READ_CHAT: {
-      const { contactId } = action.payload;
+      const { contactId, read } = action.payload;
 
       const { byId } = state;
       const chat = byId[contactId];
@@ -161,7 +161,7 @@ const ChatReducer = function(state = initialState, action) {
           ...byId,
           [contactId]: {
             ...chat,
-            read: true,
+            read,
           }
         }
       }
