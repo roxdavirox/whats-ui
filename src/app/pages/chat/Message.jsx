@@ -12,6 +12,7 @@ import {
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import ForwardIcon from '@material-ui/icons/Forward';
+import { Player } from 'video-react';
 
 const isImage = message => message.message
   && message.message.imageMessage
@@ -21,6 +22,15 @@ const isImageForwarded = message => message.message
   && message.message.imageMessage
   && message.message.imageMessage.contextInfo
   && message.message.imageMessage.contextInfo.isForwarded;
+
+const isVideo = message => message.message
+  && message.message.videoMessage
+  && message.message.videoMessage.fileUrl;
+
+const isVideoForwarded = message => message.message
+  && message.message.videoMessage
+  && message.message.videoMessage.contextInfo
+  && message.message.videoMessage.contextInfo.isForwarded;
 
 const isAudio = message => message.message
   && message.message.audioMessage
@@ -145,6 +155,17 @@ const Message = ({ message }) => {
         />
       </>
     );
+  }
+
+  if (isVideo(message)) {
+    const { message: _message } = message;
+    const { videoMessage: { fileUrl } } = _message;
+
+    return (
+      <Player>
+        <source src={fileUrl} />
+      </Player>
+    )
   }
 
   if (isAudio(message)) {
