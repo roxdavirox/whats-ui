@@ -10,9 +10,10 @@ import {
   Icon,
   MenuItem
 } from "@material-ui/core";
-import { openTransferListDialog, openSendDocument } from '../../redux/actions/ChatActions';
+import { openTransferListDialog } from '../../redux/actions/ChatActions';
 import { finishContact } from '../../redux/actions/ContactActions';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 
 const style = {
   menuItem: {
@@ -23,7 +24,12 @@ const style = {
   }
 }
 
-const Menu = ({ onSaveDialogOpen, onImageUploadClick, onFileUploadClick }) => {
+const Menu = ({
+  onSaveDialogOpen,
+  onImageUploadClick,
+  onFileUploadClick,
+  onVideoUploadClick
+}) => {
   const dispatch = useDispatch();
   const handleFinishContact = () => dispatch(finishContact());
   const handleOpenTransferList = () => dispatch(openTransferListDialog());
@@ -64,6 +70,13 @@ const Menu = ({ onSaveDialogOpen, onImageUploadClick, onFileUploadClick }) => {
           style={style.menuItem}
         >
           Enviar imagem <InsertPhotoIcon />
+        </MenuItem>
+        <MenuItem
+          className="flex items-center"
+          onClick={onVideoUploadClick}
+          style={style.menuItem}
+        >
+          Enviar video <VideoLibraryIcon />
         </MenuItem>
         <MenuItem
           className="flex items-center"

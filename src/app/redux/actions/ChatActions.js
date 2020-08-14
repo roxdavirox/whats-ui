@@ -189,6 +189,26 @@ export const uploadDocument = ({
     formData.append('ownerId', ownerId);
     formData.append('userId', userId);
     await api.post('chat/document', formData);
-  })
-  
+  });
+}
+
+export const uploadVideo = ({
+  files,
+  ownerId,
+  userId
+}) => async (dispatch, getState) => {
+  const { contact } = getState();
+  const { contactId } = contact;
+
+  const videoFiles = Array.from(files);
+  if (!videoFiles) return;
+
+  videoFiles.map(async (videoFile) => {
+    const formData = new FormData();
+    formData.append('video', videoFile);
+    formData.append('contactId', contactId);
+    formData.append('ownerId', ownerId);
+    formData.append('userId', userId);
+    await api.post('chat/video', formData);
+  });
 }

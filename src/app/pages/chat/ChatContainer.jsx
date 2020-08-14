@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Divider } from "@material-ui/core";
 import InputText from './InputText';
 import ImagePreviewDialog from './ImagePreviewDialog';
-import { uploadImage, uploadDocument } from '../../redux/actions/ChatActions';
+import { uploadImage, uploadDocument, uploadVideo } from '../../redux/actions/ChatActions';
 import ChatTopbar from "./ChatTopbar";
 import Scrollbar from 'react-perfect-scrollbar';
 import { CircularProgress } from "@material-ui/core";
@@ -32,6 +32,7 @@ const ChatContainer = ({
   const currentUser = useSelector(({ user }) => user);
   const inputImageRef = useRef();
   const inputFileRef = useRef();
+  const inputVideoRef = useRef();
   const dispatch = useDispatch();
 	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
@@ -78,6 +79,22 @@ const ChatContainer = ({
     e.target.value = null;
   }
 
+  const handleVideoUploadClick = () => {
+    inputVideoRef.current.click();
+  }
+
+  const handleVideoChange = e => {
+    e.preventDefault();
+    const { files } = e.target;
+    if (!files) return;
+    dispatch(uploadVideo({
+      files,
+      ownerId: currentUser.ownerId,
+      userId: currentUser.id
+    }));
+    e.target.value = null;
+  }
+
   const [handleLoadMessagesDebounce] = useDebouncedCallback(
     (contactId) => {
       dispatch(getMessagesByContactId(contactId));
@@ -95,7 +112,7 @@ const ChatContainer = ({
       <input
         hidden
         type="file"
-        accept="image/png, image/jpeg"
+        accept="image/*"
         multiple
         onChange={handleImageChange}
         ref={inputImageRef} />
@@ -105,12 +122,20 @@ const ChatContainer = ({
         multiple
         onChange={handleFileChange}
         ref={inputFileRef} />
+      <input
+        hidden
+        type="file"
+        accept="video/*"
+        multiple
+        onChange={handleVideoChange}
+        ref={inputVideoRef} />
       {imageModalOpen && <ImagePreviewDialog />}
       <div className="chat-container flex-column position-relative" style={{ height: '100%' }}>
         <ChatTopbar 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={handleUploadImageClick}
           onFileUploadClick={handleFileUploadClick}
+          onVideoUploadClick={handleVideoUploadClick}
         />
           {!qrcodeIsConnected && <QrcodeContainer />}
           {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}
