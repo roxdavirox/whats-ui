@@ -1,5 +1,7 @@
 import "../fake-db";
 import "../styles/_app.scss";
+import "video-react/dist/video-react.css"; // import css
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { Provider } from "react-redux";
