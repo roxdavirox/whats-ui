@@ -12,7 +12,7 @@ import {
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import ForwardIcon from '@material-ui/icons/Forward';
-import { Player } from 'video-react';
+import VideoPlayer from 'app/components/message/VideoPlayer';
 
 const isImage = message => message.message
   && message.message.imageMessage
@@ -162,9 +162,7 @@ const Message = ({ message }) => {
     const { videoMessage: { fileUrl } } = _message;
 
     return (
-      <Player>
-        <source src={fileUrl} />
-      </Player>
+      <VideoPlayer src={fileUrl} />
     )
   }
 
