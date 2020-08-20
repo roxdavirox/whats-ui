@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef } from 'react';
 import {
   Icon,
   Fab,
   TextField,
 } from "@material-ui/core";
 
-const InputText = props => {
+const InputText = forwardRef((props, ref) => {
   const [message, setMessage] = useState('');
+
   const sendMessageOnEnter = event => {
     if (event.key === "Enter" && !event.shiftKey) {
       let msg = message.trim();
@@ -33,6 +34,7 @@ const InputText = props => {
         rows={1}
         variant="outlined"
         autoFocus
+        inputRef={ref}
       />
      <div>
       <Fab
@@ -45,6 +47,6 @@ const InputText = props => {
     </div>
   </div>
   )
-}
+})
 
 export default InputText;

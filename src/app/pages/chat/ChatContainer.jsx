@@ -33,6 +33,7 @@ const ChatContainer = ({
   const inputImageRef = useRef();
   const inputFileRef = useRef();
   const inputVideoRef = useRef();
+  const inputTextRef = useRef();
   const dispatch = useDispatch();
 	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
@@ -137,43 +138,44 @@ const ChatContainer = ({
           onFileUploadClick={handleFileUploadClick}
           onVideoUploadClick={handleVideoUploadClick}
         />
-          {!qrcodeIsConnected && <QrcodeContainer />}
-          {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}
-          {currentChatRoom !== "" && (
-            <Scrollbar 
-              className="p-2 h-full-screen scroll-y chat-message-list flex-grow position-relative"
-              containerRef={ref => {
-                setRef({current: ref});
-              }}
-              onScrollUp={e => {
-                if (!currentContact) return;
-                const position = e.scrollTop;
-                if (position <= 20 && currentChat.hasMoreMessage) {
-                  handleLoadMessages(currentContact.id, currentChat.hasMoreMessage);
-                  parentScrollRef.current.scrollTop = parentScrollRef.current.scrollHeight / 5;
-                }
-              }}
+        {!qrcodeIsConnected && <QrcodeContainer />}
+        {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}
+        {currentChatRoom !== "" && (
+          <Scrollbar 
+            className="p-2 h-full-screen scroll-y chat-message-list flex-grow position-relative"
+            containerRef={ref => {
+              setRef({current: ref});
+            }}
+            onScrollUp={e => {
+              if (!currentContact) return;
+              const position = e.scrollTop;
+              if (position <= 20 && currentChat.hasMoreMessage) {
+                handleLoadMessages(currentContact.id, currentChat.hasMoreMessage);
+                parentScrollRef.current.scrollTop = parentScrollRef.current.scrollHeight / 5;
+              }
+            }}
+          >
+            {parentScrollRef && parentScrollRef.current && (
+            <InfiniteScroll
+              style={{ height: '100%' }}
+              pageStart={0}
+              isReverse
+              hasMore={currentChat && currentChat.hasMoreMessage}
+              loader={loader}
+              getScrollParent={() => parentScrollRef}
+              useWindow={true}
+              threshold={100}
+              onClick={() => inputTextRef.current.focus()}
             >
-              {parentScrollRef && parentScrollRef.current && (
-              <InfiniteScroll
-                style={{ height: '100%' }}
-                pageStart={0}
-                isReverse
-                hasMore={currentChat && currentChat.hasMoreMessage}
-                loader={loader}
-                getScrollParent={() => parentScrollRef}
-                useWindow={true}
-                threshold={100}
-              >
-                <MessageList />
-              </InfiniteScroll>
-              )}
-            </Scrollbar>
-          )}
+              <MessageList />
+            </InfiniteScroll>
+            )}
+          </Scrollbar>
+        )}
         <Divider />
         {currentChatRoom !== "" 
           && currentContact.userId === currentUser.id
-          && <InputText onSend={handleMessageSend}/>}
+          && <InputText ref={inputTextRef} onSend={handleMessageSend}/>}
       </div>
     </>
   );
