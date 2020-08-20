@@ -33,13 +33,16 @@ function TransferListDialog(props) {
     onSelect(selectedUserId);
     onClose();
   };
-  console.log('dialog render');
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Atendentes</DialogTitle>
       <List>
         {transferUsers && transferUsers.map(user => (
-          <ListItem button onClick={() => handleListItemClick(user.id)} key={user.id}>
+          <ListItem button 
+            onClick={() => handleListItemClick(user.id)}
+            key={user.id}
+          >
             <ListItemAvatar>
               <Avatar className={classes.avatar}>
                 <PersonIcon />

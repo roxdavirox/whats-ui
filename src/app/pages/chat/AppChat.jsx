@@ -36,10 +36,13 @@ import useAudio from 'app/components/customHooks/Audio';
 import AddContactDialog from "./AddContactDialog";
 import { selectRecentChats } from "app/redux/selectors/ChatSelectors";
 
-const audioUrl = 'https://whatspipe.blob.core.windows.net/audios/whats-notification.mp3';
+const audioUrl = 'https://whatspipe.blob.core.windows.net/audios/Data-Beep-Notifier-Thumb%20Pluck-Double.mp3';
+const transferNotification = 'https://whatspipe.blob.core.windows.net/audios/Ambient_Game_Bubble_UI_1.mp3';
 
 const AppChat = props => {
   const [playing, toggle] = useAudio(audioUrl);
+  const [_, transferNotify] = useAudio(transferNotification);
+
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
   const recentChats = useSelector(selectRecentChats);
@@ -132,6 +135,7 @@ const AppChat = props => {
   
   const handleCloseTransferList = () => dispatch(closeTransferListDialog());
   const handleSelectTransferContact = (selectedUserId) => {
+    transferNotify();
     dispatch(transferContact(selectedUserId, chatSocket));
     clearChat();
   }

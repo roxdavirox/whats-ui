@@ -32,7 +32,9 @@ const Menu = ({
 }) => {
   const dispatch = useDispatch();
   const handleFinishContact = () => dispatch(finishContact());
-  const handleOpenTransferList = () => dispatch(openTransferListDialog());
+  const handleOpenTransferList = () => {
+    dispatch(openTransferListDialog());
+  }
 
   return (
     <MatxMenu
