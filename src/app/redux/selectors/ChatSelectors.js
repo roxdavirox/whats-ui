@@ -24,12 +24,14 @@ export const selectCurrentChat = ({ chat, contact }) => {
   return chat.byId[contact.contactId] || {};
 }
 
-export const selectTransferUsers = ({ chat }) => {
+export const selectTransferUsers = ({ chat, user }) => {
   if (!chat.byId) return [];
 
   if (!chat.transferUsers.byId) return []
 
   return chat
     .transferUsers
-    .allIds.map(userId => chat.transferUsers.byId[userId]);
+    .allIds
+    .filter(id => id !== user.id)
+    .map(userId => chat.transferUsers.byId[userId]);
 }
