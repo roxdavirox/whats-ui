@@ -50,6 +50,8 @@ const AppChat = props => {
   const recentChats = useSelector(selectRecentChats);
   const currentContact = useSelector(selectCurrentContact);
 
+  const inputTextRef = useRef();
+
   let reference = useRef();
   const [_reference, setReference] = useState(reference);
   const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
@@ -190,6 +192,7 @@ const AppChat = props => {
             open
           >
             <ChatSidenav
+              ref={inputTextRef}
               isContactListOpen={isContactListOpen}
               onOpenContactList={handleOpenContactList}
               handleContactClick={handleContactClick}
@@ -216,6 +219,7 @@ const AppChat = props => {
               currentChatRoom={currentChatRoom}
               setRef={setRef}
               parentScrollRef={_reference}
+              ref={inputTextRef}
               handleMessageSend={handleMessageSend}
             />
           </MatxSidenavContent>

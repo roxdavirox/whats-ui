@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import ChatAvatar from "./ChatAvatar";
 import Scrollbar from "react-perfect-scrollbar";
@@ -105,11 +105,12 @@ const ContactListSlide = ({ onContactClick, open }) => {
   )
 }
 
-const ChatSidenav = ({
-  handleContactClick,
-  onOpenContactList,
-  isContactListOpen
-}) => {
+const ChatSidenav = forwardRef((props, ref) => {
+  const {
+    handleContactClick,
+    onOpenContactList,
+    isContactListOpen,
+  } = props;
   const currentUser = useSelector(({ user }) => user);
   const selectedContactId = useSelector(({ contact }) => contact.contactId);
   const recentChats = useSelector(selectRecentChats);
@@ -169,7 +170,12 @@ const ChatSidenav = ({
               <div key={index}>
                 {chat && (
                   <div
-                    onClick={() => handleContactClick(chat.contactId)}
+                    onClick={() => {
+                      if (ref.current) {
+                        ref.current.focus();
+                      }
+                      handleContactClick(chat.contactId);
+                    }}
                     key={index}
                     className="flex items-center p-4 cursor-pointer h-72 gray-on-hover"
                     style={(() => { 
@@ -224,6 +230,6 @@ const ChatSidenav = ({
       </Scrollbar>
     </div>
   );
-};
+});
 
 export default ChatSidenav;

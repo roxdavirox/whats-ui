@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, forwardRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { Divider } from "@material-ui/core";
 import InputText from './InputText';
@@ -17,12 +17,13 @@ import { selectCurrentChat } from '../../redux/selectors/ChatSelectors';
 import QrcodeContainer from '../qrcode/QrcodeContainer';
 import { useEffect } from "react";
 
-const ChatContainer = ({
-  setRef,
-  handleMessageSend,
-  onSaveDialogOpen,
-  parentScrollRef
-}) => {
+const ChatContainer = forwardRef((props, ref) => {
+  const {
+    setRef,
+    handleMessageSend,
+    onSaveDialogOpen,
+    parentScrollRef,
+  } = props;
   const { 
     currentChatRoom,
     imageModalOpen,
@@ -33,7 +34,6 @@ const ChatContainer = ({
   const inputImageRef = useRef();
   const inputFileRef = useRef();
   const inputVideoRef = useRef();
-  const inputTextRef = useRef();
   const dispatch = useDispatch();
 	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
@@ -165,7 +165,7 @@ const ChatContainer = ({
               getScrollParent={() => parentScrollRef}
               useWindow={true}
               threshold={100}
-              onClick={() => inputTextRef.current.focus()}
+              onClick={() => ref.current.focus()}
             >
               <MessageList />
             </InfiniteScroll>
@@ -175,10 +175,10 @@ const ChatContainer = ({
         <Divider />
         {currentChatRoom !== "" 
           && currentContact.userId === currentUser.id
-          && <InputText ref={inputTextRef} onSend={handleMessageSend}/>}
+          && <InputText ref={ref} onSend={handleMessageSend}/>}
       </div>
     </>
   );
-};
+});
 
 export default ChatContainer;
