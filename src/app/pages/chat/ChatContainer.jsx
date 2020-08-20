@@ -23,6 +23,7 @@ const ChatContainer = forwardRef((props, ref) => {
     handleMessageSend,
     onSaveDialogOpen,
     parentScrollRef,
+    onFinishContactNotify,
   } = props;
   const { 
     currentChatRoom,
@@ -137,6 +138,7 @@ const ChatContainer = forwardRef((props, ref) => {
           onImageUploadClick={handleUploadImageClick}
           onFileUploadClick={handleFileUploadClick}
           onVideoUploadClick={handleVideoUploadClick}
+          onFinishContactNotify={onFinishContactNotify}
         />
         {!qrcodeIsConnected && <QrcodeContainer />}
         {currentChatRoom === "" && qrcodeIsConnected && <EmptyMessage />}

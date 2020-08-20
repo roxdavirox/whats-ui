@@ -28,10 +28,14 @@ const Menu = ({
   onSaveDialogOpen,
   onImageUploadClick,
   onFileUploadClick,
-  onVideoUploadClick
+  onVideoUploadClick,
+  onFinishContactNotify
 }) => {
   const dispatch = useDispatch();
-  const handleFinishContact = () => dispatch(finishContact());
+  const handleFinishContact = () => {
+    onFinishContactNotify();
+    dispatch(finishContact());
+  };
   const handleOpenTransferList = () => {
     dispatch(openTransferListDialog());
   }
