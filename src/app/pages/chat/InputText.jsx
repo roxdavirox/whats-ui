@@ -32,6 +32,7 @@ const InputText = props => {
         multiline={true}
         rows={1}
         variant="outlined"
+        autoFocus
       />
      <div>
       <Fab
