@@ -38,10 +38,12 @@ import { selectRecentChats } from "app/redux/selectors/ChatSelectors";
 
 const audioUrl = 'https://whatspipe.blob.core.windows.net/audios/Data-Beep-Notifier-Thumb%20Pluck-Double.mp3';
 const transferNotification = 'https://whatspipe.blob.core.windows.net/audios/Ambient_Game_Bubble_UI_1.mp3';
+const receiveContactNotification = 'https://whatspipe.blob.core.windows.net/audios/Vibrant_Game__Correct_Answer_Hit.mp3';
 
 const AppChat = props => {
-  const [playing, toggle] = useAudio(audioUrl);
-  const [_, transferNotify] = useAudio(transferNotification);
+  const [, toggle] = useAudio(audioUrl);
+  const [, transferNotify] = useAudio(transferNotification);
+  const [, notifyReceiveContact] = useAudio(receiveContactNotification);
 
   const dispatch = useDispatch();
   const [chatSocket, setClient] = useState({});
@@ -142,6 +144,7 @@ const AppChat = props => {
 
   const handleReceiveContact = ({ chat, contact }) => {
     if (!contact || !chat) return;
+    notifyReceiveContact();
     dispatch(setReceivedContact(chat, contact));
   }
 
