@@ -37,13 +37,15 @@ const ChatReducer = function(state = initialState, action) {
   switch(action.type) {
     case SET_RECEIVED_CONTACT: {
       const { chat, contact } = action.payload;
+      const allIds = state.allIds.filter(id => id !== contact.id);
+
       return {
         ...state,
         byId: {
           ...state.byId,
           [contact.id]: chat
         },
-        allIds: [...state.allIds, contact.id]
+        allIds: [...allIds, contact.id]
       }
     }
 
