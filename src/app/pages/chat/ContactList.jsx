@@ -11,7 +11,6 @@ import { closeContactListDialog } from '../../redux/actions/ContactActions';
 const ContactList = ({ contacts, handleContactClick }) => {
   const dispatch = useDispatch();
   const handleCloseContactList = () => dispatch(closeContactListDialog());
-
   return (
     <List>
       {contacts && contacts.map((contact, index) => (

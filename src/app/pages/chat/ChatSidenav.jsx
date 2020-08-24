@@ -76,7 +76,10 @@ const ContactListSlide = ({ onContactClick, open }) => {
   const filteredContacts = contacts
     .filter(
       contact => 
-        contact.name
+        contact.phone
+          .includes(searchContact)
+      ||
+          contact.name
           .toLowerCase()
           .includes(searchContact.toLocaleLowerCase())
   );
