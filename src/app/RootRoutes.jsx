@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import sessionRoutes from "./pages/sessions/SessionRoutes";
 import chatRoutes from "./pages/chat/ChatRoutes";
 import qrcodeRoutes from './pages/qrcode/QrcodeRoutes';
+import sectorRoutes from './pages/config/sector/SectorRoutes';
 
 const redirectRoute = [
   {
@@ -23,6 +24,7 @@ const routes = [
   ...sessionRoutes,
   ...qrcodeRoutes,
   ...chatRoutes,
+  ...sectorRoutes,
   ...redirectRoute,
   ...errorRoute
 ];
