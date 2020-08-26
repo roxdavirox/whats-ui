@@ -18,9 +18,10 @@ import { closeContactListDialog, openAddContactDialog } from '../../redux/action
 import { useDebouncedCallback } from 'use-debounce';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { logoutUser } from "app/redux/actions/UserActions";
-
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Icon, MenuItem } from "@material-ui/core";
 import { MatxMenu } from "matx";
+import history from '../../../history';
 
 const ChatMessage = ({ text }) => (
   <p style={{ fontSize: 'smaller' }}>
@@ -125,6 +126,10 @@ const ChatSidenav = forwardRef((props, ref) => {
 
   const handleLogout = () => dispatch(logoutUser());
 
+  const handleConfig = () => {
+    history.push('/config/sector');
+  }
+
   return (
     <div className="chat-sidenav bg-default" style={{ height: '96vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
@@ -135,6 +140,13 @@ const ChatSidenav = forwardRef((props, ref) => {
                   <ChatAvatar src={currentUser.eurl || ''} />
                 }
               >
+                <MenuItem
+                  onClick={handleConfig}
+                  style={{ minWidth: 185 }}
+                >
+                  <SettingsIcon />
+                  <span className="pl-4"> Configurações </span>
+                </MenuItem>
                 <MenuItem
                   onClick={handleLogout}
                   style={{ minWidth: 185 }}
