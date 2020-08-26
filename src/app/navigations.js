@@ -13,4 +13,11 @@ export const navigations = [
     path: "/chat",
     auth: ['ADMIN', 'ATENDENTE']
   },
+
+  {
+    name: "Configurações",
+    icon: "C",
+    path: "/config/sector",
+    auth: ['ADMIN']
+  },
 ];
