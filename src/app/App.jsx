@@ -15,22 +15,25 @@ import { Store } from "./redux/Store";
 import Auth from "./auth/Auth";
 import MatxLayout from "./MatxLayout/MatxLayoutSFC";
 import AuthGuard from "./auth/AuthGuard";
+import { SnackbarProvider } from 'notistack';
 
 const App = () => {
   return (
-    <AppContext.Provider value={{ routes }}>
-      <Provider store={Store}>
-        <MatxTheme>
-          <Auth>
-            <Router history={history}>
-              <AuthGuard>
-                <MatxLayout />
-              </AuthGuard>
-            </Router>
-          </Auth>
-        </MatxTheme>
-      </Provider>
-    </AppContext.Provider>
+    <SnackbarProvider maxSnack={3}>
+      <AppContext.Provider value={{ routes }}>
+        <Provider store={Store}>
+          <MatxTheme>
+            <Auth>
+              <Router history={history}>
+                <AuthGuard>
+                  <MatxLayout />
+                </AuthGuard>
+              </Router>
+            </Auth>
+          </MatxTheme>
+        </Provider>
+      </AppContext.Provider>
+    </SnackbarProvider>
   );
 };
 
