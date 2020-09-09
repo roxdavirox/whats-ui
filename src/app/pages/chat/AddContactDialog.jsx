@@ -73,6 +73,8 @@ function AddContactDialog(props) {
       contactName,
       onlyNumbersPhone
     ));
+    setContactName('');
+    setPhone('');
     handleClose();
   };
 
