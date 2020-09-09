@@ -97,8 +97,10 @@ export const addNewContact = (name, phone, notify) => async (dispatch, getState)
     dispatch(setCurrentChatRoom(1));
     dispatch(addNewChat(recentChat, contact.id));
   } catch(e) {
-    // handle error
-    console.error('error:', e);
+    notify(`${e.response.data.error}`, {
+      variant: e.response.data.notify,
+      autoHideDuration: 3000
+    });
   }
 }
 
