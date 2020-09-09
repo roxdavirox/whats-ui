@@ -30,14 +30,21 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MaskedTextField = (props) => (
+const MaskedTextField = ({ value, onChange }) => (
   <InputMask
     mask="+55 (99) 99999-9999"
-    value={props.value}
-    placeholder="Digite o numero aqui"
-    onChange={props.onChange}
+    value={value}
+    label="Número do contato"
+    onChange={onChange}
   >
-    {(inputProps) => <TextField {...inputProps} variant="outlined" disableUnderline />}
+    {(inputProps) =>
+      <TextField
+        {...inputProps}
+        placeholder="Digite o numero aqui"
+        variant="outlined"
+        disableUnderline
+      />
+    }
   </InputMask>
 );
 
@@ -106,7 +113,6 @@ function AddContactDialog(props) {
                   <MaskedTextField
                     onChange={handlePhoneChange}
                     value={phone}
-                    label="Número"
                     />
                 </FormControl>
               </Container>
