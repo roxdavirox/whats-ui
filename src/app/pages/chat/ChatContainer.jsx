@@ -167,7 +167,12 @@ const ChatContainer = forwardRef((props, ref) => {
               getScrollParent={() => parentScrollRef}
               useWindow={true}
               threshold={100}
-              onClick={() => ref.current.focus()}
+              onClick={() => {
+                const selection = window.getSelection().toString();
+                if (!selection.length) {
+                  ref.current.focus();
+                }
+              }}
             >
               <MessageList />
             </InfiniteScroll>

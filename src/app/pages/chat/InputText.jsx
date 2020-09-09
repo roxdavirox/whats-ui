@@ -33,7 +33,7 @@ const InputText = forwardRef((props, ref) => {
         multiline={true}
         rows={1}
         variant="outlined"
-        autoFocus
+        autoFocus={false}
         inputRef={ref}
       />
      <div>
