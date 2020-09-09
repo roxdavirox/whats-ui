@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button';
 import { addNewContact, closeAddContactDialog } from '../../redux/actions/ContactActions';
 import { FormControl } from '@material-ui/core';
 import { Container } from '@material-ui/core';
-import SaveIcon from '@material-ui/icons/Save';
 import { makeStyles } from '@material-ui/core/styles';
+import InputMask from 'react-input-mask';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +29,17 @@ const useStyles = makeStyles((theme) => ({
 
   }
 }));
+
+const MaskedTextField = (props) => (
+  <InputMask
+    mask="+55 (99) 99999-9999"
+    value={props.value}
+    placeholder="Digite o numero aqui"
+    onChange={props.onChange}
+  >
+    {(inputProps) => <TextField {...inputProps} variant="outlined" disableUnderline />}
+  </InputMask>
+);
 
 function AddContactDialog(props) {
   const classes = useStyles();
@@ -74,11 +85,10 @@ function AddContactDialog(props) {
                     />
                 </FormControl>
                 <FormControl>
-                  <TextField
+                  <MaskedTextField
                     onChange={handlePhoneChange}
                     value={phone}
                     label="Número"
-                    variant="outlined"
                     />
                 </FormControl>
               </Container>
