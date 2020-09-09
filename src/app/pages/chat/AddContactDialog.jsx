@@ -41,6 +41,20 @@ const MaskedTextField = (props) => (
   </InputMask>
 );
 
+const formatBeforeSaveContact = phone => {
+  if (!phone) return;
+
+  const formatedPhone = phone
+    .replace(' ', '')
+    .replace(' ', '')
+    .replace('(', '')
+    .replace(')', '')
+    .replace('-', '')
+    .replace('+', '');
+  
+  return formatedPhone;
+}
+
 function AddContactDialog(props) {
   const classes = useStyles();
   const [contactName, setContactName] = useState('');
@@ -53,9 +67,11 @@ function AddContactDialog(props) {
   };
 
   const handleSave = () => {
+    if (phone.length < 11) return;
+    const onlyNumbersPhone = formatBeforeSaveContact(phone);
     dispatch(addNewContact(
       contactName,
-      phone
+      onlyNumbersPhone
     ));
     handleClose();
   };
