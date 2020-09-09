@@ -9,6 +9,7 @@ import { FormControl } from '@material-ui/core';
 import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import InputMask from 'react-input-mask';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +65,7 @@ const formatBeforeSaveContact = phone => {
 
 function AddContactDialog(props) {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [contactName, setContactName] = useState('');
   const [phone, setPhone] = useState('');
 
@@ -78,7 +80,8 @@ function AddContactDialog(props) {
     const onlyNumbersPhone = formatBeforeSaveContact(phone);
     dispatch(addNewContact(
       contactName,
-      onlyNumbersPhone
+      onlyNumbersPhone,
+      enqueueSnackbar
     ));
     setContactName('');
     setPhone('');

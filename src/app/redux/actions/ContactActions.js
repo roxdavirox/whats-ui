@@ -3,7 +3,7 @@ import {
   addNewChat,
   setCurrentChatRoom
 } from '../actions/ChatActions';
-
+import { useSnackbar } from 'notistack';
 import { normalize } from 'normalizr';
 import { contactSchema } from '../schema';
 
@@ -63,7 +63,7 @@ export const closeAddContactDialog = () => ({
   type: CLOSE_ADD_CONTACT_DIALOG
 });
 
-export const addNewContact = (name, phone) => async (dispatch, getState) => {
+export const addNewContact = (name, phone, notify) => async (dispatch, getState) => {
   const { user } = getState();
 
   try {
@@ -73,7 +73,10 @@ export const addNewContact = (name, phone) => async (dispatch, getState) => {
       ownerId: user.ownerId,
       userId: user.id,
     });
-
+    notify(`${name} adicionado com sucesso!`, {
+      variant: 'success',
+      autoHideDuration: 2000
+    });
     const { contact, chat } = await response.data;
     console.log('contact response', contact);
     const _contact = {
