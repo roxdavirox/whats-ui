@@ -25,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     placeSelf: 'flex-end'
-  },
-  dialog: {
-
   }
 }));
 
