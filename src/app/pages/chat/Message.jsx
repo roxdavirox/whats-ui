@@ -45,6 +45,10 @@ const isQuote = message => message.message
   && message.message.extendedTextMessage.contextInfo
   && message.message.extendedTextMessage.contextInfo.quotedMessage;
 
+const isLink = message => message.message
+  && message.message.extendedTextMessage
+  && message.message.extendedTextMessage.canonicalUrl;
+
 const isForwarded = message => message.message
   && message.message.extendedTextMessage
   && message.message.extendedTextMessage.contextInfo
@@ -304,6 +308,10 @@ const Message = ({ message }) => {
         </div>
       </div>
     )
+  }
+
+  if (isLink(message)) {
+    return <div className="whitespace-pre-wrap">{message.message.extendedTextMessage.text}</div>;
   }
 
   return <div className="whitespace-pre-wrap">{message.message.conversation}</div>;
