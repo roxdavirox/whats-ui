@@ -47,7 +47,7 @@ const isQuote = message => message.message
 
 const isLink = message => message.message
   && message.message.extendedTextMessage
-  && message.message.extendedTextMessage.canonicalUrl;
+  && message.message.extendedTextMessage.text;
 
 const isForwarded = message => message.message
   && message.message.extendedTextMessage
