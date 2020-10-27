@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Slide from '@material-ui/core/Slide';
 import ContactList from './ContactList';
-import { selectRecentChats } from '../../redux/selectors/ChatSelectors';
+import { selectFixedChats, selectChats } from '../../redux/selectors/ChatSelectors';
 import { selectContacts } from '../../redux/selectors/ContactSelectors';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
@@ -22,11 +22,12 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Icon, MenuItem } from "@material-ui/core";
 import { MatxMenu } from "matx";
 import history from '../../../history';
+import StarButton from 'app/components/buttons/StartButton';
 
 const ChatMessage = ({ text }) => (
   <p style={{ fontSize: 'smaller' }}>
     {text.length > 26
-      ? `${text.substring(0, 26)} ...`
+      ? `${text.substring(0, 20)} ...`
       : text
     }
   </p>
@@ -117,7 +118,8 @@ const ChatSidenav = forwardRef((props, ref) => {
   } = props;
   const currentUser = useSelector(({ user }) => user);
   const selectedContactId = useSelector(({ contact }) => contact.contactId);
-  const recentChats = useSelector(selectRecentChats);
+  const chats = useSelector(selectChats);
+  const fixedChats = useSelector(selectFixedChats);
   const dispatch = useDispatch();
 
   const handleOpenAddDialog = () => {
@@ -180,8 +182,8 @@ const ChatSidenav = forwardRef((props, ref) => {
       <Scrollbar className="chat-contact-list position-relative h-700" style={{ height: '100%' }}>
         {isContactListOpen
           ? <ContactListSlide onContactClick={handleContactClick} open={isContactListOpen} />
-          : recentChats && recentChats
-            .map((chat, index) => (     
+          : chats && <div>
+            {fixedChats && fixedChats.map((chat, index) => (     
               <div key={index}>
                 {chat && (
                   <div
@@ -229,19 +231,85 @@ const ChatSidenav = forwardRef((props, ref) => {
                           })}
                         </p>
                       </div>
-                      {
-                        chat.lastTextMessage && (
-                          <div>
-                            <ChatMessage text={chat.lastTextMessage}/>
-                          </div>
-                        )
-                      }
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                         {chat.lastTextMessage && (
+                           <ChatMessage text={chat.lastTextMessage}/>
+                          )}
+                        </div>
+                        <div>
+                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => alert('oi')}/>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
-            ))
-          }
+            ))}
+            {chats.map((chat, index) => (     
+              <div key={index}>
+                {chat && (
+                  <div
+                    onClick={() => {
+                      if (ref.current) {
+                        ref.current.focus();
+                      }
+                      handleContactClick(chat.contactId);
+                    }}
+                    key={index}
+                    className="flex items-center p-4 cursor-pointer h-72 gray-on-hover"
+                    style={(() => { 
+                      if (chat.contactId === selectedContactId) 
+                        return { 
+                          transition: 'background 250ms ease',
+                          background: 'rgba(0, 0, 0, 0.084)',
+                          color: '#1976d2',
+                          fontWeight: 'bold',
+                        }
+                      if (!chat.read) {
+                        return {
+                          color: 'black',
+                          background: 'rgb(0 0 0 / 2%)',
+                          fontWeight: 'bold',
+                        }
+                      }
+                    })()
+                    }
+                  >
+                    <ChatAvatar src={chat.contact.eurl || ''}/>
+                    <div 
+                      className="pl-4"
+                      style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <p className="m-0" style={{ fontSize: 'initial' }}>{chat.contact.name}</p>
+                        <p className="m-0 text-muted" style={{ fontSize: '10px' }}>
+                          {new Date(chat.lastMessageTime)
+                            .toLocaleString(
+                                'pt-BR', {
+                                  month: '2-digit',
+                                  day: '2-digit',
+                                  hour: '2-digit',
+                                  minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                         {chat.lastTextMessage && (
+                           <ChatMessage text={chat.lastTextMessage}/>
+                          )}
+                        </div>
+                        <div>
+                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => alert('oi')}/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>}
       </Scrollbar>
     </div>
   );
