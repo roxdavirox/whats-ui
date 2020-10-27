@@ -228,7 +228,7 @@ const ChatSidenav = forwardRef((props, ref) => {
                             style={{ fontSize: 'initial' }}
                           >
                             {
-                              chat.contact.name && chat.contact.name.length > 8 
+                              chat.contact.name && chat.contact.name.length > 14 
                                 ? `${chat.contact.name.substring(0, 14)} ...`
                                 : chat.contact.name
                             }
@@ -308,7 +308,7 @@ const ChatSidenav = forwardRef((props, ref) => {
                             style={{ fontSize: 'initial' }}
                           >
                             {
-                              chat.contact.name && chat.contact.name.length > 8 
+                              chat.contact.name && chat.contact.name.length > 14 
                                 ? `${chat.contact.name.substring(0, 14)} ...`
                                 : chat.contact.name
                             }
