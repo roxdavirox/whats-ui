@@ -222,7 +222,18 @@ const ChatSidenav = forwardRef((props, ref) => {
                       style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <p className="m-0" style={{ fontSize: 'initial' }}>{chat.contact.name}</p>
+                        <Tooltip title={chat.contact.name || 'usuario'}>
+                          <p
+                            className="m-0"
+                            style={{ fontSize: 'initial' }}
+                          >
+                            {
+                              chat.contact.name && chat.contact.name.length > 8 
+                                ? `${chat.contact.name.substring(0, 14)} ...`
+                                : chat.contact.name
+                            }
+                          </p>
+                        </Tooltip>
                         <p className="m-0 text-muted" style={{ fontSize: '10px' }}>
                           {new Date(chat.lastMessageTime)
                             .toLocaleString(
@@ -291,7 +302,18 @@ const ChatSidenav = forwardRef((props, ref) => {
                       style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <p className="m-0" style={{ fontSize: 'initial' }}>{chat.contact.name}</p>
+                        <Tooltip title={chat.contact.name || 'usuario'}>
+                          <p
+                            className="m-0"
+                            style={{ fontSize: 'initial' }}
+                          >
+                            {
+                              chat.contact.name && chat.contact.name.length > 8 
+                                ? `${chat.contact.name.substring(0, 14)} ...`
+                                : chat.contact.name
+                            }
+                          </p>
+                        </Tooltip>
                         <p className="m-0 text-muted" style={{ fontSize: '10px' }}>
                           {new Date(chat.lastMessageTime)
                             .toLocaleString(
