@@ -14,6 +14,7 @@ const defaultChat = {
   read: true,
 };
 
+export const FIX_CHAT = 'FIX_CHAT';
 export const ADD_RECENT_CHAT = 'ADD_RECENT_CHAT';
 export const SET_RECENT_CHATS = 'SET_RECENT_CHATS';
 export const ADD_NEW_CHAT = 'ADD_NEW_CHAT';
@@ -51,6 +52,16 @@ export const getProfilePicture = contactId => async (dispatch, getState) => {
   }
 }
 
+export const fixChat = contactId => async dispatch => {
+  if (!contactId) return;
+  const response = await api.post(`/chat/fix/${contactId}`);
+  const { fixed } = response.data;
+
+  dispatch({
+    type: FIX_CHAT,
+    payload: { contactId, fixed }
+  });
+}
 
 export const addNewChat = (recentChat, contactId) => ({
   type: ADD_NEW_CHAT,
@@ -69,7 +80,7 @@ export const closeImageModal = () => ({
   type: CLOSE_IMAGE_MODAL
 });
 
-export const setRecentChats = recentChats =>  dispatch => {
+export const setRecentChats = recentChats => dispatch => {
   if (!recentChats) return;
   const defaultChats = recentChats.map(chat => ({
     ...defaultChat,

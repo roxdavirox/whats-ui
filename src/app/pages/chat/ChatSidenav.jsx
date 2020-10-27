@@ -15,6 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { closeContactListDialog, openAddContactDialog } from '../../redux/actions/ContactActions';
+import { fixChat } from '../../redux/actions/ChatActions';
 import { useDebouncedCallback } from 'use-debounce';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { logoutUser } from "app/redux/actions/UserActions";
@@ -132,6 +133,8 @@ const ChatSidenav = forwardRef((props, ref) => {
     history.push('/config/sector');
   }
 
+  const handleFixChat = contactId => dispatch(fixChat(contactId));
+
   return (
     <div className="chat-sidenav bg-default" style={{ height: '96vh' }}>
       <div className="chat-sidenav__topbar flex items-center h-56 px-4 bg-primary">
@@ -238,7 +241,7 @@ const ChatSidenav = forwardRef((props, ref) => {
                           )}
                         </div>
                         <div>
-                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => alert('oi')}/>
+                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => handleFixChat(chat.contactId)} />
                         </div>
                       </div>
                     </div>
@@ -301,7 +304,7 @@ const ChatSidenav = forwardRef((props, ref) => {
                           )}
                         </div>
                         <div>
-                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => alert('oi')}/>
+                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => handleFixChat(chat.contactId)} />
                         </div>
                       </div>
                       <Divider />

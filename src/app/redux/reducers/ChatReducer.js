@@ -12,7 +12,8 @@ import {
   SET_CHAT,
   UPDATE_CHAT_PAGINATION,
   ADD_NEW_CHAT,
-  READ_CHAT
+  READ_CHAT,
+  FIX_CHAT
 } from '../actions/ChatActions';
 import { LOAD_FIRST_MESSAGES } from '../actions/MessageActions';
 import { SET_RECEIVED_CONTACT, TRANSFER_CONTACT } from '../actions/ContactActions';
@@ -164,6 +165,23 @@ const ChatReducer = function(state = initialState, action) {
           [contactId]: {
             ...chat,
             read,
+          }
+        }
+      }
+    }
+
+    case FIX_CHAT: {
+      const { contactId, fixed } = action.payload;
+
+      const { byId } = state;
+      const chat = byId[contactId];
+      return {
+        ...state,
+        byId: {
+          ...byId,
+          [contactId]: {
+            ...chat,
+            fixed,
           }
         }
       }
