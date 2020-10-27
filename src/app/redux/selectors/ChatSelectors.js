@@ -18,6 +18,10 @@ export const selectRecentChats = store => {
     });
 }
 
+export const selectFixedChats = store => selectRecentChats(store).filter(chat => chat.fixed);
+
+export const selectChats = store => selectRecentChats(store).filter(chat => !chat.fixed);
+
 export const selectCurrentChat = ({ chat, contact }) => {
   if (!contact.contactId) return {};
   if (!chat.byId) return {};
