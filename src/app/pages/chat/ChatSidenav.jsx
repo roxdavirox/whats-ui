@@ -249,6 +249,7 @@ const ChatSidenav = forwardRef((props, ref) => {
                           />
                         </div>
                       </div>
+                      <Divider />
                     </div>
                   </div>
                 )}
@@ -318,7 +319,6 @@ const ChatSidenav = forwardRef((props, ref) => {
                         </div>
                       </div>
                       <Divider />
-
                     </div>
                   </div>
                 )}
