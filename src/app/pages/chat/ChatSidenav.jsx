@@ -241,7 +241,12 @@ const ChatSidenav = forwardRef((props, ref) => {
                           )}
                         </div>
                         <div>
-                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => handleFixChat(chat.contactId)} />
+                          <StarButton
+                            fixed={chat.fixed}
+                            fontSize="small"
+                            title={`${chat.fixed ? 'Desafixar' : 'Fixar'} conversa`}
+                            onClick={() => handleFixChat(chat.contactId)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -304,7 +309,12 @@ const ChatSidenav = forwardRef((props, ref) => {
                           )}
                         </div>
                         <div>
-                          <StarButton fixed={chat.fixed} fontSize="small" onClick={() => handleFixChat(chat.contactId)} />
+                          <StarButton
+                            fixed={chat.fixed}
+                            fontSize="small"
+                            title={`${chat.fixed ? 'Desafixar' : 'Fixar'} conversa`}
+                            onClick={() => handleFixChat(chat.contactId)}
+                          />
                         </div>
                       </div>
                       <Divider />
