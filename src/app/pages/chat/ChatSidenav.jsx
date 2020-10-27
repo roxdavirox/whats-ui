@@ -304,6 +304,8 @@ const ChatSidenav = forwardRef((props, ref) => {
                           <StarButton fixed={chat.fixed} fontSize="small" onClick={() => alert('oi')}/>
                         </div>
                       </div>
+                      <Divider />
+
                     </div>
                   </div>
                 )}
