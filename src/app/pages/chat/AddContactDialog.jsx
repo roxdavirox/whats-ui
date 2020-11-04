@@ -49,13 +49,7 @@ const MaskedTextField = ({ value, onChange }) => (
 const formatBeforeSaveContact = phone => {
   if (!phone) return;
 
-  const formatedPhone = phone
-    .replace(' ', '')
-    .replace(' ', '')
-    .replace('(', '')
-    .replace(')', '')
-    .replace('-', '')
-    .replace('+', '');
+  const formatedPhone = phone.match(/\d/g).join('');
   
   return formatedPhone;
 }
@@ -73,7 +67,6 @@ function AddContactDialog(props) {
   };
 
   const handleSave = () => {
-    if (phone.length < 11) return;
     const onlyNumbersPhone = formatBeforeSaveContact(phone);
     dispatch(addNewContact(
       contactName,
