@@ -223,3 +223,19 @@ export const uploadVideo = ({
     await api.post('chat/video', formData);
   });
 }
+
+export const uploadAudio = ({
+  blob,
+  ownerId,
+  userId
+}) => async (dispatch, getState) => {
+  const { contact } = getState();
+  const { contactId } = contact;
+
+  const formData = new FormData();
+    formData.append('audio', blob);
+    formData.append('contactId', contactId);
+    formData.append('ownerId', ownerId);
+    formData.append('userId', userId);
+    await api.post('chat/audio', formData);
+}
