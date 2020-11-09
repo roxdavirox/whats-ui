@@ -69,7 +69,7 @@ const InputText = forwardRef((props, ref) => {
         onKeyDown={sendMessageOnEnter}
         fullWidth
         multiline={true}
-        rows={2}
+        rows={1}
         variant="outlined"
         autoFocus={false}
         inputRef={ref}
