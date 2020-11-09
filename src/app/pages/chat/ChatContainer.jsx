@@ -38,6 +38,31 @@ const ChatContainer = forwardRef((props, ref) => {
   const dispatch = useDispatch();
 	const qrcodeIsConnected = useSelector(({ qrcode }) => qrcode.isConnected);
   
+  const handlePasteFiles = (e) => {
+    if (e.clipboardData && e.clipboardData.items.length > 0) {
+      const acceptedFiles = ['image/gif', 'image/png', 'image/jpeg', 'image/bmp'];
+      
+      let files = [];
+      for(var i = 0; i < e.clipboardData.items.length; i++) {
+        const file = e.clipboardData.items[i];
+        if (acceptedFiles.includes(file.type)) {
+          files.push(file.getAsFile());
+        }
+      }
+
+      dispatch(uploadImage({ 
+        files,
+        ownerId: currentUser.ownerId,
+        userId: currentUser.id,
+      }));
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('paste', handlePasteFiles);
+    return () => { window.removeEventListener('paste', handlePasteFiles); }
+  }, []);
+
   useEffect(() => {
     if (!parentScrollRef || !parentScrollRef.current) return;
     parentScrollRef.current.scrollTop = 999999;
