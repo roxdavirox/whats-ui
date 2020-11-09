@@ -23,6 +23,7 @@
     "globalize": "^0.1.1",
     "history": "^4.10.0",
     "lodash": "^4.17.15",
+    "mic-recorder-to-mp3": "^2.2.2",
     "mui-datatables": "^2.14.0",
     "node-sass": "^4.13.1",
     "normalizr": "^3.6.0",
