@@ -17,6 +17,8 @@ import { selectCurrentChat } from '../../redux/selectors/ChatSelectors';
 import QrcodeContainer from '../qrcode/QrcodeContainer';
 import { useEffect } from "react";
 
+const acceptedFiles = ['image/gif', 'image/png', 'image/jpeg', 'image/bmp'];
+
 const ChatContainer = forwardRef((props, ref) => {
   const {
     setRef,
@@ -40,7 +42,6 @@ const ChatContainer = forwardRef((props, ref) => {
   
   const handlePasteFiles = (e) => {
     if (e.clipboardData && e.clipboardData.items.length > 0) {
-      const acceptedFiles = ['image/gif', 'image/png', 'image/jpeg', 'image/bmp'];
       
       let files = [];
       for(var i = 0; i < e.clipboardData.items.length; i++) {
@@ -58,9 +59,39 @@ const ChatContainer = forwardRef((props, ref) => {
     }
   }
 
+  const handleDropFiles = e => {
+    e.preventDefault();
+    let files = [];
+
+    if (e.dataTransfer && e.dataTransfer.items.length > 0) {
+      for (var i = 0; i < e.dataTransfer.items.length; i++) {
+        const file = e.dataTransfer.items[i];
+        if (file.kind === 'file' && acceptedFiles.includes(file.type)) {
+          files.push(file.getAsFile());
+        }
+      }
+
+      dispatch(uploadImage({ 
+        files,
+        ownerId: currentUser.ownerId,
+        userId: currentUser.id,
+      }));
+    }
+  }
+
+  const handleDragOver = e => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   useEffect(() => {
     window.addEventListener('paste', handlePasteFiles);
     return () => { window.removeEventListener('paste', handlePasteFiles); }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('drop', handleDropFiles);
+    return () => window.removeEventListener('drop', handleDropFiles);
   }, []);
 
   useEffect(() => {
@@ -157,7 +188,12 @@ const ChatContainer = forwardRef((props, ref) => {
         onChange={handleVideoChange}
         ref={inputVideoRef} />
       {imageModalOpen && <ImagePreviewDialog />}
-      <div className="chat-container flex-column position-relative" style={{ height: '100%' }}>
+      <div 
+        className="chat-container flex-column position-relative"
+        style={{ height: '100%' }}
+        draggable
+        onDragOver={handleDragOver}
+      >
         <ChatTopbar 
           onSaveDialogOpen={onSaveDialogOpen}
           onImageUploadClick={handleUploadImageClick}
