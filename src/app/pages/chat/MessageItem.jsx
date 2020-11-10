@@ -12,10 +12,10 @@ const style = {
 
 const MessageItem = ({ message }) => {
   const { key: { fromMe } } = message;
-  const [isMouseOver, setMouseOver] = useState(false);
+  // const [isMouseOver, setMouseOver] = useState(false);
 
-  const handleMouseOver = () => setMouseOver(true);
-  const handleMouseLeave = () => setMouseOver(false);
+  // const handleMouseOver = () => setMouseOver(true);
+  // const handleMouseLeave = () => setMouseOver(false);
 
   return (
     <div 
@@ -28,10 +28,10 @@ const MessageItem = ({ message }) => {
           <div
             className={`px-2 py-2 mb-2 list__message ${fromMe ? "bg-primary text-white" : "bg-paper"}`}
             style={{display: 'inline-block', position: 'relative' }}
-            onMouseOver={handleMouseOver}
-            onMouseLeave={handleMouseLeave}
+            // onMouseOver={handleMouseOver}
+            // onMouseLeave={handleMouseLeave}
           >
-            {isMouseOver && (
+            {/* {isMouseOver && (
               <ExpandMenuButton style={{
                 position: 'absolute',
                 top: 0,
@@ -40,7 +40,7 @@ const MessageItem = ({ message }) => {
                 height: '18px',
                 backgroundColor: '#56595c4f' }}
                 />
-            )}
+            )} */}
             <Message message={message} />
           </div>
         </div>

@@ -191,7 +191,6 @@ const ChatContainer = forwardRef((props, ref) => {
       <div 
         className="chat-container flex-column position-relative"
         style={{ height: '100%' }}
-        draggable
         onDragOver={handleDragOver}
       >
         <ChatTopbar 
